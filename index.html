@@ -158,6 +158,19 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .notice p{font-size:15px;color:var(--muted);margin-top:8px;line-height:1.7}
 .notice .when{display:inline-block;margin-top:16px;background:var(--s1-lt);color:var(--s1-dk);
   font-weight:700;font-size:15px;border-radius:9px;padding:11px 20px}
+.seatwrap{padding:32px 26px;text-align:center}
+.seatnum{font-family:"Gowun Batang",serif;font-size:clamp(44px,8vw,64px);font-weight:700;
+  line-height:1;letter-spacing:-.02em;color:var(--s1-dk)}
+.seatnum small{font-size:.4em;font-weight:400;color:var(--muted);margin-left:6px;letter-spacing:0}
+.seatlab{font-size:14.5px;color:var(--muted);margin-top:10px}
+.gauge{max-width:420px;margin:18px auto 0;height:8px;border-radius:99px;background:#EAE7DF;overflow:hidden}
+.gauge i{display:block;height:100%;background:var(--s1);border-radius:99px;transition:width .4s}
+.gobtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:24px;
+  background:var(--s1);color:#12210A;border-radius:10px;padding:16px 40px;text-decoration:none;
+  font-size:17px;font-weight:700;transition:.16s}
+.gobtn:hover{filter:brightness(1.08)}
+.gobtn.mute{background:#E4E1D9;color:var(--dim);pointer-events:none}
+.gohint{font-size:13px;color:var(--dim);margin-top:12px}
 .privacy{margin-top:14px;font-size:13.5px;color:var(--muted);line-height:1.7}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
 .chip{border:1px solid var(--line);background:var(--card);border-radius:999px;
@@ -430,7 +443,7 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
         <div class="jdesc">나에게 필요한 배움을<br>선택하여 배움을 깊게 합니다.</div>
         <div class="jbox">
           <div class="lbl">나에게 필요한 배움의 선택</div>
-          <div class="val" style="margin-top:8px">9. 7. ~ 10. 22. · 선택 7과정</div>
+          <div class="val" style="margin-top:8px">9월 ~ 10월 · 선택 7과정</div>
           <div class="sub">선택형 직무연수 · 원격 각 2시간</div>
         </div>
       </div>
@@ -441,8 +454,8 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
         <div class="jdesc">교실의 실천과 경험을 나누며<br>서로의 배움을 다시 이어갑니다.</div>
         <div class="jbox">
           <div class="lbl">서로의 실천을 다시 배움으로</div>
-          <div class="val" style="margin-top:8px">10. 17. ~ 11. 3. · 사례 나눔 3과정</div>
-          <div class="sub">사례 공유형 직무연수 · 집합 2~4시간</div>
+          <div class="val" style="margin-top:8px">10월 ~ 11월 · 사례 나눔 3과정</div>
+          <div class="sub">사례 공유형 직무연수 · 집합</div>
         </div>
       </div>
     </div>
@@ -503,21 +516,18 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
 <section id="apply" style="padding-top:0">
   <div class="wrap">
     <div class="shead"><h2>기조강연 신청</h2></div>
-    <p class="sdesc">아래에서 바로 신청하실 수 있습니다. 신청 후에는 수정이 어려우니 나이스 개인번호를 확인하고 제출해 주세요.</p>
+    <p class="sdesc">신청 페이지에서 바로 접수하실 수 있습니다. 300명 선착순이며, 신청 후에는 수정이 어려우니 나이스 개인번호를 확인하고 제출해 주세요.</p>
 
     <div class="applybox">
       <div class="applybar">
         <span class="st soon" id="ast">신청 준비 중</span>
         <span class="cnt" id="acnt">8. 21.(금) 10:00 ~ 8. 27.(목) 17:00 · 300명 선착순</span>
-        <a class="newtab" id="anew" href="#" target="_blank" rel="noopener" hidden>
-          <span class="ms" style="font-size:17px">open_in_new</span>새 창에서 열기</a>
       </div>
       <div id="applyBody"></div>
     </div>
 
     <p class="privacy">신청서에는 나이스 개인번호, 학교급, 학교명, 교과군, 직위, 성명, 생년월일, 휴대전화번호를 적습니다.
-      수집한 정보는 연수 대상자 확정, 출석·이수 처리, 나이스 등재 목적에만 사용하며 목적 달성 후 파기합니다.
-      화면이 잘 보이지 않으면 위의 <strong>새 창에서 열기</strong>를 눌러 주세요.</p>
+      수집한 정보는 연수 대상자 확정, 출석·이수 처리, 나이스 등재 목적에만 사용하며 목적 달성 후 파기합니다.</p>
   </div>
 </section>
 
@@ -609,7 +619,7 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
   <strong>경기도부천교육지원청 중등교육지원과</strong>
   2026 부천 중등 「배움:성장」 교원 역량 강화 프로젝트<br>
   교원의 배움에 맥락과 성장의 여정을 더하여, 현장의 실천을 거쳐 학생의 성장으로.
-  <div class="fnote">일정은 학교 사정에 따라 변경될 수 있습니다. © 2026 경기도부천교육지원청.</div>
+  <div class="fnote">연수 일정은 운영 여건에 따라 변경될 수 있습니다. © 2026 경기도부천교육지원청.</div>
 </div></footer>
 
 <script>
@@ -621,7 +631,7 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
 const LINKS = {
   /* ▼▼ 기조강연 신청 폼 — 폼을 만든 뒤 아래 "#" 자리에 주소를 붙여 넣으세요 ▼▼
      주소를 넣으면 8. 21.(금) 10:00부터 버튼이 자동으로 열립니다.            */
-  keynote:   "#",
+  keynote:   "https://script.google.com/macros/s/AKfycbxLM-FwD1oov8aFcLEkPGicDROiCBgHcC_QFnzvN9craJzhqfHqnuwTr6ib8EehE3zL/exec",
   materials: "#",   // 강의자료 폴더
   survey:    "#",   // 만족도 조사 폼
   live:      "#",   // QuizN 참여 주소
@@ -663,7 +673,7 @@ const COURSES = [
    sub:"교과별 서·논술형 평가 설계·적용 사례 공유 및 실습",
    area:"서·논술형 평가", key:"essay", aud:"중등교사", mode:"offline", time:"09:00~13:00 · 집합 4시간", url:"#"},
   {stage:3, d:"10. 24.", wd:"토", t:"학생평가 역량 강화",
-   sub:"교육과정-수업-평가 통합설계 이해 · 성취평가 운영 사례 · 최소 성취수준 보장 · 선행학습 영향평가 등 교과별 실천 사례 나눔",
+   sub:"교육과정-수업-평가 통합설계 이해, 성취평가 운영 등 교과별 학생평가 실천 사례 나눔",
    area:"학생평가", key:"assess", aud:"중등교사", mode:"offline", time:"09:00~13:00 · 집합 4시간", url:"#"},
   {stage:3, d:"11. 3.", wd:"화", t:"고등학교 교육과정 실천 사례 나눔",
    sub:"학교 교육과정 운영 및 교과특성화 사례 공유·나눔",
@@ -672,7 +682,7 @@ const COURSES = [
 
 const STAGE = {
   2:{name:"배움:성장 · 배움을 깊게 하다", note:"선택형 직무연수 · 원격", c:"var(--s2)", lt:"var(--s2-lt)", dk:"var(--s2-dk)"},
-  3:{name:"다시, 배움으로 · 실천을 나누다", note:"사례 공유형 직무연수 · 집합 2~4시간", c:"var(--s3)", lt:"var(--s3-lt)", dk:"var(--s3-dk)"}
+  3:{name:"다시, 배움으로 · 실천을 나누다", note:"사례 공유형 직무연수 · 집합", c:"var(--s3)", lt:"var(--s3-lt)", dk:"var(--s3-dk)"}
 };
 
 /* 아이콘 폰트가 로드된 뒤에만 아이콘을 보여줍니다 */
@@ -688,30 +698,16 @@ document.querySelectorAll("[data-link]").forEach(function(a){
   if (u && u !== "#") { a.href = u; a.target = "_blank"; a.rel = "noopener"; }
 });
 
-/* 기조강연 신청 — 버튼과 삽입된 신청서를 함께 제어합니다 */
+/* 기조강연 신청 — 상태 표시와 신청 페이지 연결 */
 (function(){
   var btn  = document.getElementById("kbtn"),
       st   = document.getElementById("kstate"),
       wh   = document.getElementById("kwhen"),
       ast  = document.getElementById("ast"),
       acnt = document.getElementById("acnt"),
-      anew = document.getElementById("anew"),
       body = document.getElementById("applyBody"),
-      now  = Date.now(),
-      o    = new Date(KEYNOTE.open).getTime(),
-      c    = new Date(KEYNOTE.close).getTime(),
       url  = LINKS.keynote,
       live = url && url !== "#";
-
-  /* 구글 폼 주소를 삽입용 주소로 바꿉니다 */
-  function embedSrc(u){
-    if (u.indexOf("docs.google.com") > -1) {
-      var base = u.split("?")[0].replace(/\/(edit|viewform|viewanalytics)\/?$/, "/viewform");
-      if (base.indexOf("/viewform") === -1) base = base.replace(/\/$/, "") + "/viewform";
-      return base + "?embedded=true";
-    }
-    return u;  /* forms.gle 단축 주소는 그대로 사용 */
-  }
 
   function notice(icon, head, text, when){
     body.innerHTML = '<div class="notice"><span class="ms">' + icon + '</span>'
@@ -719,56 +715,86 @@ document.querySelectorAll("[data-link]").forEach(function(a){
       + (when ? '<div class="when">' + when + '</div>' : '') + '</div>';
   }
 
+  /* 신청 페이지가 아직 없을 때 */
   if (!live) {
-    st.className = "kstate soon";  st.textContent = "신청 링크 준비 중";
+    st.className = "kstate soon";  st.textContent = "신청 페이지 준비 중";
     ast.className = "st soon";     ast.textContent = "준비 중";
     btn.classList.add("mute"); btn.textContent = "신청 준비 중";
-    notice("hourglass_empty", "신청서를 준비하고 있습니다",
-      "구글 폼을 만든 뒤 코드 상단 LINKS.keynote 에 주소를 넣으면 이 자리에 신청서가 나타납니다.");
+    notice("hourglass_empty", "신청 페이지를 준비하고 있습니다",
+      "준비가 끝나면 이 자리에서 바로 신청하실 수 있습니다.");
     return;
   }
 
-  anew.href = url; anew.hidden = false;
   btn.setAttribute("href", "#apply"); btn.removeAttribute("target");
 
-  if (KEYNOTE.closedEarly || now > c) {
-    var early = KEYNOTE.closedEarly && now <= c;
-    st.className = "kstate closed"; st.textContent = "신청 마감";
-    ast.className = "st closed";    ast.textContent = "마감";
-    acnt.textContent = early ? "정원 " + KEYNOTE.seats + "명이 모두 찼습니다"
-                             : "8. 27.(목) 17:00 마감되었습니다";
-    anew.hidden = true;
-    btn.classList.add("mute"); btn.textContent = "신청이 마감되었습니다";
-    wh.textContent = "대상자 명단은 학교로 안내됩니다";
-    notice("event_busy", "신청이 마감되었습니다",
-      early ? "정원 " + KEYNOTE.seats + "명이 모두 차서 조기 마감되었습니다. 문의는 중등교육지원과로 연락 주세요."
-            : "연수 대상자 명단은 학교로 안내해 드립니다. 문의는 중등교육지원과로 연락 주세요.");
-
-  } else if (now < o) {
-    st.className = "kstate soon"; st.textContent = "8월 21일(금) 10:00 신청 시작";
-    ast.className = "st soon";    ast.textContent = "신청 전";
-    btn.classList.add("mute"); btn.textContent = "신청 준비 중";
-    wh.textContent = "8. 21.(금) 10:00 ~ 8. 27.(목) 17:00";
-    notice("schedule", "아직 신청 기간이 아닙니다",
-      "신청이 열리면 이 자리에 신청서가 바로 나타납니다. 300명 선착순이니 시작 시각을 기억해 주세요.",
-      "2026. 8. 21.(금) 10:00 신청 시작");
-
-  } else {
-    st.className = "kstate open"; st.textContent = "신청 받는 중";
-    ast.className = "st open";    ast.textContent = "신청 받는 중";
-    acnt.textContent = "8. 27.(목) 17:00 마감 · " + KEYNOTE.seats + "명 선착순";
-    btn.classList.remove("mute");
-    btn.innerHTML = '신청하기<span class="ms" style="font-size:18px">arrow_downward</span>';
-    wh.textContent = "8. 27.(목) 17:00 마감 · " + KEYNOTE.seats + "명 선착순";
-
-    var f = document.createElement("iframe");
-    f.className = "formframe";
-    f.src = embedSrc(url);
-    f.title = "기조강연 신청서";
-    f.height = KEYNOTE.formHeight;
-    f.setAttribute("loading", "lazy");
-    body.appendChild(f);
+  /* 시각 기준 기본 상태 (신청 페이지 응답이 없어도 화면은 뜹니다) */
+  function 기본상태(){
+    var now = Date.now(),
+        o = new Date(KEYNOTE.open).getTime(),
+        c = new Date(KEYNOTE.close).getTime();
+    if (KEYNOTE.closedEarly || now > c) return "마감";
+    if (now < o) return "대기";
+    return "접수중";
   }
+
+  function 그리기(s){
+    var 상태 = s ? s.상태 : 기본상태();
+    var 정원 = s ? s.정원 : KEYNOTE.seats;
+    var 남은 = s ? s.남은 : null;
+    var 접수 = s ? s.접수 : null;
+
+    if (상태 === "접수중") {
+      st.className = "kstate open"; st.textContent = "신청 받는 중";
+      ast.className = "st open";    ast.textContent = "신청 받는 중";
+      acnt.textContent = "8. 27.(목) 17:00 마감 · " + 정원 + "명 선착순";
+      btn.classList.remove("mute");
+      btn.innerHTML = '신청하기<span class="ms" style="font-size:18px">arrow_downward</span>';
+      wh.textContent = "8. 27.(목) 17:00 마감 · " + 정원 + "명 선착순";
+
+      var 채움 = (남은 === null) ? 0 : Math.round((정원 - 남은) / 정원 * 100);
+      body.innerHTML =
+          '<div class="seatwrap">'
+        + (남은 === null
+            ? '<div class="seatlab">지금 신청하실 수 있습니다</div>'
+            : '<div class="seatnum">' + 남은 + '<small>/ ' + 정원 + '석</small></div>'
+              + '<div class="seatlab">남은 자리 · ' + 접수 + '명 신청</div>'
+              + '<div class="gauge"><i style="width:' + 채움 + '%"></i></div>')
+        + '<a class="gobtn" href="' + url + '" target="_blank" rel="noopener">'
+        + '신청 페이지로 이동<span class="ms" style="font-size:19px">arrow_forward</span></a>'
+        + '<div class="gohint">새 창에서 열립니다 · 나이스 개인번호가 필요합니다</div>'
+        + '</div>';
+
+    } else if (상태 === "대기") {
+      st.className = "kstate soon"; st.textContent = "8월 21일(금) 10:00 신청 시작";
+      ast.className = "st soon";    ast.textContent = "신청 전";
+      btn.classList.add("mute"); btn.textContent = "신청 준비 중";
+      wh.textContent = "8. 21.(금) 10:00 ~ 8. 27.(목) 17:00";
+      notice("schedule", "아직 신청 기간이 아닙니다",
+        "신청이 열리면 이 자리에 신청 버튼이 나타납니다. " + 정원 + "명 선착순이니 시작 시각을 기억해 주세요.",
+        "2026. 8. 21.(금) 10:00 신청 시작");
+
+    } else {
+      var 정원참 = (상태 === "정원마감");
+      st.className = "kstate closed"; st.textContent = "신청 마감";
+      ast.className = "st closed";    ast.textContent = "마감";
+      acnt.textContent = 정원참 ? "정원 " + 정원 + "명이 모두 찼습니다"
+                                : "8. 27.(목) 17:00 마감되었습니다";
+      btn.classList.add("mute"); btn.textContent = "신청이 마감되었습니다";
+      wh.textContent = "대상자 명단은 학교로 안내됩니다";
+      notice("event_busy", "신청이 마감되었습니다",
+        정원참 ? "정원 " + 정원 + "명이 모두 차서 조기 마감되었습니다. 문의는 중등교육지원과로 연락 주세요."
+               : "연수 대상자 명단은 학교로 안내해 드립니다. 문의는 중등교육지원과로 연락 주세요.");
+    }
+  }
+
+  그리기(null);   /* 먼저 시각 기준으로 그리고 */
+
+  /* 신청 페이지에서 실제 접수 현황을 받아 덮어씁니다 (인원 수만 오갑니다) */
+  window.__seat = function(s){ if (s && s.상태) 그리기(s); };
+  var sc = document.createElement("script");
+  sc.src = url + (url.indexOf("?") > -1 ? "&" : "?") + "callback=__seat&_=" + Date.now();
+  sc.onerror = function(){};   /* 못 받아와도 위에서 그린 화면이 남습니다 */
+  document.body.appendChild(sc);
 })();
 
 /* 포스터 파일을 못 찾으면 어떤 파일이 빠졌는지 알려 줍니다 */
