@@ -165,6 +165,8 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .seatlab{font-size:14.5px;color:var(--muted);margin-top:10px}
 .gauge{max-width:420px;margin:18px auto 0;height:8px;border-radius:99px;background:#EAE7DF;overflow:hidden}
 .gauge i{display:block;height:100%;background:var(--s1);border-radius:99px;transition:width .4s}
+.gauge i.hot{background:#C6612B}
+.seatnum.hot{color:#A8501F}
 .gobtn{display:inline-flex;align-items:center;justify-content:center;gap:8px;margin-top:24px;
   background:var(--s1);color:#12210A;border-radius:10px;padding:16px 40px;text-decoration:none;
   font-size:17px;font-weight:700;transition:.16s}
@@ -477,11 +479,11 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
         <div class="kcta">
           <div class="kstate soon" id="kstate">신청 준비 중</div>
           <a class="kbtn mute" id="kbtn" href="#apply">신청하기</a>
-          <div class="kwhen" id="kwhen">8. 21.(금) 10:00 ~ 8. 27.(목) 17:00</div>
+          <div class="kwhen" id="kwhen">8. 27.(목) 17:00 마감 · 300명 선착순</div>
         </div>
       </div>
       <dl class="k-facts">
-        <div class="fact"><dt>신청 기간</dt><dd>8. 21.(금) 10:00<br>~ 8. 27.(목) 17:00</dd></div>
+        <div class="fact"><dt>신청 마감</dt><dd>8. 27.(목) 17:00<small>정원 마감 시 조기 종료</small></dd></div>
         <div class="fact"><dt>신청 대상</dt><dd>부천 관내 중등 교원<small>및 교육전문직</small></dd></div>
         <div class="fact"><dt>모집 인원</dt><dd>300명<small>수용 규모 고려 선착순 마감</small></dd></div>
         <div class="fact"><dt>신청 방법</dt><dd>개인별 직접 신청<small>신청 링크로 제출</small></dd></div>
@@ -521,7 +523,7 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
     <div class="applybox">
       <div class="applybar">
         <span class="st soon" id="ast">신청 준비 중</span>
-        <span class="cnt" id="acnt">8. 21.(금) 10:00 ~ 8. 27.(목) 17:00 · 300명 선착순</span>
+        <span class="cnt" id="acnt">8. 27.(목) 17:00 마감 · 300명 선착순</span>
       </div>
       <div id="applyBody"></div>
     </div>
@@ -630,8 +632,8 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
    ══════════════════════════════════════════════════════════ */
 const LINKS = {
   /* ▼▼ 기조강연 신청 폼 — 폼을 만든 뒤 아래 "#" 자리에 주소를 붙여 넣으세요 ▼▼
-     주소를 넣으면 8. 21.(금) 10:00부터 버튼이 자동으로 열립니다.            */
-  keynote:   "https://script.google.com/macros/s/AKfycbxLM-FwD1oov8aFcLEkPGicDROiCBgHcC_QFnzvN9craJzhqfHqnuwTr6ib8EehE3zL/exec",
+     open 시각이 지나면 버튼이 자동으로 열립니다.                            */
+  keynote:   "https://script.google.com/macros/s/AKfycbye15waiaxIfYTtkRPWPRgIZIkbi9zJ7tSZJ_7jCI24UJX_9LkZXw9cSRgJw8s27ujU/exec",
   materials: "#",   // 강의자료 폴더
   survey:    "#",   // 만족도 조사 폼
   live:      "#",   // QuizN 참여 주소
@@ -643,11 +645,17 @@ const LINKS = {
                    ※ 구글 폼에서도 "응답 받기"를 꼭 함께 꺼주세요.
    · formHeight  : 삽입된 신청서 높이(px). 아래가 잘리면 숫자를 키우세요. */
 const KEYNOTE = {
-  open:  "2026-08-21T10:00:00+09:00",
+  open:  "2026-08-20T00:00:00+09:00",
   close: "2026-08-27T17:00:00+09:00",
   seats: 300,
   closedEarly: false,
-  formHeight: 1700
+
+  /* 남은 자리를 언제 보여줄지 정합니다.
+       "임박"  : 남은 자리가 아래 기준 이하로 떨어졌을 때만 표시 (권장)
+       true    : 신청 기간 내내 표시
+       false   : 표시하지 않음 (상태만)                              */
+  자리표시: "임박",
+  임박기준: 60
 };
 
 const COURSES = [
@@ -751,27 +759,39 @@ document.querySelectorAll("[data-link]").forEach(function(a){
       btn.innerHTML = '신청하기<span class="ms" style="font-size:18px">arrow_downward</span>';
       wh.textContent = "8. 27.(목) 17:00 마감 · " + 정원 + "명 선착순";
 
+      var 보임 = (남은 !== null) && (
+            KEYNOTE.자리표시 === true ||
+            (KEYNOTE.자리표시 === "임박" && 남은 <= KEYNOTE.임박기준));
       var 채움 = (남은 === null) ? 0 : Math.round((정원 - 남은) / 정원 * 100);
+      var 임박 = 보임 && 남은 <= KEYNOTE.임박기준;
+
       body.innerHTML =
           '<div class="seatwrap">'
-        + (남은 === null
-            ? '<div class="seatlab">지금 신청하실 수 있습니다</div>'
-            : '<div class="seatnum">' + 남은 + '<small>/ ' + 정원 + '석</small></div>'
-              + '<div class="seatlab">남은 자리 · ' + 접수 + '명 신청</div>'
-              + '<div class="gauge"><i style="width:' + 채움 + '%"></i></div>')
+        + (보임
+            ? '<div class="seatnum' + (임박 ? ' hot' : '') + '">' + 남은
+              + '<small>/ ' + 정원 + '석</small></div>'
+              + '<div class="seatlab">' + (임박 ? '마감이 얼마 남지 않았습니다 · ' : '')
+              + '남은 자리 · ' + 접수 + '명 신청</div>'
+              + '<div class="gauge"><i class="' + (임박 ? 'hot' : '')
+              + '" style="width:' + 채움 + '%"></i></div>'
+            : '<div class="seatlab">지금 신청하실 수 있습니다 · 정원 ' + 정원 + '명 선착순</div>')
         + '<a class="gobtn" href="' + url + '" target="_blank" rel="noopener">'
         + '신청 페이지로 이동<span class="ms" style="font-size:19px">arrow_forward</span></a>'
         + '<div class="gohint">새 창에서 열립니다 · 나이스 개인번호가 필요합니다</div>'
         + '</div>';
 
     } else if (상태 === "대기") {
-      st.className = "kstate soon"; st.textContent = "8월 21일(금) 10:00 신청 시작";
+      var o = new Date(KEYNOTE.open);
+      var 열림 = (o.getMonth()+1) + "월 " + o.getDate() + "일("
+               + "일월화수목금토"[o.getDay()] + ") "
+               + ("0"+o.getHours()).slice(-2) + ":" + ("0"+o.getMinutes()).slice(-2);
+      st.className = "kstate soon"; st.textContent = 열림 + " 신청 시작";
       ast.className = "st soon";    ast.textContent = "신청 전";
       btn.classList.add("mute"); btn.textContent = "신청 준비 중";
-      wh.textContent = "8. 21.(금) 10:00 ~ 8. 27.(목) 17:00";
+      wh.textContent = 열림 + " 신청 시작";
       notice("schedule", "아직 신청 기간이 아닙니다",
         "신청이 열리면 이 자리에 신청 버튼이 나타납니다. " + 정원 + "명 선착순이니 시작 시각을 기억해 주세요.",
-        "2026. 8. 21.(금) 10:00 신청 시작");
+        "2026. " + 열림 + " 신청 시작");
 
     } else {
       var 정원참 = (상태 === "정원마감");
