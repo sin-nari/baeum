@@ -107,6 +107,11 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .kdate{font-size:14px;color:var(--s1-on);font-weight:600;letter-spacing:.03em}
 .ktitle{font-size:clamp(21px,3vw,28px);font-weight:700;margin-top:9px;letter-spacing:-.02em;line-height:1.35}
 .kmeta{font-size:14.5px;color:rgba(255,255,255,.68);margin-top:12px}
+.kspk{margin-top:16px;padding-left:14px;border-left:2px solid var(--s1)}
+.kname{font-size:16px;font-weight:700;color:#fff;letter-spacing:-.01em}
+.kbio{list-style:none;margin-top:6px}
+.kbio li{font-size:13.5px;color:rgba(255,255,255,.6);line-height:1.65;position:relative;padding-left:11px}
+.kbio li::before{content:"·";position:absolute;left:1px;color:var(--s1-on)}
 .kcta{display:flex;flex-direction:column;align-items:stretch;gap:9px;min-width:210px}
 .kstate{font-size:12.5px;font-weight:700;letter-spacing:.02em;text-align:center;
   padding:5px 10px;border-radius:6px}
@@ -474,7 +479,14 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
         <div>
           <div class="kdate">2026. 9. 4.(금) 14:30 ~ 16:30 · 집합 2시간</div>
           <div class="ktitle serif">AI 공존의 시대,<br>교육과정-수업-평가의 방향</div>
-          <div class="kmeta">총신대학교 김수환 교수 · 부천대학교 한길아트홀</div>
+          <div class="kspk">
+            <div class="kname">총신대학교 김수환 교수</div>
+            <ul class="kbio">
+              <li>국가교육위원회 교육과정 전문위원</li>
+              <li>한국컴퓨터교육학회 부회장</li>
+            </ul>
+          </div>
+          <div class="kmeta">부천대학교 한길아트홀</div>
         </div>
         <div class="kcta">
           <div class="kstate soon" id="kstate">신청 준비 중</div>
