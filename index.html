@@ -771,10 +771,10 @@ document.querySelectorAll("[data-link]").forEach(function(a){
     if (상태 === "접수중") {
       st.className = "kstate open"; st.textContent = "신청 받는 중";
       ast.className = "st open";    ast.textContent = "신청 받는 중";
-      acnt.textContent = "8. 27.(목) 17:00 마감 · " + 정원 + "명 선착순";
+      acnt.textContent = "8. 28.(금) 17:00 마감 · " + 정원 + "명 선착순";
       btn.classList.remove("mute");
       btn.innerHTML = '신청하기<span class="ms" style="font-size:18px">arrow_downward</span>';
-      wh.textContent = "8. 27.(목) 17:00 마감 · " + 정원 + "명 선착순";
+      wh.textContent = "8. 28.(금) 17:00 마감 · " + 정원 + "명 선착순";
 
       var 보임 = (남은 !== null) && (
             KEYNOTE.자리표시 === true ||
@@ -815,7 +815,7 @@ document.querySelectorAll("[data-link]").forEach(function(a){
       st.className = "kstate closed"; st.textContent = "신청 마감";
       ast.className = "st closed";    ast.textContent = "마감";
       acnt.textContent = 정원참 ? "정원 " + 정원 + "명이 모두 찼습니다"
-                                : "8. 27.(목) 17:00 마감되었습니다";
+                                : "8. 28.(금) 17:00 마감되었습니다";
       btn.classList.add("mute"); btn.textContent = "신청이 마감되었습니다";
       wh.textContent = "대상자 명단은 학교로 안내됩니다";
       notice("event_busy", "신청이 마감되었습니다",
