@@ -1,3 +1,6 @@
+
+
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -181,6 +184,22 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .gobtn:hover{filter:brightness(1.08)}
 .gobtn.mute{background:#E4E1D9;color:var(--dim);pointer-events:none}
 .gohint{font-size:13px;color:var(--dim);margin-top:12px}
+.olist{display:flex;flex-direction:column;gap:12px}
+.ocard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:20px 24px;display:grid;grid-template-columns:auto 1fr auto;gap:22px;align-items:center;
+  border-left:3px solid var(--c);transition:.16s}
+.ocard:hover{border-color:var(--dim);border-left-color:var(--c)}
+.oday{text-align:center;min-width:74px}
+.oday .d{font-family:"Gowun Batang",serif;font-size:25px;font-weight:700;line-height:1.1;letter-spacing:-.01em}
+.oday .w{font-size:12.5px;color:var(--dim);margin-top:3px}
+.ostage{font-size:12px;font-weight:700;color:var(--c-dk);letter-spacing:.02em}
+.otitle{font-size:17.5px;font-weight:600;letter-spacing:-.01em;line-height:1.4;margin-top:5px}
+.ometa{font-size:13.5px;color:var(--muted);margin-top:6px;line-height:1.6}
+.oseat{font-size:13px;font-weight:700;color:#A8501F;margin-top:6px}
+.obtn{background:var(--s1);color:#12210A;border-radius:9px;padding:13px 26px;text-decoration:none;
+  font-size:15.5px;font-weight:700;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;
+  transition:.16s}
+.obtn:hover{filter:brightness(1.08)}
 .privacy{margin-top:14px;font-size:13.5px;color:var(--muted);line-height:1.7}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
 .chip{border:1px solid var(--line);background:var(--card);border-radius:999px;
@@ -281,6 +300,9 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
   .diagram{margin-top:34px}
 }
 @media(max-width:720px){
+  .ocard{grid-template-columns:1fr;gap:12px;text-align:left}
+  .oday{text-align:left;display:flex;align-items:baseline;gap:8px}
+  .obtn{justify-content:center}
   .k-top{grid-template-columns:1fr}
   .fact{border-right:0;border-bottom:1px solid rgba(255,255,255,.1)}
   .fact:last-child{border-bottom:0}
@@ -495,12 +517,12 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
         <div class="kcta">
           <div class="kstate soon" id="kstate">신청 준비 중</div>
           <a class="kbtn mute" id="kbtn" href="#apply">신청하기</a>
-          <div class="kwhen" id="kwhen">8. 28.(금) 17:00 마감 · 300명 선착순</div>
+          <div class="kwhen" id="kwhen">8. 27.(목) 17:00 마감 · 300명 선착순</div>
         </div>
       </div>
       <dl class="k-facts">
-        <div class="fact"><dt>신청 마감</dt><dd>8. 28.(금) 17:00<small>정원 마감 시 조기 종료</small></dd></div>
-        <div class="fact"><dt>신청 대상</dt><dd> 초·중·고 교원<small>및 교육전문직</small></dd></div>
+        <div class="fact"><dt>신청 마감</dt><dd>8. 27.(목) 17:00<small>정원 마감 시 조기 종료</small></dd></div>
+        <div class="fact"><dt>신청 대상</dt><dd>부천 관내 초·중·고 교원<small>및 교육전문직</small></dd></div>
         <div class="fact"><dt>모집 인원</dt><dd>300명<small>수용 규모 고려 선착순 마감</small></dd></div>
         <div class="fact"><dt>신청 방법</dt><dd>개인별 직접 신청<small>신청 링크로 제출</small></dd></div>
       </dl>
@@ -533,17 +555,9 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
 
 <section id="apply" style="padding-top:0">
   <div class="wrap">
-    <div class="shead"><h2>기조강연 신청</h2></div>
-    <p class="sdesc">신청 페이지에서 바로 접수하실 수 있습니다. 300명 선착순이며, 신청 후에는 수정이 어려우니 나이스 개인번호를 확인하고 제출해 주세요.</p>
-
-    <div class="applybox">
-      <div class="applybar">
-        <span class="st soon" id="ast">신청 준비 중</span>
-        <span class="cnt" id="acnt">8. 28.(금) 17:00 마감 · 300명 선착순</span>
-      </div>
-      <div id="applyBody"></div>
-    </div>
-
+    <div class="shead"><h2>신청 중인 과정</h2></div>
+    <p class="sdesc">지금 신청하실 수 있는 과정입니다. 과정마다 따로 신청하며, 듣고 싶은 만큼 고르실 수 있습니다.</p>
+    <div id="openList"><div class="applybox"><div class="notice"><p>불러오는 중입니다…</p></div></div></div>
     <p class="privacy">신청서에는 나이스 개인번호, 학교급, 학교명, 교과군, 직위, 성명, 생년월일, 휴대전화번호를 적습니다.
       수집한 정보는 연수 대상자 확정, 출석·이수 처리, 나이스 등재 목적에만 사용하며 목적 달성 후 파기합니다.</p>
   </div>
@@ -663,7 +677,7 @@ const LINKS = {
    · formHeight  : 삽입된 신청서 높이(px). 아래가 잘리면 숫자를 키우세요. */
 const KEYNOTE = {
   open:  "2026-08-20T00:00:00+09:00",
-  close: "2026-09-04T17:00:00+09:00",
+  close: "2026-08-27T17:00:00+09:00",
   seats: 300,
   closedEarly: false,
 
@@ -723,114 +737,136 @@ document.querySelectorAll("[data-link]").forEach(function(a){
   if (u && u !== "#") { a.href = u; a.target = "_blank"; a.rel = "noopener"; }
 });
 
-/* 기조강연 신청 — 상태 표시와 신청 페이지 연결 */
+/* 신청 — 기조강연 카드 상태와 "신청 중인 과정" 목록을 함께 그립니다 */
 (function(){
   var btn  = document.getElementById("kbtn"),
       st   = document.getElementById("kstate"),
       wh   = document.getElementById("kwhen"),
-      ast  = document.getElementById("ast"),
-      acnt = document.getElementById("acnt"),
-      body = document.getElementById("applyBody"),
+      list = document.getElementById("openList"),
       url  = LINKS.keynote,
       live = url && url !== "#";
 
-  function notice(icon, head, text, when){
-    body.innerHTML = '<div class="notice"><span class="ms">' + icon + '</span>'
-      + '<h3>' + head + '</h3><p>' + text + '</p>'
-      + (when ? '<div class="when">' + when + '</div>' : '') + '</div>';
+  var 색 = { keynote:["var(--s1)","var(--s1-dk)"],
+             essay1:["var(--s2)","var(--s2-dk)"],
+             essay2:["var(--s2)","var(--s2-dk)"] };
+
+  function 안내상자(icon, head, text, when){
+    list.innerHTML = '<div class="applybox"><div class="notice">'
+      + '<span class="ms">' + icon + '</span><h3>' + head + '</h3><p>' + text + '</p>'
+      + (when ? '<div class="when">' + when + '</div>' : '') + '</div></div>';
   }
 
-  /* 신청 페이지가 아직 없을 때 */
   if (!live) {
-    st.className = "kstate soon";  st.textContent = "신청 페이지 준비 중";
-    ast.className = "st soon";     ast.textContent = "준비 중";
+    st.className = "kstate soon"; st.textContent = "신청 페이지 준비 중";
     btn.classList.add("mute"); btn.textContent = "신청 준비 중";
-    notice("hourglass_empty", "신청 페이지를 준비하고 있습니다",
-      "준비가 끝나면 이 자리에서 바로 신청하실 수 있습니다.");
+    안내상자("hourglass_empty", "신청 페이지를 준비하고 있습니다",
+      "준비가 끝나면 이 자리에 신청 가능한 과정이 나타납니다.");
     return;
   }
-
   btn.setAttribute("href", "#apply"); btn.removeAttribute("target");
 
-  /* 시각 기준 기본 상태 (신청 페이지 응답이 없어도 화면은 뜹니다) */
-  function 기본상태(){
+  /* 신청 페이지 응답 전, 시각 기준으로 기조강연 카드만 먼저 그립니다 */
+  기조강연카드(null);
+
+  function 기조강연카드(s){
     var now = Date.now(),
         o = new Date(KEYNOTE.open).getTime(),
         c = new Date(KEYNOTE.close).getTime();
-    if (KEYNOTE.closedEarly || now > c) return "마감";
-    if (now < o) return "대기";
-    return "접수중";
-  }
-
-  function 그리기(s){
-    var 상태 = s ? s.상태 : 기본상태();
+    var 상태 = s ? s.상태 : (KEYNOTE.closedEarly || now > c ? "마감" : now < o ? "대기" : "접수중");
     var 정원 = s ? s.정원 : KEYNOTE.seats;
-    var 남은 = s ? s.남은 : null;
-    var 접수 = s ? s.접수 : null;
 
     if (상태 === "접수중") {
       st.className = "kstate open"; st.textContent = "신청 받는 중";
-      ast.className = "st open";    ast.textContent = "신청 받는 중";
-      acnt.textContent = "8. 28.(금) 17:00 마감 · " + 정원 + "명 선착순";
       btn.classList.remove("mute");
       btn.innerHTML = '신청하기<span class="ms" style="font-size:18px">arrow_downward</span>';
-      wh.textContent = "8. 28.(금) 17:00 마감 · " + 정원 + "명 선착순";
-
-      var 보임 = (남은 !== null) && (
-            KEYNOTE.자리표시 === true ||
-            (KEYNOTE.자리표시 === "임박" && 남은 <= KEYNOTE.임박기준));
-      var 채움 = (남은 === null) ? 0 : Math.round((정원 - 남은) / 정원 * 100);
-      var 임박 = 보임 && 남은 <= KEYNOTE.임박기준;
-
-      body.innerHTML =
-          '<div class="seatwrap">'
-        + (보임
-            ? '<div class="seatnum' + (임박 ? ' hot' : '') + '">' + 남은
-              + '<small>/ ' + 정원 + '석</small></div>'
-              + '<div class="seatlab">' + (임박 ? '마감이 얼마 남지 않았습니다 · ' : '')
-              + '남은 자리 · ' + 접수 + '명 신청</div>'
-              + '<div class="gauge"><i class="' + (임박 ? 'hot' : '')
-              + '" style="width:' + 채움 + '%"></i></div>'
-            : '<div class="seatlab">지금 신청하실 수 있습니다 · 정원 ' + 정원 + '명 선착순</div>')
-        + '<a class="gobtn" href="' + url + '" target="_blank" rel="noopener">'
-        + '신청 페이지로 이동<span class="ms" style="font-size:19px">arrow_forward</span></a>'
-        + '<div class="gohint">새 창에서 열립니다 · 나이스 개인번호가 필요합니다</div>'
-        + '</div>';
-
+      wh.textContent = "9. 4.(금) 17:00 마감 · " + 정원 + "명 선착순";
     } else if (상태 === "대기") {
-      var o = new Date(KEYNOTE.open);
-      var 열림 = (o.getMonth()+1) + "월 " + o.getDate() + "일("
-               + "일월화수목금토"[o.getDay()] + ") "
-               + ("0"+o.getHours()).slice(-2) + ":" + ("0"+o.getMinutes()).slice(-2);
-      st.className = "kstate soon"; st.textContent = 열림 + " 신청 시작";
-      ast.className = "st soon";    ast.textContent = "신청 전";
+      st.className = "kstate soon"; st.textContent = "신청 전";
       btn.classList.add("mute"); btn.textContent = "신청 준비 중";
-      wh.textContent = 열림 + " 신청 시작";
-      notice("schedule", "아직 신청 기간이 아닙니다",
-        "신청이 열리면 이 자리에 신청 버튼이 나타납니다. " + 정원 + "명 선착순이니 시작 시각을 기억해 주세요.",
-        "2026. " + 열림 + " 신청 시작");
-
     } else {
-      var 정원참 = (상태 === "정원마감");
       st.className = "kstate closed"; st.textContent = "신청 마감";
-      ast.className = "st closed";    ast.textContent = "마감";
-      acnt.textContent = 정원참 ? "정원 " + 정원 + "명이 모두 찼습니다"
-                                : "8. 28.(금) 17:00 마감되었습니다";
       btn.classList.add("mute"); btn.textContent = "신청이 마감되었습니다";
       wh.textContent = "대상자 명단은 학교로 안내됩니다";
-      notice("event_busy", "신청이 마감되었습니다",
-        정원참 ? "정원 " + 정원 + "명이 모두 차서 조기 마감되었습니다. 문의는 중등교육지원과로 연락 주세요."
-               : "연수 대상자 명단은 학교로 안내해 드립니다. 문의는 중등교육지원과로 연락 주세요.");
     }
   }
 
-  그리기(null);   /* 먼저 시각 기준으로 그리고 */
+  function 목록(all){
+    var 열린것 = [];
+    for (var id in all) if (all[id].상태 === "접수중") 열린것.push(all[id]);
 
-  /* 신청 페이지에서 실제 접수 현황을 받아 덮어씁니다 (인원 수만 오갑니다) */
-  window.__seat = function(s){ if (s && s.상태) 그리기(s); };
+    if (!열린것.length) {
+      안내상자("event_busy", "지금 신청 가능한 과정이 없습니다",
+        "다음 과정이 열리면 이 자리에 안내해 드립니다. 전체 일정은 아래에서 확인하실 수 있습니다.");
+      return;
+    }
+
+    /* 문자열이 아니라 실제 날짜 순으로 정렬합니다 */
+    function 날짜값(s){
+      var m = String(s.일시).match(/(\d+)\.\s*(\d+)\.\(/);   /* 요일 괄호 앞의 월·일 */
+      return m ? Number(m[1]) * 100 + Number(m[2]) : 9999;
+    }
+    열린것.sort(function(a,b){ return 날짜값(a) - 날짜값(b); });
+
+    var html = '<div class="olist">';
+    열린것.forEach(function(s){
+      var cc = 색[s.id] || ["var(--s2)","var(--s2-dk)"];
+      var m = String(s.일시).match(/(\d+)\.\s*(\d+)\.\((.)\)\s*(.*)$/);
+      var 날 = m ? m[1] + ". " + m[2] + "." : s.일시;
+      var 요일 = m ? m[3] + "요일" : "";
+      var 시각 = m ? m[4] : "";
+      var 임박 = (KEYNOTE.자리표시 === true) ||
+                 (KEYNOTE.자리표시 === "임박" && s.남은 <= KEYNOTE.임박기준);
+      var 주소 = url + (s.id === "keynote" ? "" : "#" + s.id);   /* # 는 리디렉션에도 안전합니다 */
+
+      html += '<div class="ocard" style="--c:' + cc[0] + ';--c-dk:' + cc[1] + '">'
+        + '<div class="oday"><div class="d serif">' + esc(날) + '</div>'
+        +   '<div class="w">' + esc(요일) + '</div></div>'
+        + '<div>'
+        +   '<div class="ostage">' + esc(s.구분 || "") + '</div>'
+        +   '<div class="otitle">' + esc(s.연수명) + '</div>'
+        +   '<div class="ometa">' + esc(시각) + ' · ' + esc(s.형태 || "")
+        +     (s.곁들임 ? ' · ' + esc(s.곁들임) : '') + '</div>'
+        +   (임박 ? '<div class="oseat">남은 자리 ' + s.남은 + '석 · 마감이 얼마 남지 않았습니다</div>' : '')
+        + '</div>'
+        + '<a class="obtn" href="' + 주소 + '" target="_blank" rel="noopener">'
+        +   '신청하기<span class="ms" style="font-size:18px">arrow_forward</span></a>'
+        + '</div>';
+    });
+    list.innerHTML = html + '</div>';
+
+    /* 일정표의 과정별 신청 버튼도 함께 살립니다 */
+    일정표버튼(all);
+  }
+
+  function 일정표버튼(all){
+    var 짝 = { "중등 서·논술형 평가의 이해":"essay1",
+               "수업과 연계한 서·논술형 평가 문항 제작":"essay2" };
+    document.querySelectorAll("#rail .slot").forEach(function(slot){
+      var t = slot.querySelector(".ctitle");
+      var a = slot.querySelector(".apply");
+      if (!t || !a) return;
+      var id = 짝[t.textContent.trim()];
+      if (!id || !all[id] || all[id].상태 !== "접수중") return;
+      a.classList.remove("mute");
+      a.href = url + "#" + id;
+      a.target = "_blank"; a.rel = "noopener";
+      a.innerHTML = '신청하기<span class="ms" style="font-size:17px">arrow_forward</span>';
+    });
+  }
+
+  /* 세 과정 현황을 한 번에 받아옵니다 (인원 수만 오갑니다) */
+  window.__all = function(all){
+    if (!all) return;
+    if (all.keynote) 기조강연카드(all.keynote);
+    목록(all);
+  };
   var sc = document.createElement("script");
-  sc.src = url + (url.indexOf("?") > -1 ? "&" : "?") + "callback=__seat&_=" + Date.now();
-  sc.onerror = function(){};   /* 못 받아와도 위에서 그린 화면이 남습니다 */
+  sc.src = url + (url.indexOf("?") > -1 ? "&" : "?") + "all=1&callback=__all&_=" + Date.now();
+  sc.onerror = function(){
+    안내상자("wifi_off", "신청 현황을 불러오지 못했습니다",
+      '아래 <a href="' + url + '" target="_blank" rel="noopener" '
+      + 'style="color:var(--s1-dk);font-weight:700">신청 페이지</a>에서 직접 확인해 주세요.');
+  };
   document.body.appendChild(sc);
 })();
 
