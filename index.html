@@ -148,6 +148,18 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .note.hi p,.note.hi li{color:#4E6337}
 .note.hi li::before{color:#7FA05C}
 
+/* 기조강연 만족도 조사 — 단계 색이 아니라 기본 남색을 씁니다 */
+.kfeedback{display:flex;align-items:center;gap:20px;flex-wrap:wrap;
+  background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:20px 24px;margin-top:16px}
+.kfeedback .fbtext{flex:1;min-width:230px}
+.kfeedback h3{font-size:15px;font-weight:700;display:flex;align-items:center;gap:7px}
+.kfeedback p{font-size:14.5px;color:var(--muted);line-height:1.65;margin-top:6px}
+.fbtn{background:var(--navy);color:#fff;border-radius:9px;padding:14px 24px;text-decoration:none;
+  font-size:15.5px;font-weight:700;white-space:nowrap;
+  display:inline-flex;align-items:center;gap:7px;transition:.16s}
+.fbtn:hover{background:var(--navy-3)}
+
 /* ---------- apply (embedded form) ---------- */
 .applybox{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
 .applybar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
@@ -307,6 +319,8 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
   .k-top{grid-template-columns:1fr}
   .fact{border-right:0;border-bottom:1px solid rgba(255,255,255,.1)}
   .fact:last-child{border-bottom:0}
+  .kfeedback{align-items:stretch}
+  .fbtn{justify-content:center}
   .rail{padding-left:0}
   .rail::before{display:none}
   .slot .day{position:static;width:auto;text-align:left;display:flex;align-items:baseline;gap:8px;margin-bottom:6px}
@@ -551,6 +565,18 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
         <p style="margin-top:8px">이수증은 따로 발급하지 않으며, 나이스 연수 기록 등재로 갈음합니다.</p>
       </div>
     </div>
+
+    <!-- 기조강연 만족도 조사 — 참여하신 선생님 대상 -->
+    <div class="kfeedback">
+      <div class="fbtext">
+        <h3><span class="ms">rate_review</span>기조강연 만족도 조사</h3>
+        <p>강연에 참여하신 선생님의 의견을 들려주세요. 앞으로의 과정 운영에 반영합니다.<br>
+          응답 약 1분 · 9. 8.(월)까지</p>
+      </div>
+      <a class="fbtn" href="./survey.html">
+        의견 남기기<span class="ms" style="font-size:18px">arrow_forward</span>
+      </a>
+    </div>
   </div>
 </section>
 
@@ -666,10 +692,10 @@ const LINKS = {
   /* ▼▼ 기조강연 신청 폼 — 폼을 만든 뒤 아래 "#" 자리에 주소를 붙여 넣으세요 ▼▼
      open 시각이 지나면 버튼이 자동으로 열립니다.                            */
   keynote:   "https://script.google.com/macros/s/AKfycbyGCDwW1GWM_u251ZAqLn4vFcRIvJf3i69IiRiGIvjbmcFXtOnxa3mSiG-tFBNpc-ga/exec",
-  materials: "#",   // 강의자료 폴더
-  survey:    "#",   // 만족도 조사 폼
-  live:      "#",   // QuizN 참여 주소
-  ask:       "#"    // 문의 폼 또는 mailto:
+  materials: "#",              // 강의자료 폴더
+  survey:    "./survey.html",  // 만족도 조사 (구글 폼 주소는 survey.html 안에서 관리)
+  live:      "#",              // QuizN 참여 주소
+  ask:       "#"               // 문의 폼 또는 mailto:
 };
 
 /* 기조강연 신청 설정 (한국 시간 기준)
