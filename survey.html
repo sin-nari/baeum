@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>기조강연 만족도 조사 — 2026 부천 중등 「배움:성장」</title>
+<meta name="robots" content="noindex">
+<style>
+  :root{
+    --ink:#182B3A; --soft:#5A6B78; --teal:#0E7C6B; --wash:#EDF1F3; --line:#CBD5DC;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center;
+    padding:24px; background:#fff; color:var(--ink);
+    font-family:'Pretendard','Apple SD Gothic Neo','맑은 고딕','Malgun Gothic',sans-serif;
+    line-height:1.7; letter-spacing:-0.01em;
+  }
+  .card{max-width:420px; width:100%;}
+  .kicker{font-size:13px; color:var(--soft); margin-bottom:10px;}
+  h1{font-size:24px; line-height:1.4; margin:0 0 14px; letter-spacing:-0.02em;}
+  p{margin:0 0 10px; font-size:15px; color:var(--soft);}
+  .btn{
+    display:block; margin-top:22px; padding:15px 18px; text-align:center;
+    background:var(--teal); color:#fff; text-decoration:none; font-size:16px; font-weight:600;
+    border-radius:8px;
+  }
+  .note{margin-top:14px; font-size:13px; color:var(--soft); text-align:center;}
+  .closed{background:var(--wash); border-radius:8px; padding:20px; margin-top:18px;}
+  .closed p{margin:0; font-size:15px; color:var(--ink);}
+  .foot{margin-top:28px; padding-top:14px; border-top:1px solid var(--line); font-size:12px; color:var(--soft);}
+</style>
+</head>
+<body>
+<div class="card" id="card"></div>
+
+<script>
+/* ────────────────────────────────────────────────────────────
+   운영자가 고칠 곳은 여기 세 줄뿐입니다.
+
+   FORM_URL : createSurvey 실행 로그에 찍힌 '응답용 링크'
+   CLOSED   : 조사를 마감하면 true 로 바꾼다
+   AUTO     : QR로 들어온 사람을 바로 설문으로 넘길지 여부
+   ──────────────────────────────────────────────────────────── */
+var FORM_URL = 'https://docs.google.com/forms/d/e/1FAIpQLSc2bqLPJwRHFpoMoIAPb32DGuBWWMQxS4UI93I3dPdGxtAg5A/viewform';
+
+
+ 
+var CLOSED   = false;
+var AUTO     = true;
+
+var card = document.getElementById('card');
+
+if (CLOSED) {
+  card.innerHTML =
+    '<div class="kicker">2026 부천 중등 「배움:성장」</div>' +
+    '<h1>기조강연 만족도 조사가<br>마감되었습니다</h1>' +
+    '<div class="closed"><p>참여해 주셔서 감사합니다. 남겨주신 의견은 이후 「배움:성장」 연수 구성에 반영하겠습니다.</p></div>' +
+    '<div class="foot">부천교육지원청 중등교육지원과</div>';
+} else {
+  card.innerHTML =
+    '<div class="kicker">2026 부천 중등 「배움:성장」 · 기조강연</div>' +
+    '<h1>오늘 배움에 대한<br>의견을 들려주세요</h1>' +
+    '<p>더 나은 연수 운영을 위해 짧은 의견을 여쭙습니다. 응답은 1분이면 됩니다.</p>' +
+    '<p>남겨주신 답변은 앞으로의 온라인 선택과정과 사례나눔 구성에 반영됩니다.</p>' +
+    '<a class="btn" href="' + FORM_URL + '">만족도 조사 참여하기</a>' +
+    '<div class="note" id="note"></div>' +
+    '<div class="foot">2026. 9. 4.(금) · 부천대학교 한길아트홀<br>부천교육지원청 중등교육지원과</div>';
+
+  if (AUTO) {
+    document.getElementById('note').textContent = '잠시 후 설문으로 이동합니다.';
+    setTimeout(function () { location.replace(FORM_URL); }, 1200);
+  }
+}
+</script>
+</body>
+</html>
