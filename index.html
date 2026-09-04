@@ -314,6 +314,9 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .rlink.off{opacity:.5;pointer-events:none}
 .rlink.off .soonmark{display:inline-block;margin-top:9px;font-size:12px;font-weight:700;
   background:#EFEEE9;color:var(--muted);border-radius:999px;padding:3px 10px}
+.rnote{margin-top:12px;font-size:13.5px;line-height:1.7;color:#8A6A55;
+  background:#FBF4EE;border:1px solid #EAD9C9;border-radius:10px;padding:12px 15px}
+.rnote strong{color:#7A5233;font-weight:700}
 
 footer{background:var(--navy);color:rgba(255,255,255,.62);padding:40px 0;font-size:14px}
 footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-size:15px}
@@ -595,7 +598,7 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
           남겨 주신 질문은 강연장 화면에 함께 올라갑니다. 이름은 적지 않으셔도 됩니다.</p>
       </div>
       <div class="fbacts">
-        <a class="fbtn" href="https://forms.gle/DA124bLxsSdQbBLd9" target="_blank" rel="noopener">
+        <a class="fbtn" href="https://forms.gle/GLTZKWRoGtXZqdnt9" target="_blank" rel="noopener">
           질문 남기기<span class="ms" style="font-size:18px">arrow_forward</span>
         </a>
         <a class="fbsub" href="./qna-live.html" target="_blank" rel="noopener">올라온 질문 보기</a>
@@ -708,7 +711,7 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
       </div>
       <div class="rlist">
         <a class="rlink" href="#" data-link="materials"><span class="ms">description</span>
-          <strong>강의자료 내려받기</strong><span>김수환 교수 발표자료</span></a>
+          <strong>강의자료 내려받기</strong><span>김수환 교수 발표자료 · 연구 목적 한정, 배포 금지</span></a>
         <a class="rlink" href="#" data-link="question"><span class="ms">live_help</span>
           <strong>현장 질의</strong><span>강연 중 질문 남기기</span></a>
         <a class="rlink" href="#" data-link="wall"><span class="ms">forum</span>
@@ -716,6 +719,8 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
         <a class="rlink" href="#" data-link="survey"><span class="ms">rate_review</span>
           <strong>만족도 조사</strong><span>9. 6.(일)까지 · 약 1분</span></a>
       </div>
+      <p class="rnote"><strong>연구 목적 한정 · 다른 곳에 배포 금지</strong><br>
+        강사님께서 위 조건으로 제공해 주신 자료입니다. 지켜 주시기를 부탁드립니다.</p>
     </div>
 
     <div class="rgroup">
@@ -747,8 +752,8 @@ const LINKS = {
   /* ▼▼ 기조강연 신청 폼 — 폼을 만든 뒤 아래 "#" 자리에 주소를 붙여 넣으세요 ▼▼
      open 시각이 지나면 버튼이 자동으로 열립니다.                            */
   keynote:   "https://script.google.com/macros/s/AKfycbyGCDwW1GWM_u251ZAqLn4vFcRIvJf3i69IiRiGIvjbmcFXtOnxa3mSiG-tFBNpc-ga/exec",
-  materials: "#",   // 9/4 기조강연 강의자료 (준비되면 주소를 넣으세요)
-  question:  "https://forms.gle/DA124bLxsSdQbBLd9",   // 현장 질의 폼 (9/4 당일용)
+  materials: "https://drive.google.com/file/d/1wi3iqFHovCkKWOJ2u4AFd0qAG7GrnnGD/view",   // 9/4 기조강연 강의자료 (연구 목적 한정 · 배포 금지)
+  question:  "https://forms.gle/GLTZKWRoGtXZqdnt9",   // 현장 질의 폼 (9/4 당일용)
   wall:      "./qna-live.html",   // 올라온 질문 벽 (9/4 당일용)
   survey:    "./survey.html",   // 만족도 조사 (구글 폼 주소는 survey.html 안에서 관리)
   ask:       "#"    // 문의 폼 또는 mailto:
