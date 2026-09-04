@@ -166,6 +166,11 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .kfeedback.live p{color:#4E6337}
 .kfeedback.live .fbtn{background:var(--s1-dk)}
 .kfeedback.live .fbtn:hover{background:#3D5D19}
+.kfeedback.live .fbacts{display:flex;flex-direction:column;gap:9px;min-width:170px}
+.kfeedback.live .fbsub{font-size:13.5px;font-weight:600;color:var(--s1-dk);
+  text-align:center;text-decoration:none;border:1px solid #C8DDB0;border-radius:9px;
+  padding:9px 14px;background:#fff;transition:.15s}
+.kfeedback.live .fbsub:hover{border-color:var(--s1-dk)}
 
 /* ---------- apply (embedded form) ---------- */
 .applybox{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
@@ -587,11 +592,14 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
       <div class="fbtext">
         <h3><span class="ms">live_help</span>강연 중 질문 남기기</h3>
         <p>강연을 들으며 떠오른 질문을 남겨 주세요. 질의응답 시간에 함께 다룹니다.<br>
-          이름은 적지 않으셔도 됩니다.</p>
+          남겨 주신 질문은 강연장 화면에 함께 올라갑니다. 이름은 적지 않으셔도 됩니다.</p>
       </div>
-      <a class="fbtn" href="https://forms.gle/DA124bLxsSdQbBLd9" target="_blank" rel="noopener">
-        질문 남기기<span class="ms" style="font-size:18px">arrow_forward</span>
-      </a>
+      <div class="fbacts">
+        <a class="fbtn" href="https://forms.gle/DA124bLxsSdQbBLd9" target="_blank" rel="noopener">
+          질문 남기기<span class="ms" style="font-size:18px">arrow_forward</span>
+        </a>
+        <a class="fbsub" href="./qna-live.html" target="_blank" rel="noopener">올라온 질문 보기</a>
+      </div>
     </div>
     <!-- ▲▲ 현장 질의 끝 ▲▲ -->
 
@@ -703,6 +711,8 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
           <strong>강의자료 내려받기</strong><span>김수환 교수 발표자료</span></a>
         <a class="rlink" href="#" data-link="question"><span class="ms">live_help</span>
           <strong>현장 질의</strong><span>강연 중 질문 남기기</span></a>
+        <a class="rlink" href="#" data-link="wall"><span class="ms">forum</span>
+          <strong>올라온 질문 보기</strong><span>실시간으로 함께 봅니다</span></a>
         <a class="rlink" href="#" data-link="survey"><span class="ms">rate_review</span>
           <strong>만족도 조사</strong><span>9. 6.(일)까지 · 약 1분</span></a>
       </div>
@@ -738,7 +748,8 @@ const LINKS = {
      open 시각이 지나면 버튼이 자동으로 열립니다.                            */
   keynote:   "https://script.google.com/macros/s/AKfycbyGCDwW1GWM_u251ZAqLn4vFcRIvJf3i69IiRiGIvjbmcFXtOnxa3mSiG-tFBNpc-ga/exec",
   materials: "#",   // 9/4 기조강연 강의자료 (준비되면 주소를 넣으세요)
-  question:  "https://forms.gle/DA124bLxsSdQbBLd9",   // 현장 질의 (9/4 당일용)
+  question:  "https://forms.gle/DA124bLxsSdQbBLd9",   // 현장 질의 폼 (9/4 당일용)
+  wall:      "./qna-live.html",   // 올라온 질문 벽 (9/4 당일용)
   survey:    "./survey.html",   // 만족도 조사 (구글 폼 주소는 survey.html 안에서 관리)
   ask:       "#"    // 문의 폼 또는 mailto:
 };
