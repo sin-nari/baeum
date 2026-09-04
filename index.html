@@ -160,6 +160,13 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
   display:inline-flex;align-items:center;gap:7px;transition:.16s}
 .fbtn:hover{background:var(--navy-3)}
 
+/* 현장 질의 — 강연 당일에만 씁니다. 「여는 배움」 단계 색으로 만족도 조사와 구분합니다 */
+.kfeedback.live{background:var(--s1-lt);border-color:#C8DDB0;border-left-color:var(--s1-dk)}
+.kfeedback.live h3{color:var(--s1-dk)}
+.kfeedback.live p{color:#4E6337}
+.kfeedback.live .fbtn{background:var(--s1-dk)}
+.kfeedback.live .fbtn:hover{background:#3D5D19}
+
 /* ---------- apply (embedded form) ---------- */
 .applybox{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
 .applybar{display:flex;align-items:center;gap:14px;flex-wrap:wrap;
@@ -293,6 +300,15 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .rlink .ms{font-size:24px;color:var(--navy)}
 .rlink strong{display:block;font-size:15.5px;margin-top:10px;font-weight:600}
 .rlink span{font-size:13.5px;color:var(--muted)}
+
+/* 자료실 — 과정별 묶음. 과정이 끝날 때마다 묶음을 위에 추가합니다 */
+.rgroup+.rgroup{margin-top:30px}
+.rghead{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:13px}
+.rghead h3{font-size:16.5px;font-weight:700}
+.rghead .rgnote{font-size:13.5px;color:var(--muted)}
+.rlink.off{opacity:.5;pointer-events:none}
+.rlink.off .soonmark{display:inline-block;margin-top:9px;font-size:12px;font-weight:700;
+  background:#EFEEE9;color:var(--muted);border-radius:999px;padding:3px 10px}
 
 footer{background:var(--navy);color:rgba(255,255,255,.62);padding:40px 0;font-size:14px}
 footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-size:15px}
@@ -566,6 +582,19 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
       </div>
     </div>
 
+    <!-- ▼▼ 현장 질의 — 9. 4. 강연 당일 전용. 행사가 끝나면 이 블록을 지우세요 ▼▼ -->
+    <div class="kfeedback live">
+      <div class="fbtext">
+        <h3><span class="ms">live_help</span>강연 중 질문 남기기</h3>
+        <p>강연을 들으며 떠오른 질문을 남겨 주세요. 질의응답 시간에 함께 다룹니다.<br>
+          이름은 적지 않으셔도 됩니다.</p>
+      </div>
+      <a class="fbtn" href="https://forms.gle/DA124bLxsSdQbBLd9" target="_blank" rel="noopener">
+        질문 남기기<span class="ms" style="font-size:18px">arrow_forward</span>
+      </a>
+    </div>
+    <!-- ▲▲ 현장 질의 끝 ▲▲ -->
+
     <!-- 기조강연 만족도 조사 — 참여하신 선생님 대상 -->
     <div class="kfeedback">
       <div class="fbtext">
@@ -661,16 +690,32 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
 <section id="resources" style="background:#F1EFE9">
   <div class="wrap" style="padding-top:0">
     <div class="shead"><h2>자료실</h2></div>
-    <p class="sdesc">연수 자료와 의견 창구입니다. 자료는 연수 종료 후 순차적으로 올라갑니다.</p>
-    <div class="rlist">
-      <a class="rlink" href="#" data-link="materials"><span class="ms">description</span>
-        <strong>강의자료 내려받기</strong><span>과정별 발표자료와 배부자료</span></a>
-      <a class="rlink" href="#" data-link="survey"><span class="ms">rate_review</span>
-        <strong>만족도 조사</strong><span>다음 연수를 더 좋게 만듭니다</span></a>
-      <a class="rlink" href="#" data-link="live"><span class="ms">forum</span>
-        <strong>실시간 참여</strong><span>연수 중 의견 나눔 (QuizN)</span></a>
-      <a class="rlink" href="#" data-link="ask"><span class="ms">contact_support</span>
-        <strong>문의하기</strong><span>중등교육지원과 담당 장학사</span></a>
+    <p class="sdesc">과정별 자료와 의견 창구입니다. 강의자료는 과정이 끝난 뒤 순차적으로 올라갑니다.</p>
+
+    <div class="rgroup">
+      <div class="rghead">
+        <span class="tag t-s1">여는 배움</span>
+        <h3>9월 4일 기조강연</h3>
+        <span class="rgnote">AI 공존의 시대, 교육과정-수업-평가의 방향</span>
+      </div>
+      <div class="rlist">
+        <a class="rlink" href="#" data-link="materials"><span class="ms">description</span>
+          <strong>강의자료 내려받기</strong><span>김수환 교수 발표자료</span></a>
+        <a class="rlink" href="#" data-link="question"><span class="ms">live_help</span>
+          <strong>현장 질의</strong><span>강연 중 질문 남기기</span></a>
+        <a class="rlink" href="#" data-link="survey"><span class="ms">rate_review</span>
+          <strong>만족도 조사</strong><span>9. 6.(일)까지 · 약 1분</span></a>
+      </div>
+    </div>
+
+    <div class="rgroup">
+      <div class="rghead">
+        <h3>상시 창구</h3>
+      </div>
+      <div class="rlist">
+        <a class="rlink" href="#" data-link="ask"><span class="ms">contact_support</span>
+          <strong>문의하기</strong><span>중등교육지원과 담당 장학사</span></a>
+      </div>
     </div>
   </div>
 </section>
@@ -692,9 +737,9 @@ const LINKS = {
   /* ▼▼ 기조강연 신청 폼 — 폼을 만든 뒤 아래 "#" 자리에 주소를 붙여 넣으세요 ▼▼
      open 시각이 지나면 버튼이 자동으로 열립니다.                            */
   keynote:   "https://script.google.com/macros/s/AKfycbyGCDwW1GWM_u251ZAqLn4vFcRIvJf3i69IiRiGIvjbmcFXtOnxa3mSiG-tFBNpc-ga/exec",
-  materials: "#",   // 강의자료 폴더
+  materials: "#",   // 9/4 기조강연 강의자료 (준비되면 주소를 넣으세요)
+  question:  "https://forms.gle/DA124bLxsSdQbBLd9",   // 현장 질의 (9/4 당일용)
   survey:    "./survey.html",   // 만족도 조사 (구글 폼 주소는 survey.html 안에서 관리)
-  live:      "#",   // QuizN 참여 주소
   ask:       "#"    // 문의 폼 또는 mailto:
 };
 
@@ -761,7 +806,14 @@ if (document.fonts && document.fonts.load) {
 /* 링크 연결 */
 document.querySelectorAll("[data-link]").forEach(function(a){
   var u = LINKS[a.dataset.link];
-  if (u && u !== "#") { a.href = u; a.target = "_blank"; a.rel = "noopener"; }
+  if (u && u !== "#") { a.href = u; a.target = "_blank"; a.rel = "noopener"; return; }
+  a.classList.add("off");
+  a.setAttribute("aria-disabled", "true");
+  a.removeAttribute("href");
+  var m = document.createElement("span");
+  m.className = "soonmark";
+  m.textContent = "준비 중";
+  a.appendChild(m);
 });
 
 /* 신청 — 기조강연 카드 상태와 "신청 중인 과정" 목록을 함께 그립니다 */
