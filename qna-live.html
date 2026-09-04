@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -129,6 +130,8 @@ main{flex:1;overflow-y:auto;padding:26px 22px 60px}
   'use strict';
 
   /* Apps Script 웹 앱 배포 주소(/exec)를 넣으세요. ?url=... 로도 넘길 수 있습니다. */
+  /* ↓ Apps Script 웹 앱 배포 주소. 반드시 /exec 로 끝나야 합니다.
+     구글 폼 주소(docs.google.com/forms/...)를 넣으면 안 됩니다. */
   var QNA_URL = 'https://script.google.com/macros/s/AKfycbxZXxvdLSDztdIu1Q5k_Q-SAnVBFcCQkosltdhX1ZxgJggNvD4s70adO5I9yL-u6QGyEA/exec';
 
   var override = new URLSearchParams(location.search).get('url');
@@ -186,16 +189,21 @@ main{flex:1;overflow-y:auto;padding:26px 22px 60px}
     if (msg) console.error(msg);
     if (!items.length) {
       el.main.innerHTML = '<div class="blank"><strong>질문을 불러오지 못했습니다</strong>' +
-        'Apps Script를 <code>모든 사용자</code> 액세스로 새로 배포했는지, ' +
-        '주소가 <code>/exec</code> 로 끝나는지 확인해 주세요.</div>';
+        (msg && msg !== 'network'
+          ? '<code>' + esc(msg) + '</code>'
+          : 'Apps Script를 <code>모든 사용자</code> 액세스로 새로 배포했는지 확인해 주세요.') +
+        '</div>';
     }
   }
 
   function poll() {
-    if (QNA_URL.indexOf('PASTE_') === 0) {
-      el.main.innerHTML = '<div class="blank"><strong>배포 주소를 넣어 주세요</strong>' +
-        '이 파일의 <code>QNA_URL</code> 값을 웹 앱 주소로 바꾸거나, ' +
-        '주소 끝에 <code>?url=배포주소</code> 를 붙이면 됩니다.</div>';
+    if (QNA_URL.indexOf('script.google.com') === -1 || QNA_URL.indexOf('/exec') === -1) {
+      el.main.innerHTML = '<div class="blank"><strong>주소를 다시 확인해 주세요</strong>' +
+        '<code>QNA_URL</code> 에는 Apps Script 웹 앱 주소가 들어가야 합니다. ' +
+        '<code>script.google.com/macros/s/…/exec</code> 형태여야 하며, ' +
+        '구글 폼 주소를 넣으면 이 화면이 나옵니다.</div>';
+      el.stat.textContent = '주소 오류';
+      el.dot.classList.add('off');
       return;
     }
     var old = document.getElementById('jsonp');
