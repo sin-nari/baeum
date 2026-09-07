@@ -102,6 +102,7 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .scope strong{font-weight:700}
 .tag{font-size:12px;font-weight:700;letter-spacing:.1em;padding:4px 11px;border-radius:5px}
 .t-s1{background:var(--s1-lt);color:var(--s1-dk)}
+.t-s2{background:var(--s2-lt);color:var(--s2-dk)}
 .t-s3{background:var(--s3-lt);color:var(--s3-dk)}
 
 /* ---------- keynote ---------- */
@@ -171,6 +172,17 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
   text-align:center;text-decoration:none;border:1px solid #C8DDB0;border-radius:9px;
   padding:9px 14px;background:#fff;transition:.15s}
 .kfeedback.live .fbsub:hover{border-color:var(--s1-dk)}
+
+/* 운영이 끝난 창구 — 색을 걷어내고 누를 수 없는 상태로 둡니다 */
+.kfeedback.done{background:#F4F5F7;border-color:#D8DCE4;border-left-color:#B9C0CC}
+.kfeedback.done h3,
+.kfeedback.done p{color:var(--muted)}
+.kfeedback.done .fbtn,
+.kfeedback.done .fbsub{background:#E7E9ED;color:var(--muted);
+  border:1px solid #D8DCE4;cursor:default}
+.kfeedback.done .dbadge{font-size:11.5px;font-weight:700;letter-spacing:-.01em;
+  background:#fff;color:var(--muted);border:1px solid #D8DCE4;
+  border-radius:999px;padding:2px 8px;margin-left:8px}
 
 /* ---------- apply (embedded form) ---------- */
 .applybox{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
@@ -381,6 +393,14 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
   color:#fff;background:var(--s1-dk);border-radius:999px;padding:3px 9px;
 }
 .rlink#survey.off::after{content:none}
+/* 마감 뒤에는 초록 강조를 걷어내고 다른 카드와 같은 회색 종료 상태가 됩니다 */
+.rlink#survey.off{
+  border-color:var(--line);
+  box-shadow:none;
+  background:var(--card);
+}
+.rlink#survey.off .ms{color:var(--navy)}
+.rlink#survey.off strong{color:inherit}
 /* 주소 뒤에 #survey 를 붙여 들어오면 잠깐 깜빡입니다 */
 @keyframes surveyping{
   0%,100%{box-shadow:inset 0 0 0 1px var(--s1-dk), 0 0 0 0 rgba(127,177,58,0)}
@@ -388,6 +408,24 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
 }
 .rlink#survey.ping{animation:surveyping 1.1s ease-out 2}
 @media(prefers-reduced-motion:reduce){.rlink#survey.ping{animation:none}}
+
+
+/* ── 선택형 과정 만족도 조사 카드 ──────────────────────────────
+   최근 끝난 과정 하나만 자동으로 나타납니다. 기간이 지나면 사라집니다.
+   기간은 아래 스크립트의 '열림일수' 값으로 조절합니다. */
+.rgroup[hidden]{display:none}
+.rlink.svnow{
+  border-color:var(--s2-dk);
+  box-shadow:inset 0 0 0 1px var(--s2-dk), 0 2px 10px rgba(37,94,158,.15);
+  background:var(--s2-lt);
+}
+.rlink.svnow:hover{
+  border-color:var(--s2-dk);
+  box-shadow:inset 0 0 0 1px var(--s2-dk), 0 7px 20px rgba(37,94,158,.24);
+}
+.rlink.svnow .ms,
+.rlink.svnow strong{color:var(--s2-dk)}
+#rg-now .rlist{grid-template-columns:repeat(auto-fill,minmax(230px,1fr))}
 </style>
 </head>
 <body>
@@ -621,32 +659,27 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
       </div>
     </div>
 
-    <!-- ▼▼ 현장 질의 — 9. 4. 강연 당일 전용. 행사가 끝나면 이 블록을 지우세요 ▼▼ -->
-    <div class="kfeedback live">
+    <!-- 현장 질의 — 9. 4. 강연 당일에만 운영했습니다. 종료 상태입니다 -->
+    <div class="kfeedback live done">
       <div class="fbtext">
         <h3><span class="ms">live_help</span>강연 중 질문 남기기</h3>
-        <p>강연을 들으며 떠오른 질문을 남겨 주세요. 질의응답 시간에 함께 다룹니다.<br>
-          남겨 주신 질문은 강연장 화면에 함께 올라갑니다. 이름은 적지 않으셔도 됩니다.</p>
+        <p>9. 4.(금) 강연 중에만 운영했습니다.<br>
+          주신 질문은 질의응답 시간에 함께 다루었습니다.</p>
       </div>
       <div class="fbacts">
-        <a class="fbtn" href="https://forms.gle/GLTZKWRoGtXZqdnt9" target="_blank" rel="noopener">
-          질문 남기기<span class="ms" style="font-size:18px">arrow_forward</span>
-        </a>
-        <a class="fbsub" href="./qna-live.html" target="_blank" rel="noopener">올라온 질문 보기</a>
+        <span class="fbtn">질문 남기기<span class="dbadge">종료</span></span>
+        <span class="fbsub">올라온 질문 보기<span class="dbadge">종료</span></span>
       </div>
     </div>
-    <!-- ▲▲ 현장 질의 끝 ▲▲ -->
 
-    <!-- 기조강연 만족도 조사 — 참여하신 선생님 대상 -->
-    <div class="kfeedback">
+    <!-- 기조강연 만족도 조사 — 9. 6. 마감. 종료 상태입니다 -->
+    <div class="kfeedback done">
       <div class="fbtext">
         <h3><span class="ms">rate_review</span>기조강연 만족도 조사</h3>
-        <p>강연에 참여하신 선생님의 의견을 들려주세요. 앞으로의 과정 운영에 반영합니다.<br>
-          응답 약 1분 · 9. 6.(일)까지</p>
+        <p>9. 6.(일) 마감했습니다. 응답해 주신 선생님께 감사드립니다.<br>
+          주신 의견은 앞으로의 과정 운영에 반영합니다.</p>
       </div>
-      <a class="fbtn" href="./survey.html">
-        의견 남기기<span class="ms" style="font-size:18px">arrow_forward</span>
-      </a>
+      <span class="fbtn">의견 남기기<span class="dbadge">종료</span></span>
     </div>
   </div>
 </section>
@@ -743,15 +776,25 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
       <div class="rlist">
         <a class="rlink" href="#" data-link="materials"><span class="ms">description</span>
           <strong>강의자료 내려받기</strong><span>김수환 교수 발표자료 · 연구 목적 한정, 배포 금지</span></a>
-        <a class="rlink" href="#" data-link="question"><span class="ms">live_help</span>
+        <a class="rlink" href="#" data-link="question" data-done="종료"><span class="ms">live_help</span>
           <strong>현장 질의</strong><span>강연 중 질문 남기기</span></a>
-        <a class="rlink" href="#" data-link="wall"><span class="ms">forum</span>
+        <a class="rlink" href="#" data-link="wall" data-done="종료"><span class="ms">forum</span>
           <strong>올라온 질문 보기</strong><span>실시간으로 함께 봅니다</span></a>
-        <a class="rlink" id="survey" href="#" data-link="survey"><span class="ms">rate_review</span>
-          <strong>만족도 조사</strong><span>9. 6.(일)까지 · 약 1분</span></a>
+        <a class="rlink" id="survey" href="#" data-link="survey" data-done="종료"><span class="ms">rate_review</span>
+          <strong>만족도 조사</strong><span>9. 6.(일) 마감</span></a>
       </div>
       <p class="rnote"><strong>연구 목적 한정 · 다른 곳에 배포 금지</strong><br>
         강사님께서 위 조건으로 제공해 주신 자료입니다. 지켜 주시기를 부탁드립니다.</p>
+    </div>
+
+    <!-- 선택형 직무연수 만족도 조사. 카드는 스크립트가 자동으로 채웁니다 -->
+    <div class="rgroup" id="rg-now">
+      <div class="rghead">
+        <span class="tag t-s2">배움:성장</span>
+        <h3>선택형 직무연수 만족도 조사</h3>
+        <span class="rgnote">연수 당일부터 3일간 열립니다 · 약 1분 · 무기명</span>
+      </div>
+      <div class="rlist" id="rg-now-l"></div>
     </div>
 
     <div class="rgroup">
@@ -810,20 +853,20 @@ const KEYNOTE = {
 
 const COURSES = [
   /* ── 02 배움:성장 · 선택형 직무연수 7과정 (원격 · 15:00~17:00) ── */
-  {stage:2, d:"9. 7.",  wd:"월", t:"중등 서·논술형 평가의 이해",
+  {stage:2, sv:1, d:"9. 7.",  wd:"월", t:"중등 서·논술형 평가의 이해",
    area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
-  {stage:2, d:"9. 17.", wd:"목", t:"수업과 연계한 서·논술형 평가 문항 제작",
+  {stage:2, sv:2, d:"9. 17.", wd:"목", t:"수업과 연계한 서·논술형 평가 문항 제작",
    area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
-  {stage:2, d:"9. 21.", wd:"월", t:"2022 개정 교육과정과 성취평가제 이해",
+  {stage:2, sv:[3,4], d:"9. 21.", wd:"월", t:"2022 개정 교육과정과 성취평가제 이해",
    sub:"중학교·고등학교로 나누어 운영하며, 신청 시 학교급을 선택합니다",
    area:"학생평가", key:"assess", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", split:"중·고 분반", url:"#"},
-  {stage:2, d:"9. 22.", wd:"화", t:"고등학교 학생평가 지원을 위한 성취평가 운영의 이해",
+  {stage:2, sv:5, d:"9. 22.", wd:"화", t:"고등학교 학생평가 지원을 위한 성취평가 운영의 이해",
    area:"학생평가", key:"assess", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
-  {stage:2, d:"9. 29.", wd:"화", t:"고교 학점 이수 지원을 위한 최소 성취수준 보장 지도 방안",
+  {stage:2, sv:6, d:"9. 29.", wd:"화", t:"고교 학점 이수 지원을 위한 최소 성취수준 보장 지도 방안",
    area:"고등학교 교육과정", key:"curr", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
-  {stage:2, d:"10. 8.", wd:"목", t:"고교학점제 운영의 실제",
+  {stage:2, sv:7, d:"10. 8.", wd:"목", t:"고교학점제 운영의 실제",
    area:"고등학교 교육과정", key:"curr", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
-  {stage:2, d:"10. 22.",wd:"목", t:"고교학점제와 진로·학업설계 지도의 실제",
+  {stage:2, sv:8, d:"10. 22.",wd:"목", t:"고교학점제와 진로·학업설계 지도의 실제",
    area:"고등학교 교육과정", key:"curr", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
 
   /* ── 03 다시, 배움으로 · 사례 공유형 직무연수 3과정 (집합) ── */
@@ -850,8 +893,20 @@ if (document.fonts && document.fonts.load) {
     .catch(function(){});
 }
 
+/* 운영이 끝난 카드 — 링크를 떼고 회색 "종료" 상태로 둡니다 */
+document.querySelectorAll("[data-done]").forEach(function(a){
+  a.classList.add("off");
+  a.removeAttribute("href");
+  a.setAttribute("aria-disabled", "true");
+  var m = document.createElement("span");
+  m.className = "soonmark";
+  m.textContent = a.dataset.done || "종료";
+  a.appendChild(m);
+});
+
 /* 링크 연결 */
 document.querySelectorAll("[data-link]").forEach(function(a){
+  if (a.hasAttribute("data-done")) return;
   var u = LINKS[a.dataset.link];
   if (u && u !== "#") { a.href = u; a.target = "_blank"; a.rel = "noopener"; return; }
   a.classList.add("off");
@@ -1083,6 +1138,55 @@ render("all");
   }
   window.addEventListener("hashchange", ping);
   window.addEventListener("load", function(){ setTimeout(ping, 400); });
+})();
+
+/* 자료실 — 선택형 7과정(9. 21.은 중·고 분반)의 만족도 조사 카드를 모두 그립니다.
+   과정 당일 '여는시각'부터 '열림일수' 뒤 자정까지만 눌립니다.
+   그 전에는 "예정", 그 뒤에는 "종료" 상태로 회색 처리됩니다. */
+(function(){
+  var 열림일수 = 3;   // 과정 뒤 며칠까지 응답을 받을지
+  var 여는시각 = 0;   // 과정 당일 몇 시부터 열지 (15 로 두면 연수 시작 뒤에만)
+
+  var list = document.getElementById("rg-now-l");
+  if (!list || typeof COURSES === "undefined") return;
+
+  var now = new Date();
+
+  COURSES.forEach(function(c){
+    if (c.stage !== 2 || !c.sv) return;
+
+    var m = String(c.d).match(/(\d+)\D+(\d+)/);
+    if (!m) return;
+    var 시작 = new Date(2026, +m[1] - 1, +m[2], 여는시각, 0, 0);
+    var 끝   = new Date(2026, +m[1] - 1, +m[2] + 열림일수, 23, 59, 59);
+    var 상태 = now < 시작 ? "예정" : now <= 끝 ? "열림" : "종료";
+
+    var 번호 = [].concat(c.sv);
+    var 분반 = 번호.length > 1 ? ["중학교", "고등학교"] : [""];
+
+    번호.forEach(function(no, i){
+      var a = document.createElement("a");
+      a.className = "rlink" + (상태 === "열림" ? " svnow" : " off");
+      a.innerHTML = '<span class="ms">rate_review</span><strong></strong><span></span>';
+
+      a.querySelector("strong").textContent =
+        c.d + "(" + c.wd + ")" + (분반[i] ? " " + 분반[i] : "");
+      a.querySelector("strong + span").textContent = c.t;
+
+      if (상태 === "열림") {
+        a.href = "./s.html?" + no;
+        a.target = "_blank";
+        a.rel = "noopener";
+      } else {
+        a.setAttribute("aria-disabled", "true");
+        var b = document.createElement("span");
+        b.className = "soonmark";
+        b.textContent = 상태;
+        a.appendChild(b);
+      }
+      list.appendChild(a);
+    });
+  });
 })();
 </script>
 </body>
