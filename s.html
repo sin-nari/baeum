@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#131C31">
+<meta name="robots" content="noindex">
+<title>만족도 조사 · 배움:성장</title>
+<style>
+  :root{ --ink:#131C31; --sub:#5B6478; --line:#DDE1EA; --bg:#F7F8FA; }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; }
+  body{
+    display:flex; align-items:center; justify-content:center; padding:24px;
+    background:var(--bg); color:var(--ink);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    -webkit-text-size-adjust:100%;
+  }
+  main{ width:100%; max-width:400px; text-align:center; }
+  .mark{ font-size:13px; letter-spacing:.02em; color:var(--sub); margin:0 0 20px; }
+  .mark b{ color:var(--ink); font-weight:600; }
+  h1{ font-size:19px; line-height:1.5; font-weight:600; margin:0 0 8px; }
+  p{ font-size:14px; line-height:1.7; color:var(--sub); margin:0; }
+  .go{
+    display:inline-block; margin-top:22px; padding:13px 26px; border-radius:8px;
+    background:var(--ink); color:#fff; font-size:15px; font-weight:600;
+    text-decoration:none;
+  }
+  .go:focus-visible{ outline:3px solid #7C8AA8; outline-offset:3px; }
+  ul{ list-style:none; margin:20px 0 0; padding:0; text-align:left; }
+  li + li{ border-top:1px solid var(--line); }
+  ul a{
+    display:block; padding:13px 4px; color:var(--ink);
+    font-size:14px; line-height:1.5; text-decoration:none;
+  }
+  ul a:hover, ul a:focus-visible{ color:#3A4A6B; }
+  ul .d{ color:var(--sub); font-variant-numeric:tabular-nums; margin-right:8px; }
+  .hide{ display:none; }
+</style>
+</head>
+<body>
+<main>
+  <p class="mark">2026 부천 중등 <b>배움:성장</b></p>
+
+  <div id="go" class="hide">
+    <h1 id="ct"></h1>
+    <p>만족도 조사로 이동하고 있습니다.</p>
+    <a class="go" id="link" href="#">바로 열기</a>
+  </div>
+
+  <div id="pick" class="hide">
+    <h1>어느 과정에 참여하셨나요?</h1>
+    <p>과정을 고르면 만족도 조사가 열립니다.</p>
+    <ul id="list"></ul>
+  </div>
+</main>
+
+<script>
+/* ── 설정 ──────────────────────────────────────────
+   폼을 다시 만들면 FORM 과 ENTRY 두 값만 바꾸면 됩니다.
+   COURSES 순서는 만족도 조사 폼의 선택지 순서와 같아야 합니다.  */
+
+var FORM  = "https://docs.google.com/forms/d/e/1FAIpQLSehES8YV0INbywRgwnmSXQnUh19U5Cof3185pe4IpyHP80VHg/viewform";
+var ENTRY = "entry.1214013888";
+
+var COURSES = [
+  { d:"9. 7.",   t:"중등 서·논술형 평가의 이해" },
+  { d:"9. 17.",  t:"수업과 연계한 서·논술형 평가 문항 제작" },
+  { d:"9. 21.",  t:"2022 개정 교육과정과 성취평가제 이해 (중학교)" },
+  { d:"9. 21.",  t:"2022 개정 교육과정과 성취평가제 이해 (고등학교)" },
+  { d:"9. 22.",  t:"고등학교 학생평가 지원을 위한 성취평가 운영의 이해" },
+  { d:"9. 29.",  t:"고교 학점 이수 지원을 위한 최소 성취수준 보장 지도 방안" },
+  { d:"10. 8.",  t:"고교학점제 운영의 실제" },
+  { d:"10. 22.", t:"고교학점제와 진로·학업설계 지도의 실제" }
+];
+/* ─────────────────────────────────────────────── */
+
+function 이름(c){ return c.d + " " + c.t; }
+function 주소(c){
+  return FORM + "?usp=pp_url&" + ENTRY + "=" + encodeURIComponent(이름(c));
+}
+
+var n = parseInt((location.search.replace("?", "").split("&")[0] || ""), 10);
+var c = COURSES[n - 1];
+
+if (c) {
+  var url = 주소(c);
+  document.getElementById("ct").textContent = 이름(c);
+  document.getElementById("link").href = url;
+  document.getElementById("go").classList.remove("hide");
+  location.replace(url);
+} else {
+  var ul = document.getElementById("list");
+  COURSES.forEach(function(x, i){
+    var li = document.createElement("li");
+    var a  = document.createElement("a");
+    a.href = "?" + (i + 1);
+    a.innerHTML = '<span class="d"></span><span class="t"></span>';
+    a.querySelector(".d").textContent = x.d;
+    a.querySelector(".t").textContent = x.t;
+    ul.appendChild(li).appendChild(a);
+  });
+  document.getElementById("pick").classList.remove("hide");
+}
+</script>
+</body>
+</html>
