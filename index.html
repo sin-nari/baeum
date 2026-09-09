@@ -1054,7 +1054,8 @@ document.querySelectorAll("[data-link]").forEach(function(a){
     var 날짜별 = {};
     for (var id in all) {
       if (all[id].상태 !== "접수중") continue;
-      var m = String(all[id].일시).match(/(\d+)\.\s*(\d+)\./);
+      /* 요일 괄호를 기준으로 잡아야 앞의 연도(2026.)를 월로 잘못 읽지 않습니다 */
+      var m = String(all[id].일시).match(/(\d+)\.\s*(\d+)\.\s*\(/);
       if (m) 날짜별[m[1] + "." + m[2]] = id;
     }
 
