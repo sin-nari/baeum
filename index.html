@@ -1042,18 +1042,30 @@ document.querySelectorAll("[data-link]").forEach(function(a){
     list.innerHTML = html + '</div>';
 
     /* 일정표의 과정별 신청 버튼도 함께 살립니다 */
+    window.__현황 = all;
     일정표버튼(all);
   }
 
+  /* 일정표의 과정별 신청 버튼을 살립니다.
+     과정명이 아니라 '날짜'로 짝을 맞춥니다. 9. 7.과 9. 15.처럼
+     같은 이름의 과정이 두 번 열려도 서로 섞이지 않습니다. */
   function 일정표버튼(all){
-    var 짝 = { "중등 서·논술형 평가의 이해":"essay1",
-               "수업과 연계한 서·논술형 평가 문항 제작":"essay2" };
+    if (!all) return;
+    var 날짜별 = {};
+    for (var id in all) {
+      if (all[id].상태 !== "접수중") continue;
+      var m = String(all[id].일시).match(/(\d+)\.\s*(\d+)\./);
+      if (m) 날짜별[m[1] + "." + m[2]] = id;
+    }
+
     document.querySelectorAll("#rail .slot").forEach(function(slot){
-      var t = slot.querySelector(".ctitle");
       var a = slot.querySelector(".apply");
-      if (!t || !a) return;
-      var id = 짝[t.textContent.trim()];
-      if (!id || !all[id] || all[id].상태 !== "접수중") return;
+      if (!a) return;
+      var m = String(slot.getAttribute("data-d") || "").match(/(\d+)\D+(\d+)/);
+      if (!m) return;
+      var id = 날짜별[m[1] + "." + m[2]];
+      if (!id) return;
+
       a.classList.remove("mute");
       a.href = url + "#" + id;
       a.target = "_blank"; a.rel = "noopener";
@@ -1062,6 +1074,8 @@ document.querySelectorAll("[data-link]").forEach(function(a){
   }
 
   /* 세 과정 현황을 한 번에 받아옵니다 (인원 수만 오갑니다) */
+  window.__신청버튼 = 일정표버튼;
+
   window.__all = function(all){
     if (!all) return;
     if (all.keynote) 기조강연카드(all.keynote);
@@ -1117,7 +1131,8 @@ function render(filter){
     }
     var live = c.url && c.url !== "#";
     var cls = "slot" + (c.tbd ? " tbd" : "") + (c.wd === "토" ? " sat" : "");
-    html += '<div class="' + cls + '" style="--c:' + s.c + ';--c-lt:' + s.lt + ';--c-dk:' + s.dk + '">'
+    html += '<div class="' + cls + '" data-d="' + esc(c.d) + '"'
+      + ' style="--c:' + s.c + ';--c-lt:' + s.lt + ';--c-dk:' + s.dk + '">'
       + '<div class="day"><div class="dnum serif' + (c.tbd ? ' tbd' : '') + '">' + esc(c.d) + '</div>'
       +   '<div class="dwd">' + esc(c.tbd ? c.wd : c.wd + "요일") + '</div></div>'
       + '<span class="node" aria-hidden="true"></span>'
@@ -1140,6 +1155,9 @@ function render(filter){
       + '</div></div>';
   });
   rail.innerHTML = html;
+
+  /* 필터로 다시 그린 뒤에도 신청 버튼 상태를 되살립니다 */
+  if (window.__신청버튼 && window.__현황) window.__신청버튼(window.__현황);
 }
 
 document.querySelectorAll(".chip").forEach(function(btn){
