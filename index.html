@@ -180,6 +180,10 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .kfeedback.done .fbtn,
 .kfeedback.done .fbsub{background:#E7E9ED;color:var(--muted);
   border:1px solid #D8DCE4;cursor:default}
+#zoombox{margin:18px 0 22px}
+#zoomcred{display:block;margin-bottom:3px;color:var(--navy);font-size:15px;
+  letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+#zoomcred:empty{display:none}
 .kfeedback.done .dbadge{font-size:11.5px;font-weight:700;letter-spacing:-.01em;
   background:#fff;color:var(--muted);border:1px solid #D8DCE4;
   border-radius:999px;padding:2px 8px;margin-left:8px}
@@ -450,10 +454,10 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
     </div>
     <div class="eyebrow">2026 부천 중등 교원 역량 강화 프로젝트</div>
     <h1 class="serif"><span class="g">교원의 배움</span>이<br><span class="b">학생의 성장</span>으로 이어집니다</h1>
-    <p class="tagline">방향을 보고, 필요한 배움을 깊게 하고, 서로의 <span class="o">실천을 나눕니다</span>. 9월 기조강연에서 시작해 11월 사례 나눔까지, 열한 번의 배움이 이어집니다.</p>
+    <p class="tagline">방향을 보고, 필요한 배움을 깊게 하고, 서로의 <span class="o">실천을 나눕니다</span>. 9월 기조강연에서 시작해 11월 사례 나눔까지, 열두 번의 배움이 이어집니다.</p>
     <div class="meta-row">
       <span class="pill">2026. 9. 4. ~ 11. 3.</span>
-      <span class="pill">전 11개 과정</span>
+      <span class="pill">전 12개 과정</span>
       <span class="pill">관내 중등교원</span>
     </div>
   </div>
@@ -583,7 +587,7 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
         <div class="jdesc">나에게 필요한 배움을<br>선택하여 배움을 깊게 합니다.</div>
         <div class="jbox">
           <div class="lbl">나에게 필요한 배움의 선택</div>
-          <div class="val" style="margin-top:8px">9월 ~ 10월 · 선택 7과정</div>
+          <div class="val" style="margin-top:8px">9월 ~ 10월 · 선택 8과정</div>
           <div class="sub">선택형 직무연수 · 원격 각 2시간</div>
         </div>
       </div>
@@ -698,10 +702,19 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
   <div class="wrap">
     <div class="shead"><h2>연수 일정</h2></div>
     <p class="scope">※ 「배움:성장」 프로젝트는 <strong>중등 교원</strong>을 중심으로 운영하며, 첫 과정인 「여는 배움│방향을 보다」 기조강연은 <strong>초·중·고 교원</strong>이 함께합니다.</p>
-    <p class="sdesc">선택형 원격 연수 7과정은 모두 <strong>15:00~17:00</strong>에 열리며, <strong>서·논술형 평가 → 학생평가 → 고등학교 교육과정</strong> 순으로 이어집니다. 사례 공유형 집합 연수는 <strong>10. 17.(토)·10. 24.(토) 09:00~13:00</strong>과 <strong>11. 3.(화) 15:00~17:00</strong>에 운영합니다. 연수 내용의 중점 학교급과 무관하게 선택하여 참여하실 수 있습니다.</p>
+    <p class="sdesc">선택형 원격 연수 8과정은 <strong>9. 15.(화) 17:00~19:00</strong>을 빼고 모두 <strong>15:00~17:00</strong>에 열리며, <strong>서·논술형 평가 → 학생평가 → 고등학교 교육과정</strong> 순으로 이어집니다. 사례 공유형 집합 연수는 <strong>10. 17.(토)·10. 24.(토) 09:00~13:00</strong>과 <strong>11. 3.(화) 15:00~17:00</strong>에 운영합니다. 연수 내용의 중점 학교급과 무관하게 선택하여 참여하실 수 있습니다.</p>
+
+    <div class="kfeedback" id="zoombox">
+      <div class="fbtext">
+        <h3><span class="ms">videocam</span>원격 연수 참여 (Zoom)</h3>
+        <p><strong id="zoomcred"></strong><span id="zoomnote"></span></p>
+      </div>
+      <a class="fbtn" id="zoombtn" href="#" target="_blank" rel="noopener">
+        <span class="ms">open_in_new</span>Zoom 입장</a>
+    </div>
 
     <div class="filters" role="group" aria-label="연수 과정 필터">
-      <button class="chip" aria-pressed="true" data-f="all">전체 10과정</button>
+      <button class="chip" aria-pressed="true" data-f="all">전체 11과정</button>
       <button class="chip" aria-pressed="false" data-f="essay">서·논술형 평가</button>
       <button class="chip" aria-pressed="false" data-f="assess">학생평가</button>
       <button class="chip" aria-pressed="false" data-f="curr">고등학교 교육과정</button>
@@ -754,7 +767,7 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
       <a class="poster" href="poster-schedule.png" download>
         <img src="poster-schedule.png" alt="배움:성장 과정별 세부 일정표" loading="lazy">
         <div class="pcap">
-          <div><strong>과정별 세부 일정</strong><span>11개 과정 일정표</span></div>
+          <div><strong>과정별 세부 일정</strong><span>12개 과정 일정표</span></div>
           <span class="pdl"><span class="ms" style="font-size:17px">download</span>내려받기</span>
         </div>
       </a>
@@ -833,6 +846,16 @@ const LINKS = {
   ask:       "#"    // 문의 폼 또는 mailto:
 };
 
+/* ▼▼ 원격 연수 Zoom 안내 — 아래 세 줄만 채우면 됩니다 ▼▼
+   url 을 "#" 로 두면 "준비 중" 회색 상태로 표시됩니다.               */
+const ZOOM = {
+  url:  "https://zoom.us/j/3343517622",   // 회의 참가 주소
+  id:   "334 351 7622",                   // 회의 ID
+  pw:   "2026",                           // 암호
+  note: "선택형 원격 연수는 모두 같은 회의실에서 진행합니다. " +
+        "시작 10분 전부터 입장하실 수 있으며, 이름은 「학교명 성명」으로 바꿔 주세요."
+};
+
 /* 기조강연 신청 설정 (한국 시간 기준)
    · closedEarly : 300명이 다 차면 true 로 바꾸면 즉시 마감 화면으로 바뀝니다.
                    ※ 구글 폼에서도 "응답 받기"를 꼭 함께 꺼주세요.
@@ -852,21 +875,24 @@ const KEYNOTE = {
 };
 
 const COURSES = [
-  /* ── 02 배움:성장 · 선택형 직무연수 7과정 (원격 · 15:00~17:00) ── */
+  /* ── 02 배움:성장 · 선택형 직무연수 8과정 (원격) ── */
   {stage:2, sv:1, d:"9. 7.",  wd:"월", t:"중등 서·논술형 평가의 이해",
    area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
-  {stage:2, sv:2, d:"9. 17.", wd:"목", t:"수업과 연계한 서·논술형 평가 문항 제작",
+  {stage:2, sv:2, d:"9. 15.", wd:"화", t:"중등 서·논술형 평가의 이해",
+   sub:"9. 7.(월) 과정과 같은 내용으로, 참여가 어려우셨던 선생님을 위해 한 차례 더 운영합니다",
+   area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"online", time:"17:00~19:00 · 2시간", url:"#"},
+  {stage:2, sv:3, d:"9. 17.", wd:"목", t:"수업과 연계한 서·논술형 평가 문항 제작",
    area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
-  {stage:2, sv:[3,4], d:"9. 21.", wd:"월", t:"2022 개정 교육과정과 성취평가제 이해",
+  {stage:2, sv:[4,5], d:"9. 21.", wd:"월", t:"2022 개정 교육과정과 성취평가제 이해",
    sub:"중학교·고등학교로 나누어 운영하며, 신청 시 학교급을 선택합니다",
    area:"학생평가", key:"assess", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", split:"중·고 분반", url:"#"},
-  {stage:2, sv:5, d:"9. 22.", wd:"화", t:"고등학교 학생평가 지원을 위한 성취평가 운영의 이해",
+  {stage:2, sv:6, d:"9. 22.", wd:"화", t:"고등학교 학생평가 지원을 위한 성취평가 운영의 이해",
    area:"학생평가", key:"assess", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
-  {stage:2, sv:6, d:"9. 29.", wd:"화", t:"고교 학점 이수 지원을 위한 최소 성취수준 보장 지도 방안",
+  {stage:2, sv:7, d:"9. 29.", wd:"화", t:"고교 학점 이수 지원을 위한 최소 성취수준 보장 지도 방안",
    area:"고등학교 교육과정", key:"curr", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
-  {stage:2, sv:7, d:"10. 8.", wd:"목", t:"고교학점제 운영의 실제",
+  {stage:2, sv:8, d:"10. 8.", wd:"목", t:"고교학점제 운영의 실제",
    area:"고등학교 교육과정", key:"curr", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
-  {stage:2, sv:8, d:"10. 22.",wd:"목", t:"고교학점제와 진로·학업설계 지도의 실제",
+  {stage:2, sv:9, d:"10. 22.",wd:"목", t:"고교학점제와 진로·학업설계 지도의 실제",
    area:"고등학교 교육과정", key:"curr", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
 
   /* ── 03 다시, 배움으로 · 사례 공유형 직무연수 3과정 (집합) ── */
@@ -1140,7 +1166,28 @@ render("all");
   window.addEventListener("load", function(){ setTimeout(ping, 400); });
 })();
 
-/* 자료실 — 선택형 7과정(9. 21.은 중·고 분반)의 만족도 조사 카드를 모두 그립니다.
+/* 원격 연수 Zoom 안내 — 위 ZOOM 설정을 읽어 채웁니다 */
+(function(){
+  var box = document.getElementById("zoombox");
+  if (!box || typeof ZOOM === "undefined") return;
+
+  var 자격 = [];
+  if (ZOOM.id) 자격.push("회의 ID " + ZOOM.id);
+  if (ZOOM.pw) 자격.push("암호 " + ZOOM.pw);
+  document.getElementById("zoomcred").textContent = 자격.join("  ·  ");
+  document.getElementById("zoomnote").textContent = ZOOM.note || "";
+
+  var btn = document.getElementById("zoombtn");
+  if (ZOOM.url && ZOOM.url !== "#") { btn.href = ZOOM.url; return; }
+
+  box.classList.add("done");
+  btn.removeAttribute("href");
+  btn.removeAttribute("target");
+  btn.setAttribute("aria-disabled", "true");
+  btn.innerHTML = 'Zoom 입장<span class="dbadge">준비 중</span>';
+})();
+
+/* 자료실 — 선택형 8과정(9. 21.은 중·고 분반)의 만족도 조사 카드를 모두 그립니다.
    과정 당일 '여는시각'부터 '열림일수' 뒤 자정까지만 눌립니다.
    그 전에는 "예정", 그 뒤에는 "종료" 상태로 회색 처리됩니다. */
 (function(){
