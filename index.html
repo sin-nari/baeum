@@ -265,6 +265,15 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .card:hover{border-color:var(--dim);border-left-color:var(--c);transform:translateX(2px)}
 .ctitle{font-size:17px;font-weight:600;letter-spacing:-.01em;line-height:1.4}
 .csub{font-size:13.5px;color:var(--muted);margin-top:4px;line-height:1.55}
+/* 강조할 안내문 — 같은 내용 재운영 등 꼭 읽어야 하는 한 줄 */
+.csub.hl{display:inline-block;margin-top:7px;padding:6px 11px;border-radius:7px;
+  background:var(--s2-lt);color:var(--s2-dk);font-weight:600;
+  border-left:3px solid var(--s2-dk)}
+/* 이미 지난 과정 */
+.slot.past .card{background:#FAFAF8}
+.slot.past .ctitle{color:var(--muted)}
+.apply.ended{background:#EEEFF2;border:1px solid #DDE1EA;color:var(--muted);
+  cursor:default;font-weight:700}
 .crow{display:flex;flex-wrap:wrap;gap:6px;margin-top:9px;align-items:center}
 .badge{font-size:12.5px;padding:3px 9px;border-radius:5px;background:#F0EEE8;color:var(--muted)}
 .badge.area{background:var(--c-lt);color:var(--c-dk);font-weight:600}
@@ -879,7 +888,7 @@ const COURSES = [
   {stage:2, sv:1, d:"9. 7.",  wd:"월", t:"중등 서·논술형 평가의 이해",
    area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
   {stage:2, sv:2, d:"9. 15.", wd:"화", t:"중등 서·논술형 평가의 이해",
-   sub:"9. 7.(월) 과정과 같은 내용으로, 참여가 어려우셨던 선생님을 위해 한 차례 더 운영합니다",
+   sub:"9. 7.(월) 과정과 같은 내용으로, 참여가 어려우셨던 선생님을 위해 한 차례 더 운영합니다", hl:true,
    area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"online", time:"17:00~19:00 · 2시간", url:"#"},
   {stage:2, sv:3, d:"9. 17.", wd:"목", t:"수업과 연계한 서·논술형 평가 문항 제작",
    area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
@@ -1066,6 +1075,7 @@ document.querySelectorAll("[data-link]").forEach(function(a){
       if (!m) return;
       var id = 날짜별[m[1] + "." + m[2]];
       if (!id) return;
+      if (a.classList.contains("ended")) return;   /* 이미 지난 과정은 그대로 둡니다 */
 
       a.classList.remove("mute");
       a.href = url + "#" + id;
@@ -1110,6 +1120,14 @@ var empty = document.getElementById("empty");
 function esc(s){ return String(s).replace(/[&<>"]/g, function(ch){
   return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[ch]; }); }
 
+/* 과정 날짜가 지났는지 — 연수 당일 자정까지는 지나지 않은 것으로 봅니다 */
+function 지난과정(c){
+  if (c.tbd) return false;
+  var m = String(c.d).match(/(\d+)\D+(\d+)/);
+  if (!m) return false;
+  return new Date() > new Date(2026, +m[1] - 1, +m[2], 23, 59, 59);
+}
+
 function render(filter){
   var list = COURSES.filter(function(c){
     if (filter === "all") return true;
@@ -1131,7 +1149,9 @@ function render(filter){
       lastStage = c.stage;
     }
     var live = c.url && c.url !== "#";
-    var cls = "slot" + (c.tbd ? " tbd" : "") + (c.wd === "토" ? " sat" : "");
+    var 지남 = 지난과정(c);
+    var cls = "slot" + (c.tbd ? " tbd" : "") + (c.wd === "토" ? " sat" : "")
+            + (지남 ? " past" : "");
     html += '<div class="' + cls + '" data-d="' + esc(c.d) + '"'
       + ' style="--c:' + s.c + ';--c-lt:' + s.lt + ';--c-dk:' + s.dk + '">'
       + '<div class="day"><div class="dnum serif' + (c.tbd ? ' tbd' : '') + '">' + esc(c.d) + '</div>'
@@ -1140,7 +1160,8 @@ function render(filter){
       + '<div class="card">'
       +   '<div>'
       +     '<div class="ctitle">' + esc(c.t) + '</div>'
-      +     (c.sub ? '<div class="csub">' + esc(c.sub) + '</div>' : '')
+      +     (c.sub ? '<div class="csub' + (c.hl ? ' hl' : '') + '">'
+      +           esc(c.sub) + '</div>' : '')
       +     '<div class="crow"><span class="badge area">' + esc(c.area) + '</span>'
       +       '<span class="badge aud">' + esc(c.aud) + '</span>'
       +       '<span class="badge">' + (c.mode === "online" ? "원격" : "집합") + '</span>'
@@ -1149,10 +1170,12 @@ function render(filter){
       +     '</div>'
       +     '<div class="time">' + esc(c.time) + '</div>'
       +   '</div>'
-      +   '<a class="apply' + (live ? '' : ' mute') + '" href="' + (live ? esc(c.url) : "#") + '"'
-      +     (live ? ' target="_blank" rel="noopener"' : '') + '>'
+      +   '<a class="apply' + (live ? '' : (지남 ? ' ended' : ' mute')) + '"'
+      +     ' href="' + (live ? esc(c.url) : "#") + '"'
+      +     (live ? ' target="_blank" rel="noopener"' : ' aria-disabled="true"') + '>'
       +     (live ? '신청하기<span class="ms" style="font-size:17px">arrow_forward</span>'
-                  : (c.tbd ? '일정 확정 후 안내' : '신청 준비 중')) + '</a>'
+                  : 지남 ? '종료'
+                  : c.tbd ? '일정 확정 후 안내' : '신청 준비 중') + '</a>'
       + '</div></div>';
   });
   rail.innerHTML = html;
