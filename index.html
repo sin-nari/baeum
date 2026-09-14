@@ -279,13 +279,18 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .badge.area{background:var(--c-lt);color:var(--c-dk);font-weight:600}
 .badge.aud{background:#EFEEE9;color:#55524B}
 .badge.warn{background:#FBEFD6;color:#7A5518;font-weight:600}
-.badge.split{background:var(--c-lt);color:var(--c-dk);font-weight:600;border:1px dashed var(--c)}
+/* 분반 배지 — 같은 날 두 과정을 가르는 표시라 또렷하게 둡니다 */
+.badge.split{background:var(--c-dk);color:#fff;font-weight:700;
+  border:1px solid var(--c-dk);letter-spacing:-.01em}
 .time{font-size:13.5px;color:var(--muted);margin-top:7px}
 /* 신청하기 = 단계 색으로 채움 / 신청 준비 중 = 눌리지 않는 회색 */
 .apply{border:1px solid var(--c);background:var(--c);border-radius:8px;padding:11px 20px;
   font:inherit;font-size:14.5px;font-weight:700;color:#fff;text-decoration:none;
   white-space:nowrap;transition:.15s;display:inline-flex;align-items:center;gap:5px}
 .apply:hover{filter:brightness(1.08)}
+/* 분반 운영처럼 한 날짜에 신청 창구가 둘일 때 */
+.applys{display:flex;flex-direction:column;gap:7px;align-items:stretch}
+.applys .apply{padding:9px 16px;font-size:14px;white-space:nowrap}
 .apply.mute{background:#F0EEE8;border:1px dashed #D6D2C8;color:var(--dim);
   font-weight:600;pointer-events:none;filter:none}
 .stagebar{display:flex;align-items:center;gap:11px;margin:26px 0 14px;position:relative}
@@ -463,10 +468,10 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
     </div>
     <div class="eyebrow">2026 부천 중등 교원 역량 강화 프로젝트</div>
     <h1 class="serif"><span class="g">교원의 배움</span>이<br><span class="b">학생의 성장</span>으로 이어집니다</h1>
-    <p class="tagline">방향을 보고, 필요한 배움을 깊게 하고, 서로의 <span class="o">실천을 나눕니다</span>. 9월 기조강연에서 시작해 11월 사례 나눔까지, 열두 번의 배움이 이어집니다.</p>
+    <p class="tagline">방향을 보고, 필요한 배움을 깊게 하고, 서로의 <span class="o">실천을 나눕니다</span>. 9월 기조강연에서 시작해 11월 사례 나눔까지, 열세 번의 배움이 이어집니다.</p>
     <div class="meta-row">
       <span class="pill">2026. 9. 4. ~ 11. 3.</span>
-      <span class="pill">전 12개 과정</span>
+      <span class="pill">전 13개 과정</span>
       <span class="pill">관내 중등교원</span>
     </div>
   </div>
@@ -596,7 +601,7 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
         <div class="jdesc">나에게 필요한 배움을<br>선택하여 배움을 깊게 합니다.</div>
         <div class="jbox">
           <div class="lbl">나에게 필요한 배움의 선택</div>
-          <div class="val" style="margin-top:8px">9월 ~ 10월 · 선택 8과정</div>
+          <div class="val" style="margin-top:8px">9월 ~ 10월 · 선택 9과정</div>
           <div class="sub">선택형 직무연수 · 원격 각 2시간</div>
         </div>
       </div>
@@ -723,7 +728,7 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
     </div>
 
     <div class="filters" role="group" aria-label="연수 과정 필터">
-      <button class="chip" aria-pressed="true" data-f="all">전체 11과정</button>
+      <button class="chip" aria-pressed="true" data-f="all">전체 12과정</button>
       <button class="chip" aria-pressed="false" data-f="essay">서·논술형 평가</button>
       <button class="chip" aria-pressed="false" data-f="assess">학생평가</button>
       <button class="chip" aria-pressed="false" data-f="curr">고등학교 교육과정</button>
@@ -776,7 +781,7 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
       <a class="poster" href="poster-schedule.png" download>
         <img src="poster-schedule.png" alt="배움:성장 과정별 세부 일정표" loading="lazy">
         <div class="pcap">
-          <div><strong>과정별 세부 일정</strong><span>12개 과정 일정표</span></div>
+          <div><strong>과정별 세부 일정</strong><span>13개 과정 일정표</span></div>
           <span class="pdl"><span class="ms" style="font-size:17px">download</span>내려받기</span>
         </div>
       </a>
@@ -884,18 +889,21 @@ const KEYNOTE = {
 };
 
 const COURSES = [
-  /* ── 02 배움:성장 · 선택형 직무연수 8과정 (원격) ── */
-  {stage:2, sv:1, d:"9. 7.",  wd:"월", t:"중등 서·논술형 평가의 이해",
+  /* ── 02 배움:성장 · 선택형 직무연수 9과정 (원격) ── */
+  {stage:2, sv:1, rid:"essay1", d:"9. 7.",  wd:"월", t:"중등 서·논술형 평가의 이해",
    area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
-  {stage:2, sv:2, d:"9. 15.", wd:"화", t:"중등 서·논술형 평가의 이해",
+  {stage:2, sv:2, rid:"essay1b", d:"9. 15.", wd:"화", t:"중등 서·논술형 평가의 이해",
    sub:"9. 7.(월) 과정과 같은 내용으로, 참여가 어려우셨던 선생님을 위해 한 차례 더 운영합니다", hl:true,
    area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"online", time:"17:00~19:00 · 2시간", url:"#"},
-  {stage:2, sv:3, d:"9. 17.", wd:"목", t:"수업과 연계한 서·논술형 평가 문항 제작",
+  {stage:2, sv:3, rid:"essay2", d:"9. 17.", wd:"목", t:"수업과 연계한 서·논술형 평가 문항 제작",
    area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
-  {stage:2, sv:[4,5], d:"9. 21.", wd:"월", t:"2022 개정 교육과정과 성취평가제 이해",
-   sub:"중학교·고등학교로 나누어 운영하며, 신청 시 학교급을 선택합니다",
-   area:"학생평가", key:"assess", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", split:"중·고 분반", url:"#"},
-  {stage:2, sv:6, d:"9. 22.", wd:"화", t:"고등학교 학생평가 지원을 위한 성취평가 운영의 이해",
+  {stage:2, sv:4, rid:"assess1m", d:"9. 21.", wd:"월", t:"2022 개정 교육과정과 성취평가제 이해",
+   br:"중학교", sub:"중학교 분반 · 옥길새길중학교 정세정 수석교사",
+   area:"학생평가", key:"assess", aud:"중학교 교원", mode:"online", time:"15:00~17:00 · 2시간", split:"중학교 분반", url:"#"},
+  {stage:2, sv:5, rid:"assess1h", d:"9. 21.", wd:"월", t:"2022 개정 교육과정과 성취평가제 이해",
+   br:"고등학교", sub:"고등학교 분반 · 시흥매화고등학교 황보름 교사",
+   area:"학생평가", key:"assess", aud:"고등학교 교원", mode:"online", time:"15:00~17:00 · 2시간", split:"고등학교 분반", url:"#"},
+  {stage:2, sv:6, rid:"assess2", d:"9. 22.", wd:"화", t:"고등학교 학생평가 지원을 위한 성취평가 운영의 이해",
    area:"학생평가", key:"assess", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
   {stage:2, sv:7, d:"9. 29.", wd:"화", t:"고교 학점 이수 지원을 위한 최소 성취수준 보장 지도 방안",
    area:"고등학교 교육과정", key:"curr", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
@@ -1058,29 +1066,61 @@ document.querySelectorAll("[data-link]").forEach(function(a){
   /* 일정표의 과정별 신청 버튼을 살립니다.
      과정명이 아니라 '날짜'로 짝을 맞춥니다. 9. 7.과 9. 15.처럼
      같은 이름의 과정이 두 번 열려도 서로 섞이지 않습니다. */
+  /* 일정표의 과정별 신청 버튼을 살립니다.
+     1순위는 과정에 적어 둔 신청 서버 키(rid), 없으면 날짜로 맞춥니다.
+     분반처럼 같은 날 두 과정이 있어도 키가 있으면 섞이지 않습니다. */
   function 일정표버튼(all){
     if (!all) return;
+
     var 날짜별 = {};
     for (var id in all) {
       if (all[id].상태 !== "접수중") continue;
-      /* 요일 괄호를 기준으로 잡아야 앞의 연도(2026.)를 월로 잘못 읽지 않습니다 */
       var m = String(all[id].일시).match(/(\d+)\.\s*(\d+)\.\s*\(/);
-      if (m) 날짜별[m[1] + "." + m[2]] = id;
+      if (!m) continue;
+      var k = m[1] + "." + m[2];
+      (날짜별[k] = 날짜별[k] || []).push(id);
+    }
+
+    function 분반이름(id, i){
+      var m = String(all[id].연수명 || "").match(/\(([^()]+)\)\s*$/);
+      return m ? m[1] : (all[id].대상 || ("신청 " + (i + 1)));
+    }
+
+    function 버튼(a, id, 이름){
+      a.className = "apply";
+      a.href = url + "#" + id;
+      a.target = "_blank"; a.rel = "noopener";
+      a.removeAttribute("aria-disabled");
+      a.innerHTML = esc(이름) + '<span class="ms" style="font-size:17px">arrow_forward</span>';
     }
 
     document.querySelectorAll("#rail .slot").forEach(function(slot){
       var a = slot.querySelector(".apply");
-      if (!a) return;
+      if (!a || a.classList.contains("ended")) return;   /* 지난 과정은 그대로 둡니다 */
+
+      /* ① 과정 키가 있으면 그것으로 곧장 맞춥니다 */
+      var rid = slot.getAttribute("data-rid");
+      if (rid) {
+        if (all[rid] && all[rid].상태 === "접수중") 버튼(a, rid, "신청하기");
+        return;
+      }
+
+      /* ② 키가 없는 과정은 날짜로 맞춥니다 */
       var m = String(slot.getAttribute("data-d") || "").match(/(\d+)\D+(\d+)/);
       if (!m) return;
-      var id = 날짜별[m[1] + "." + m[2]];
-      if (!id) return;
-      if (a.classList.contains("ended")) return;   /* 이미 지난 과정은 그대로 둡니다 */
+      var ids = 날짜별[m[1] + "." + m[2]];
+      if (!ids || !ids.length) return;
 
-      a.classList.remove("mute");
-      a.href = url + "#" + id;
-      a.target = "_blank"; a.rel = "noopener";
-      a.innerHTML = '신청하기<span class="ms" style="font-size:17px">arrow_forward</span>';
+      if (ids.length === 1) { 버튼(a, ids[0], "신청하기"); return; }
+
+      var box = document.createElement("div");
+      box.className = "applys";
+      ids.forEach(function(id, i){
+        var b = document.createElement("a");
+        버튼(b, id, 분반이름(id, i));
+        box.appendChild(b);
+      });
+      a.parentNode.replaceChild(box, a);
     });
   }
 
@@ -1153,6 +1193,7 @@ function render(filter){
     var cls = "slot" + (c.tbd ? " tbd" : "") + (c.wd === "토" ? " sat" : "")
             + (지남 ? " past" : "");
     html += '<div class="' + cls + '" data-d="' + esc(c.d) + '"'
+      + (c.rid ? ' data-rid="' + esc(c.rid) + '"' : '')
       + ' style="--c:' + s.c + ';--c-lt:' + s.lt + ';--c-dk:' + s.dk + '">'
       + '<div class="day"><div class="dnum serif' + (c.tbd ? ' tbd' : '') + '">' + esc(c.d) + '</div>'
       +   '<div class="dwd">' + esc(c.tbd ? c.wd : c.wd + "요일") + '</div></div>'
@@ -1229,7 +1270,7 @@ render("all");
   btn.innerHTML = 'Zoom 입장<span class="dbadge">준비 중</span>';
 })();
 
-/* 자료실 — 선택형 8과정(9. 21.은 중·고 분반)의 만족도 조사 카드를 모두 그립니다.
+/* 자료실 — 선택형 9과정(9. 21.은 중·고 분반)의 만족도 조사 카드를 모두 그립니다.
    과정 당일 '여는시각'부터 '열림일수' 뒤 자정까지만 눌립니다.
    그 전에는 "예정", 그 뒤에는 "종료" 상태로 회색 처리됩니다. */
 (function(){
@@ -1250,16 +1291,13 @@ render("all");
     var 끝   = new Date(2026, +m[1] - 1, +m[2] + 열림일수, 23, 59, 59);
     var 상태 = now < 시작 ? "예정" : now <= 끝 ? "열림" : "종료";
 
-    var 번호 = [].concat(c.sv);
-    var 분반 = 번호.length > 1 ? ["중학교", "고등학교"] : [""];
-
-    번호.forEach(function(no, i){
+    [].concat(c.sv).forEach(function(no){
       var a = document.createElement("a");
       a.className = "rlink" + (상태 === "열림" ? " svnow" : " off");
       a.innerHTML = '<span class="ms">rate_review</span><strong></strong><span></span>';
 
       a.querySelector("strong").textContent =
-        c.d + "(" + c.wd + ")" + (분반[i] ? " " + 분반[i] : "");
+        c.d + "(" + c.wd + ")" + (c.br ? " " + c.br : "");
       a.querySelector("strong + span").textContent = c.t;
 
       if (상태 === "열림") {
