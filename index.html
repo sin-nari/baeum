@@ -307,6 +307,34 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .bans .bnote{font-size:12.5px;color:var(--muted);margin-top:8px}
 @media(max-width:560px){.bans{padding:11px 10px}.bans ol{grid-template-columns:repeat(2,minmax(0,1fr))}
   .bans li{font-size:13px;padding:7px 7px;gap:5px;letter-spacing:-.03em;white-space:nowrap}}
+/* 주제가 있는 분반 목록 — 한 줄에 한 분반, 주요 내용은 펼쳐 봅니다 */
+.bans.topics ol{grid-template-columns:repeat(2,minmax(0,1fr))}
+.bans.topics li{align-items:flex-start;padding:10px 12px;white-space:normal;letter-spacing:normal}
+.bans.topics li b{margin-top:1px}
+.bans.topics .bt{display:flex;flex-direction:column;gap:3px;min-width:0}
+.bans.topics .bn{font-size:14.5px;font-weight:800;color:var(--c-dk)}
+.bans.topics .btopic{font-size:14px;font-weight:600;line-height:1.45;word-break:keep-all;color:var(--ink,#222)}
+.bans.topics .btopic.none{font-weight:500;color:var(--dim)}
+.bans.topics ul.bk{margin:4px 0 0;padding-left:16px;line-height:1.5;word-break:keep-all}
+.bans.topics ul.bk li{display:list-item;background:none;padding:1px 0;font-size:13px;font-weight:500;color:var(--muted)}
+/* 전체 특강 블록 — 교과별 분반 블록과 같은 틀로 시간대를 나눕니다 */
+.talk{margin-top:12px;display:grid;grid-template-columns:auto 1fr;gap:20px;align-items:center;
+  padding:18px 22px;border-radius:12px;background:var(--navy-2);color:#fff;
+  border:1px solid rgba(255,255,255,.08)}
+.talk .tm{font-family:"Gowun Batang",serif;text-align:center;padding-right:20px;
+  border-right:1px solid rgba(255,255,255,.14);line-height:1.15}
+.talk .tm b{display:block;font-size:24px;font-weight:700;color:var(--s3-on)}
+.talk .tm span{display:block;font-size:13px;color:rgba(255,255,255,.55);margin-top:3px}
+.talk .lab{font-size:12px;font-weight:700;letter-spacing:.1em;color:var(--s3-on)}
+.talk .tt{font-size:19px;font-weight:700;margin-top:6px;line-height:1.4;letter-spacing:-.02em;word-break:keep-all}
+.talk .tw{margin-top:9px;padding-left:10px;border-left:2px solid var(--s3);
+  font-size:13.5px;color:rgba(255,255,255,.72);word-break:keep-all}
+@media(max-width:560px){.talk{gap:14px;padding:16px}.talk .tm{padding-right:14px}
+  .talk .tm b{font-size:20px}.talk .tt{font-size:16.5px}}
+.bans.topics li.x{grid-column:1/-1;border:1.5px dashed var(--c-dk)}
+.bans.topics .xtag{font-style:normal;font-size:11.5px;font-weight:700;color:#fff;background:var(--c-dk);
+  border-radius:4px;padding:1px 6px;margin-left:6px;vertical-align:1px;white-space:nowrap}
+@media(max-width:720px){.bans.topics ol{grid-template-columns:1fr}}
 /* 신청하기 = 단계 색으로 채움 / 신청 준비 중 = 눌리지 않는 회색 */
 .apply{border:1px solid var(--c);background:var(--c);border-radius:8px;padding:11px 20px;
   font:inherit;font-size:14.5px;font-weight:700;color:#fff;text-decoration:none;
@@ -952,9 +980,36 @@ const COURSES = [
    area:"서·논술형 평가", key:"essay", aud:"중등교사", mode:"offline", split:"교과별 분반 운영", time:"09:00~13:00 · 집합 4시간", url:"#",
    bans:["국어","영어","수학","사회","과학","기술가정·정보","음악·미술·체육","제2외국어·한문"],
    bannote:"분반은 신청 현황에 따라 조정될 수 있습니다"},
-  {stage:3, d:"10. 24.", wd:"토", t:"학생평가 역량 강화",
-   sub:"교육과정-수업-평가 통합설계 이해, 성취평가 운영 등 교과별 학생평가 실천 사례 나눔",
-   area:"학생평가", key:"assess", aud:"중등교사", mode:"offline", time:"09:00~13:00 · 집합 4시간", url:"#"},
+  {stage:3, rid:"share2", d:"10. 24.", wd:"토", t:"학생평가 역량 강화",
+   sub:"교과별 특성을 살린 학생평가 연수 · 우리 교과 수업에서 이루어지는 평가의 실제를 나눕니다", hl:true,
+   talk:{from:"09:00", to:"10:00", t:"교육과정-수업-평가 통합설계의 이해", who:"옥길새길중학교 정세정 수석교사"},
+   area:"학생평가", key:"assess", aud:"중등교원", mode:"offline", split:"교과별 분반 운영",
+   time:"09:00~13:00 · 집합 4시간 (전체 특강 1시간 + 교과별 연수 3시간)", url:"#",
+   banhead:"10:00~13:00 교과별 연수",
+   bans:[
+    {n:"국어"},
+    {n:"영어"},
+    {n:"수학", t:"수학과 성취평가 실천역량 강화",
+     k:["성취평가 운영의 실제 이해(교육과정 분석-준거 설정-평가도구 개발)",
+        "성취평가 역량 강화 실습(성취수준 분석, 추정분할점수 산출, 문항 분석)"]},
+    {n:"사회(역사·도덕)", t:"사회과 교육과정-수업-평가 통합설계의 실제",
+     k:["사회과 교육과정-수업-평가 통합설계 실천 사례",
+        "수업과 연계한 진단평가와 형성평가, 총괄평가의 설계"]},
+    {n:"과학", t:"과학과 성취평가 실천역량 강화",
+     k:["성취평가 운영의 실제 이해(교육과정 분석-준거설정-성취평가도구 개발-기록 및 피드백)",
+        "성취평가 역량 강화 실습(성취수준 분석, 웹앱 분석, 추정분할점수 산출 실습)",
+        "성취평가 문항 설계 및 나눔"]},
+    {n:"기술·가정·정보", t:"수업과 평가를 잇는 성취평가: 평가 설계부터 프로젝트 사례까지",
+     k:["성취평가 운영의 이해",
+        "성취평가를 위한 정기시험 및 수행평가 설계",
+        "프로젝트 기반 교육과정-수업-평가 통합설계 사례 나눔"]},
+    {n:"음악·미술·체육"},
+    {n:"제2외국어·한문", t:"제2외국어 한문 교과를 위한 수업 평가 통합 설계 및 학생 주도적 스스로 피드백을 위한 에듀테크 평가도구 나눔",
+     k:["교육과정 수업 평가 통합 설계 실습",
+        "동양어/한문을 위한 공한증 탈출기 실습",
+        "학생 스스로 피드백 하기 에듀테크 프로그램 실습"]}
+   ],
+   bannote:"분반은 신청 시 적어 주신 교과에 따라 배정합니다 · 주제가 비어 있는 분반은 확정되는 대로 안내합니다"},
   {stage:3, d:"11. 3.", wd:"화", t:"고등학교 교육과정 실천 사례 나눔",
    sub:"학교 교육과정 운영 및 교과특성화 사례 공유·나눔",
    area:"고등학교 교육과정", key:"curr", aud:"중등교사", mode:"offline", time:"15:00~17:00 · 집합 2시간", url:"#"}
@@ -1009,7 +1064,8 @@ document.querySelectorAll("[data-link]").forEach(function(a){
   var 색 = { keynote:["var(--s1)","var(--s1-dk)"],
              essay1:["var(--s2)","var(--s2-dk)"],
              essay2:["var(--s2)","var(--s2-dk)"],
-             share1:["var(--s3)","var(--s3-dk)"] };
+             share1:["var(--s3)","var(--s3-dk)"],
+             share2:["var(--s3)","var(--s3-dk)"] };
 
   function 안내상자(icon, head, text, when){
     list.innerHTML = '<div class="applybox"><div class="notice">'
@@ -1207,6 +1263,27 @@ function 지난과정(c){
   return new Date() > new Date(2026, +m[1] - 1, +m[2], 23, 59, 59);
 }
 
+/* 교과별 분반 목록 — 글자만 있으면 칸으로, 주제가 있으면 주제 목록으로 그립니다 */
+function 분반수(bans){
+  var x = bans.filter(function(b){ return b && b.x; }).length;
+  return '교과별 ' + (bans.length - x) + '개' + (x ? ' + 교과통합 ' + x + '개' : '') + ' 분반';
+}
+function 분반목록(c){
+  var 주제형 = c.bans.some(function(b){ return typeof b === "object"; });
+  var h = '<div class="bans' + (주제형 ? ' topics' : '') + '"><div class="bhead"><span class="ms">groups</span>'
+        + (c.banhead ? esc(c.banhead) + ' · ' : '') + 분반수(c.bans) + '</div><ol>';
+  c.bans.forEach(function(b, i){
+    if (typeof b !== "object") { h += '<li><b>' + (i + 1) + '</b>' + esc(b) + '</li>'; return; }
+    h += '<li' + (b.x ? ' class="x"' : '') + '><b>' + (i + 1) + '</b><div class="bt"><span class="bn">' + esc(b.n)
+       + (b.x ? '<em class="xtag">교과 무관 · 별도 신청</em>' : '') + '</span>'
+       + (b.t ? '<span class="btopic">' + esc(b.t) + '</span>' : '<span class="btopic none">주제 확정 후 안내</span>')
+       + (b.k && b.k.length ? '<ul class="bk">'
+           + b.k.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul>' : '')
+       + '</div></li>';
+  });
+  return h + '</ol>' + (c.bannote ? '<div class="bnote">※ ' + esc(c.bannote) + '</div>' : '') + '</div>';
+}
+
 function render(filter){
   var list = COURSES.filter(function(c){
     if (filter === "all") return true;
@@ -1253,11 +1330,10 @@ function render(filter){
       +       (c.split ? '<span class="badge split">' + esc(c.split) + '</span>' : '')
       +       (c.two ? '<span class="badge warn">2회 모두 참석해야 이수</span>' : '')
       +     '</div>'
-      +     (c.bans ? '<div class="bans"><div class="bhead"><span class="ms">groups</span>'
-      +           '교과별 ' + c.bans.length + '개 분반</div><ol>'
-      +           c.bans.map(function(b, i){ return '<li><b>' + (i + 1) + '</b>' + esc(b) + '</li>'; }).join('')
-      +           '</ol>' + (c.bannote ? '<div class="bnote">※ ' + esc(c.bannote) + '</div>' : '')
-      +           '</div>' : '')
+      +     (c.talk ? '<div class="talk"><div class="tm"><b>' + esc(c.talk.from) + '</b><span>~ ' + esc(c.talk.to) + '</span></div>'
+      +           '<div><div class="lab">전체 특강 · 모든 분반 함께</div>'
+      +           '<div class="tt">' + esc(c.talk.t) + '</div><div class="tw">' + esc(c.talk.who) + '</div></div></div>' : '')
+      +     (c.bans ? 분반목록(c) : '')
       +     '<div class="time">' + esc(c.time) + '</div>'
       +   '</div>'
       +   '<a class="apply' + (live ? '' : (지남 ? ' ended' : ' mute')) + '"'
