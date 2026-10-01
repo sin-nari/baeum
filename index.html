@@ -329,6 +329,18 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .talk .tt{font-size:19px;font-weight:700;margin-top:6px;line-height:1.4;letter-spacing:-.02em;word-break:keep-all}
 .talk .tw{margin-top:9px;padding-left:10px;border-left:2px solid var(--s3);
   font-size:13.5px;color:rgba(255,255,255,.72);word-break:keep-all}
+/* 시간대별 블록 — 분반 안에서 이어지는 두 시간 */
+.phases{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.phase{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:14px 16px;border-radius:10px;
+  background:#fff;border:1px solid color-mix(in srgb,var(--c) 35%,transparent)}
+.phase .tm{font-family:"Gowun Batang",serif;text-align:center;padding-right:14px;
+  border-right:1px solid color-mix(in srgb,var(--c) 30%,transparent);line-height:1.15}
+.phase .tm b{display:block;font-size:20px;font-weight:700;color:var(--c-dk)}
+.phase .tm span{display:block;font-size:12.5px;color:var(--dim);margin-top:3px}
+.phase .lab{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--c-dk)}
+.phase .pt{font-size:15.5px;font-weight:700;margin-top:4px;line-height:1.4;letter-spacing:-.01em;word-break:keep-all}
+.phase ul{margin:6px 0 0;padding-left:16px;font-size:13px;color:var(--muted);line-height:1.55;word-break:keep-all}
+@media(max-width:720px){.phases{grid-template-columns:1fr}}
 @media(max-width:560px){.talk{gap:14px;padding:16px}.talk .tm{padding-right:14px}
   .talk .tm b{font-size:20px}.talk .tt{font-size:16.5px}}
 .bans.topics li.x{grid-column:1/-1;border:1.5px dashed var(--c-dk)}
@@ -978,6 +990,16 @@ const COURSES = [
   {stage:3, rid:"share1", d:"10. 17.", wd:"토", t:"서·논술형 평가 실천 사례 나눔",
    sub:"교과별 서·논술형 평가 설계·적용 사례 공유 및 실습",
    area:"서·논술형 평가", key:"essay", aud:"중등교사", mode:"offline", split:"교과별 분반 운영", time:"09:00~13:00 · 집합 4시간", url:"#",
+   phases:[
+    {from:"09:00", to:"11:00", lab:"강의·나눔 · 분반", t:"교과별 서·논술형 평가 설계·적용 사례",
+     k:["경기 논술형 평가 방향(MAP Assessment)",
+        "깊이 있는 수업과 서·논술형 평가의 연계",
+        "교과별 서·논술형 평가 설계·적용 사례 공유"]},
+    {from:"11:00", to:"13:00", lab:"실습 워크숍 · 분반", t:"서·논술형 평가 문항 설계 실습",
+     k:["성취기준 기반 서·논술형 문항 제작의 실제",
+        "수행수준 개발과 채점기준 정교화",
+        "문항 수정·보완 및 결과 제출, 상호 피드백"]}
+   ],
    bans:["국어","영어","수학","사회","과학","기술가정·정보","음악·미술·체육","제2외국어·한문"],
    bannote:"분반은 신청 현황에 따라 조정될 수 있습니다"},
   {stage:3, rid:"share2", d:"10. 24.", wd:"토", t:"학생평가 역량 강화",
@@ -1333,6 +1355,11 @@ function render(filter){
       +     (c.talk ? '<div class="talk"><div class="tm"><b>' + esc(c.talk.from) + '</b><span>~ ' + esc(c.talk.to) + '</span></div>'
       +           '<div><div class="lab">전체 특강 · 모든 분반 함께</div>'
       +           '<div class="tt">' + esc(c.talk.t) + '</div><div class="tw">' + esc(c.talk.who) + '</div></div></div>' : '')
+      +     (c.phases ? '<div class="phases">' + c.phases.map(function(ph){
+              return '<div class="phase"><div class="tm"><b>' + esc(ph.from) + '</b><span>~ ' + esc(ph.to) + '</span></div>'
+                   + '<div><div class="lab">' + esc(ph.lab) + '</div><div class="pt">' + esc(ph.t) + '</div>'
+                   + '<ul>' + ph.k.map(function(x){ return '<li>' + esc(x) + '</li>'; }).join('') + '</ul></div></div>';
+            }).join('') + '</div>' : '')
       +     (c.bans ? 분반목록(c) : '')
       +     '<div class="time">' + esc(c.time) + '</div>'
       +   '</div>'
