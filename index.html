@@ -665,7 +665,7 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
         <div class="jdesc">나에게 필요한 배움을<br>선택하여 배움을 깊게 합니다.</div>
         <div class="jbox">
           <div class="lbl">나에게 필요한 배움의 선택</div>
-          <div class="val" style="margin-top:8px">9월 ~ 10월 · 선택 9과정</div>
+          <div class="val" style="margin-top:8px">9월 ~ 10월 · 선택 10과정</div>
           <div class="sub">선택형 직무연수 · 원격 각 2시간</div>
         </div>
       </div>
@@ -780,7 +780,7 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
   <div class="wrap">
     <div class="shead"><h2>연수 일정</h2></div>
     <p class="scope">※ 「배움:성장」 프로젝트는 <strong>중등 교원</strong>을 중심으로 운영하며, 첫 과정인 「여는 배움│방향을 보다」 기조강연은 <strong>초·중·고 교원</strong>이 함께합니다.</p>
-    <p class="sdesc">선택형 원격 연수 8과정은 <strong>9. 15.(화) 17:00~19:00</strong>을 빼고 모두 <strong>15:00~17:00</strong>에 열리며, <strong>서·논술형 평가 → 학생평가 → 고등학교 교육과정</strong> 순으로 이어집니다. 사례 공유형 집합 연수는 <strong>10. 17.(토)·10. 24.(토) 09:00~13:00</strong>과 <strong>11. 3.(화) 15:00~17:00</strong>에 운영합니다. 연수 내용의 중점 학교급과 무관하게 선택하여 참여하실 수 있습니다.</p>
+    <p class="sdesc">선택형 원격 연수는 <strong>9. 15.(화)·10. 14.(수) 17:00~19:00</strong>을 빼고 모두 <strong>15:00~17:00</strong>에 열리며, <strong>서·논술형 평가 → 학생평가 → 고등학교 교육과정</strong> 순으로 이어집니다. 사례 공유형 집합 연수는 <strong>10. 17.(토)·10. 24.(토) 09:00~13:00</strong>과 <strong>11. 3.(화) 15:00~17:00</strong>에 운영합니다. 연수 내용의 중점 학교급과 무관하게 선택하여 참여하실 수 있습니다.</p>
 
     <div class="kfeedback" id="zoombox">
       <div class="fbtext">
@@ -954,7 +954,7 @@ const KEYNOTE = {
 };
 
 const COURSES = [
-  /* ── 02 배움:성장 · 선택형 직무연수 9과정 (원격) ── */
+  /* ── 02 배움:성장 · 선택형 직무연수 10과정 (원격) ── */
   {stage:2, sv:1, rid:"essay1", d:"9. 7.",  wd:"월", t:"중등 서·논술형 평가의 이해",
    lecturer:"옥길새길중학교 정세정 수석교사",
    area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
@@ -965,6 +965,10 @@ const COURSES = [
   {stage:2, sv:3, rid:"essay2", d:"9. 17.", wd:"목", t:"수업과 연계한 서·논술형 평가 문항 제작",
    lecturer:"옥길새길중학교 정세정 수석교사",
    area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"online", time:"15:00~17:00 · 2시간", url:"#"},
+  {stage:2, sv:10, rid:"essay2b", d:"10. 14.", wd:"수", t:"수업과 연계한 서·논술형 평가 문항 제작",
+   sub:"9. 17.(목) 과정과 같은 내용으로, 참여가 어려우셨던 선생님을 위해 한 차례 더 운영합니다", hl:true,
+   lecturer:"옥길새길중학교 정세정 수석교사",
+   area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"online", time:"17:00~19:00 · 2시간", url:"#"},
   {stage:2, sv:4, rid:"assess1m", d:"9. 21.", wd:"월", t:"2022 개정 교육과정과 성취평가제 이해",
    br:"중학교", lecturer:"옥길새길중학교 정세정 수석교사",
    area:"학생평가", key:"assess", aud:"중학교 교원", mode:"online", time:"15:00~17:00 · 2시간", split:"중학교 분반", url:"#"},
@@ -989,7 +993,7 @@ const COURSES = [
   /* ── 03 다시, 배움으로 · 사례 공유형 직무연수 3과정 (집합) ── */
   {stage:3, rid:"share1", d:"10. 17.", wd:"토", t:"서·논술형 평가 실천 사례 나눔",
    sub:"교과별 서·논술형 평가 설계·적용 사례 공유 및 실습",
-   area:"서·논술형 평가", key:"essay", aud:"중등교사", mode:"offline", split:"교과별 분반 운영", time:"09:00~13:00 · 집합 4시간", url:"#",
+   area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"offline", split:"교과별 분반 운영", time:"09:00~13:00 · 집합 4시간", url:"#",
    phases:[
     {from:"09:00", to:"11:00", lab:"강의·나눔 · 분반", t:"교과별 서·논술형 평가 설계·적용 사례",
      k:["경기 논술형 평가 방향(MAP Assessment)",
@@ -1098,6 +1102,7 @@ document.querySelectorAll("[data-link]").forEach(function(a){
   var 색 = { keynote:["var(--s1)","var(--s1-dk)"],
              essay1:["var(--s2)","var(--s2-dk)"],
              essay2:["var(--s2)","var(--s2-dk)"],
+             essay2b:["var(--s2)","var(--s2-dk)"],
              share1:["var(--s3)","var(--s3-dk)"],
              share2:["var(--s3)","var(--s3-dk)"] };
 
@@ -1434,7 +1439,7 @@ render("all");
   btn.innerHTML = 'Zoom 입장<span class="dbadge">준비 중</span>';
 })();
 
-/* 자료실 — 선택형 9과정(9. 21.은 중·고 분반)의 만족도 조사 카드를 모두 그립니다.
+/* 자료실 — 선택형 10과정(9. 21.은 중·고 분반)의 만족도 조사 카드를 모두 그립니다.
    과정 당일 '여는시각'부터 '열림일수' 뒤 자정까지만 눌립니다.
    그 전에는 "예정", 그 뒤에는 "종료" 상태로 회색 처리됩니다. */
 (function(){
