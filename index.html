@@ -240,6 +240,8 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
   font-size:15.5px;font-weight:700;white-space:nowrap;display:inline-flex;align-items:center;gap:6px;
   transition:.16s}
 .obtn:hover{filter:brightness(1.08)}
+.obtns{display:flex;flex-direction:column;gap:8px}
+.obtns .obtn{padding:11px 20px;white-space:nowrap}
 .privacy{margin-top:14px;font-size:13.5px;color:var(--muted);line-height:1.7}
 .filters{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
 .chip{border:1px solid var(--line);background:var(--card);border-radius:999px;
@@ -390,6 +392,24 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .info{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:22px}
 .info h3{font-size:16px;font-weight:700;margin-bottom:8px;display:flex;align-items:center;gap:8px}
 .info p{font-size:14.5px;color:var(--muted);line-height:1.65}
+.ktbl-wrap{margin-top:16px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.ktbl{width:100%;min-width:560px;border-collapse:collapse;font-size:14px;line-height:1.5}
+.ktbl th,.ktbl td{border:1px solid var(--line);padding:8px 10px;text-align:center;vertical-align:middle}
+.ktbl thead th{background:color-mix(in srgb,var(--ink,#131C31) 6%,transparent);font-weight:700}
+.ktbl td.l{text-align:left}
+.ktbl th.stg{font-weight:700;white-space:nowrap}
+.ktbl td.d{white-space:nowrap;font-variant-numeric:tabular-nums}
+.ktbl tr.new td{color:#1F4FD8;font-weight:700}
+.ktbl tr.s3 td,.ktbl tr.s3 th{background:color-mix(in srgb,#F5C542 14%,transparent)}
+.ktbl tr.ai td{color:var(--ai);font-weight:700}
+.ktbl tr.ai td.l small{display:block;font-weight:600;color:var(--ai)}
+.ktbl tfoot td{font-weight:700;background:color-mix(in srgb,var(--ink,#131C31) 4%,transparent)}
+.ktbl .badge{display:inline-block;font-size:11px;font-weight:700;padding:1px 7px;border-radius:99px;margin-left:6px;vertical-align:1px;background:#1F4FD8;color:#fff}
+.ktbl tr.ai .badge{background:var(--ai)}
+.knote{margin-top:8px;font-size:13px;color:var(--muted);line-height:1.6}
+@media (prefers-color-scheme:dark){ .ktbl tr.new td{color:#8FB0FF} }
+@media (max-width:640px){ .ktbl{min-width:0;font-size:12.5px} .ktbl th,.ktbl td{padding:6px 5px} .ktbl td.d{white-space:normal;word-break:keep-all} .ktbl td.d .tm{display:inline-block} .ktbl td,.ktbl th{word-break:keep-all} .ktbl td:nth-last-child(2):not(.l),.ktbl td:last-child{white-space:nowrap} .ktbl tfoot td small{white-space:normal} .ktbl .badge{margin-left:3px} .ktbl tr.ai td.l small{font-size:11.5px} }
+
 .warnbox{background:#FDF6E7;border-color:#EBD9AE}
 .warnbox h3{color:#7A5518}
 
@@ -849,7 +869,24 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
       </div>
       <div class="info" style="grid-column:1/-1">
         <h3><span class="ms">workspace_premium</span>서·논술형 평가 핵심교원 기본과정(AI 통합)</h3>
-        <p><strong>1단계</strong>(서·논술형 평가의 이해) · <strong>2단계</strong>(문항 제작)를 1~3차 중 한 번씩 듣고, <strong>3단계</strong>로 <strong>10. 17.(토) 교과별 실습</strong> 또는 <strong>11. 2.~5. AI 서·논술형 평가 역량 강화</strong> 중 하나를 이수하면 핵심교원 기본과정 이수자로 인정되어 이수 공문을 보내 드립니다. 5월 하이러닝 AI 서·논술형 평가 연수를 이수하신 선생님은 1·2단계만 들으셔도 인정됩니다. 각 과정은 따로 신청하고 따로 이수합니다.</p>
+        <p><strong>1단계</strong>(서·논술형 평가의 이해) · <strong>2단계</strong>(문항 제작)를 1~3차 중 한 번씩 듣고, <strong>3단계</strong>로 <strong>10. 17.(토) 교과별 실습</strong> 또는 <strong>11. 2.~5. AI 서·논술형 평가 역량 강화</strong> 중 하나를 이수하면 핵심교원 기본과정 이수자로 인정되어 이수 공문을 보내 드립니다. 각 과정은 따로 신청하고 따로 이수합니다.</p>
+        <div class="ktbl-wrap">
+          <table class="ktbl">
+            <thead><tr><th>단계</th><th>일시</th><th>연수명</th><th>방법</th><th>시간</th></tr></thead>
+            <tbody>
+              <tr><th class="stg" rowspan="3">1단계</th><td class="d">9. 7.(월) <span class="tm">15:00~17:00</span></td><td class="l">중등 서·논술형 평가의 이해 1차</td><td>원격</td><td rowspan="3">2시간</td></tr>
+              <tr><td class="d">9. 15.(화) <span class="tm">17:00~19:00</span></td><td class="l">중등 서·논술형 평가의 이해 2차</td><td>원격</td></tr>
+              <tr class="new"><td class="d">10. 21.(수) <span class="tm">15:00~17:00</span></td><td class="l">중등 서·논술형 평가의 이해 3차<span class="badge">추가</span></td><td>원격</td></tr>
+              <tr><th class="stg" rowspan="3">2단계</th><td class="d">9. 17.(목) <span class="tm">15:00~17:00</span></td><td class="l">수업과 연계한 서·논술형 평가 문항 제작 1차</td><td>원격</td><td rowspan="3">2시간</td></tr>
+              <tr><td class="d">10. 14.(수) <span class="tm">17:00~19:00</span></td><td class="l">수업과 연계한 서·논술형 평가 문항 제작 2차</td><td>원격</td></tr>
+              <tr class="new"><td class="d">10. 26.(월) <span class="tm">15:00~17:00</span></td><td class="l">수업과 연계한 서·논술형 평가 문항 제작 3차<span class="badge">추가</span></td><td>원격</td></tr>
+              <tr class="s3"><th class="stg" rowspan="2">3단계<br><small>(택 1)</small></th><td class="d">10. 17.(토) <span class="tm">09:00~13:00</span></td><td class="l">서·논술형 평가 실천 사례 나눔(교과별 실습)</td><td>집합</td><td>4시간</td></tr>
+              <tr class="s3 ai"><td class="d">11. 2.(월) <span class="tm">17:30~18:30</span><br>11. 2.(월) <span class="tm">18:30~20:30</span><br>11. 5.(목) <span class="tm">17:30~19:30</span></td><td class="l">AI 서·논술형 평가 역량 강화<span class="badge">AI 통합</span><small>① AI 윤리교육<br>② AI 서·논술형 평가 문항 제작의 실제<br>③ AI 서·논술형 평가의 채점과 피드백</small></td><td>병행*<br>병행*<br>집합</td><td>5시간</td></tr>
+            </tbody>
+            <tfoot><tr><td colspan="4">계</td><td>8시간<br><small>(AI 과정 선택 시 9시간)</small></td></tr></tfoot>
+          </table>
+        </div>
+        <p class="knote">* 병행: 11. 2.(월)은 집합과 실시간 원격(Zoom)을 함께 운영하며, 신청할 때 [집합 참여]·[원격 참여] 중 하나를 고릅니다. 11. 5.(목)은 교과별 분반(영어·수학·교과군 통합, 분반별 20명 내외) 집합 실습입니다.</p>
       </div>
     </div>
   </div>
@@ -1090,7 +1127,7 @@ const COURSES = [
         "학생 스스로 피드백 하기 에듀테크 프로그램 실습"]}
    ],
    bannote:"분반은 신청 시 적어 주신 교과에 따라 배정합니다"},
-  {stage:3, rid:"essayai", ai:true, total:"총 5시간", modetext:"11. 2. 집합·원격 병행 · 11. 5. 집합", totalsub:"11. 2. 집합·원격 병행 3시간 + 11. 5. 집합 2시간", d:"11. 2.", end:"11. 5.", wd:"월", t:"AI 서·논술형 평가 역량 강화",
+  {stage:3, rid:"essayai essayaiz", ai:true, total:"총 5시간", modetext:"11. 2. 집합·원격 병행 · 11. 5. 집합", totalsub:"11. 2. 집합·원격 병행 3시간 + 11. 5. 집합 2시간", d:"11. 2.", end:"11. 5.", wd:"월", t:"AI 서·논술형 평가 역량 강화",
    sub:"서·논술형 평가 핵심교원 기본과정(AI 통합) 3단계 · 11. 2.(월) 집합·원격 병행 + 11. 5.(목) 집합", hl:true,
    lecturer:"11. 2. 옥길새길중학교 정세정 수석교사",
    area:"서·논술형 평가", key:"essay", aud:"중등교원", mode:"mix", split:"11. 5. 교과별 분반", two:true,
@@ -1111,13 +1148,13 @@ const COURSES = [
         "평가도구 정교화 실습(AI 평가시스템 채점 및 채점기준 교정)",
         "상호 피드백 및 만족도 조사"]}
    ],
-   banhead:"11. 5.(목) 분반",
+   banhead:"11. 5.(목) 분반 · 분반별 20명 내외",
    bans:[
     {n:"영어", t:"배곧해솔중학교 김미숙 수석교사"},
     {n:"수학", t:"상신중학교 양숙자 수석교사"},
     {n:"교과군 통합", t:"옥길새길중학교 정세정 수석교사 · 교과 구분 없이 운영"}
    ],
-   bannote:"분반은 중·고 학교급 구분 없이 운영하며, 신청 인원에 따라 통합·변경될 수 있습니다. 11. 2.(월)은 신청 시 참여 방식(집합 또는 원격)을 선택합니다"},
+   bannote:"분반별 20명 내외로 모집하며, 분반은 담당 교과에 따라 배정됩니다(중·고 학교급 구분 없음). 11. 2.(월) 참여 방식(집합 또는 원격)에 따라 [집합 참여 신청]·[원격 참여 신청] 중 하나로 신청해 주세요"},
   {stage:3, d:"11. 3.", wd:"화", t:"고등학교 교육과정 실천 사례 나눔",
    sub:"학교 교육과정 운영 및 교과특성화 사례 공유·나눔",
    area:"고등학교 교육과정", key:"curr", aud:"중등교사", mode:"offline", time:"15:00~17:00 · 집합 2시간", url:"#"}
@@ -1220,8 +1257,15 @@ document.querySelectorAll("[data-link]").forEach(function(a){
   }
 
   function 목록(all){
-    var 열린것 = [];
-    for (var id in all) if (all[id].상태 === "접수중") 열린것.push(all[id]);
+    var 열린것 = [], 묶음별 = {};
+    for (var id in all) {
+      if (all[id].상태 !== "접수중") continue;
+      var b = all[id].묶음 && all[id].묶음 !== id ? all[id].묶음 : null;
+      if (b && all[b] && all[b].상태 === "접수중") {          /* 묶음 대표 카드에 버튼만 더합니다 */
+        (묶음별[b] = 묶음별[b] || []).push(all[id]); continue;
+      }
+      열린것.push(all[id]);
+    }
 
     if (!열린것.length) {
       안내상자("event_busy", "지금 신청 가능한 과정이 없습니다",
@@ -1248,6 +1292,8 @@ document.querySelectorAll("[data-link]").forEach(function(a){
                  ((KEYNOTE.자리표시 === true) ||
                   (KEYNOTE.자리표시 === "임박" && s.남은 <= KEYNOTE.임박기준));
       var 주소 = url + (s.id === "keynote" ? "" : "#" + s.id);   /* # 는 리디렉션에도 안전합니다 */
+      var 형태 = s.형태 || "";
+      if (묶음별[s.id]) { 형태 = 형태.replace(/^\[[^\]]*\]\s*/, ""); 임박 = false; }   /* 묶음 카드는 공통 정보만, 남은 자리는 분반별이라 숨김 */
 
       html += '<div class="ocard" style="--c:' + cc[0] + ';--c-dk:' + cc[1] + '">'
         + '<div class="oday"><div class="d serif">' + esc(날) + '</div>'
@@ -1255,12 +1301,17 @@ document.querySelectorAll("[data-link]").forEach(function(a){
         + '<div>'
         +   '<div class="ostage">' + esc(s.구분 || "") + '</div>'
         +   '<div class="otitle">' + esc(s.연수명) + '</div>'
-        +   '<div class="ometa">' + esc(시각) + ' · ' + esc(s.형태 || "")
+        +   '<div class="ometa">' + esc(시각) + ' · ' + esc(형태)
         +     (s.곁들임 ? ' · ' + esc(s.곁들임) : '') + '</div>'
         +   (임박 ? '<div class="oseat">남은 자리 ' + s.남은 + '석 · 마감이 얼마 남지 않았습니다</div>' : '')
         + '</div>'
-        + '<a class="obtn" href="' + 주소 + '" target="_blank" rel="noopener">'
-        +   '신청하기<span class="ms" style="font-size:18px">arrow_forward</span></a>'
+        + (묶음별[s.id]
+            ? '<div class="obtns">' + [s].concat(묶음별[s.id]).map(function(x){
+                return '<a class="obtn" href="' + url + '#' + x.id + '" target="_blank" rel="noopener">'
+                  + esc((x.참여방식 || "") + " 참여 신청") + '<span class="ms" style="font-size:18px">arrow_forward</span></a>';
+              }).join("") + '</div>'
+            : '<a class="obtn" href="' + 주소 + '" target="_blank" rel="noopener">'
+              + '신청하기<span class="ms" style="font-size:18px">arrow_forward</span></a>')
         + '</div>';
     });
     list.innerHTML = html + '</div>';
@@ -1308,7 +1359,18 @@ document.querySelectorAll("[data-link]").forEach(function(a){
       /* ① 과정 키가 있으면 그것으로 곧장 맞춥니다 */
       var rid = slot.getAttribute("data-rid");
       if (rid) {
-        if (all[rid] && all[rid].상태 === "접수중") 버튼(a, rid, "신청하기");
+        var rids = rid.split(/\s+/).filter(function(r){ return all[r] && all[r].상태 === "접수중"; });
+        if (!rids.length) return;
+        if (rid.indexOf(" ") < 0) { 버튼(a, rids[0], "신청하기"); return; }
+        /* 집합·원격처럼 신청을 둘로 나눈 과정 → 버튼 두 개 */
+        var box2 = document.createElement("div");
+        box2.className = "applys";
+        rids.forEach(function(r){
+          var b = document.createElement("a");
+          버튼(b, r, (all[r].참여방식 ? all[r].참여방식 + " 참여 신청" : "신청하기"));
+          box2.appendChild(b);
+        });
+        a.parentNode.replaceChild(box2, a);
         return;
       }
 
