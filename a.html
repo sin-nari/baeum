@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#131C31">
+<meta name="robots" content="noindex">
+<title>출석 확인 · 배움:성장</title>
+<style>
+  :root{ --ink:#131C31; --sub:#5B6478; --line:#DDE1EA; --bg:#F7F8FA; }
+  *{ box-sizing:border-box; }
+  html,body{ height:100%; margin:0; }
+  body{
+    display:flex; align-items:center; justify-content:center; padding:24px;
+    background:var(--bg); color:var(--ink);
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,sans-serif;
+    -webkit-text-size-adjust:100%;
+  }
+  main{ width:100%; max-width:400px; text-align:center; }
+  .mark{ font-size:13px; letter-spacing:.02em; color:var(--sub); margin:0 0 20px; }
+  .mark b{ color:var(--ink); font-weight:600; }
+  h1{ font-size:19px; line-height:1.5; font-weight:600; margin:0 0 8px; }
+  p{ font-size:14px; line-height:1.7; color:var(--sub); margin:0; }
+  .go{
+    display:inline-block; margin-top:22px; padding:13px 26px; border-radius:8px;
+    background:var(--ink); color:#fff; font-size:15px; font-weight:600;
+    text-decoration:none;
+  }
+  .go:focus-visible{ outline:3px solid #7C8AA8; outline-offset:3px; }
+  ul{ list-style:none; margin:20px 0 0; padding:0; text-align:left; }
+  li + li{ border-top:1px solid var(--line); }
+  ul a{
+    display:block; padding:13px 4px; color:var(--ink);
+    font-size:14px; line-height:1.5; text-decoration:none;
+  }
+  ul a:hover, ul a:focus-visible{ color:#3A4A6B; }
+  ul .d{ color:var(--sub); font-variant-numeric:tabular-nums; margin-right:8px; }
+  .hide{ display:none; }
+</style>
+</head>
+<body>
+<main>
+  <p class="mark">2026 부천 중등 <b>배움:성장</b></p>
+
+  <div id="go" class="hide">
+    <h1 id="ct"></h1>
+    <p id="msg">출석 확인 화면으로 이동하고 있습니다.</p>
+    <a class="go" id="link" href="#">바로 열기</a>
+  </div>
+
+  <div id="pick" class="hide">
+    <h1>어느 과정에 참여하셨나요?</h1>
+    <p>과정을 고르면 출석 확인 화면이 열립니다.</p>
+    <ul id="list"></ul>
+  </div>
+</main>
+
+<script>
+/* ── 설정 ──────────────────────────────────────────
+   a.html        → DEFAULT 과정(지금은 10. 17.)의 출석 화면으로 바로 이동
+   a.html?번호   → 그 번호 과정으로 이동 (a.html?list 는 전체 목록)
+   ENTRY 는 출석 폼의 '참여 강좌' 문항 번호입니다.
+     폼 편집 → ⋮ → 미리 채워진 링크 가져오기 → 링크에 보이는 entry.숫자 를 그대로 넣으세요.
+   ENTRY 가 비어 있으면 과정이 미리 선택되지 않고, 화면에 '직접 선택' 안내가 나옵니다.
+   COURSES 글자는 출석 폼 선택지와 한 글자도 달라서는 안 됩니다(다르면 선택이 조용히 빠짐). */
+
+var FORM    = "https://docs.google.com/forms/d/e/1FAIpQLScHxLyTQPfqxmbvipDEseVSKkEju6UHPjyg5D6mNP7flueirg/viewform";
+var ENTRY   = "";          /* 예) "entry.123456789" */
+var DEFAULT = 11;          /* 번호 없이 a.html 로 들어오면 이 과정 (11 = 10. 17.) */
+
+var COURSES = [
+  "9. 7.(월) 중등 서·논술형 평가의 이해",
+  "9.15.(화) 중등 서·논술형 평가의 이해",
+  "9. 17.(목) 수업과 연계한 서·논술형 평가 문항 제작",
+  "9. 21.(월) 2022 개정 교육과정과 성취평가제 이해 [중학교]",
+  "9. 21.(월) 2022 개정 교육과정과 성취평가제 이해 [고등학교]",
+  "9. 22.(화) 고등학교 학생평가 지원을 위한 성취평가 운영의 이해",
+  "9. 29.(화) 고교 학점 이수 지원을 위한 최소 성취수준 보장 지도 방안",
+  "10. 8.(목) 고교학점제 운영의 실제",
+  "10. 22.(목) 고교학점제와 진로·학업설계 지도의 실제",
+  "10. 14.(수) 수업과 연계한 서·논술형 평가 문항 제작",
+  "10. 17.(토) 서·논술형 평가 실천 사례 나눔",
+  "10. 21.(수) 중등 서·논술형 평가의 이해",
+  "10. 24.(토) 학생평가 역량 강화",
+  "10. 26.(월) 수업과 연계한 서·논술형 평가 문항 제작",
+  "11. 2.(월) AI 서·논술형 평가 역량 강화",
+  "11. 3.(화) 고등학교 교육과정 실천 사례 나눔",
+  "11. 5.(목) AI 서·논술형 평가 역량 강화"
+];
+/* ─────────────────────────────────────────────── */
+
+function 주소(t){
+  return ENTRY ? FORM + "?usp=pp_url&" + ENTRY + "=" + encodeURIComponent(t) : FORM;
+}
+
+var q = location.search.replace("?", "").split("&")[0] || "";
+var n = q === "" ? DEFAULT : parseInt(q, 10);
+var t = COURSES[n - 1];
+
+if (t) {
+  document.getElementById("ct").textContent = t;
+  document.getElementById("link").href = 주소(t);
+  document.getElementById("go").classList.remove("hide");
+  if (ENTRY) {
+    location.replace(주소(t));
+  } else {
+    document.getElementById("msg").innerHTML =
+      "다음 화면의 <b>참여 강좌</b>에서 위 과정을 골라 주세요.";
+    document.getElementById("link").textContent = "출석 확인하기";
+  }
+} else {
+  var ul = document.getElementById("list");
+  COURSES.forEach(function(x, i){
+    var li = document.createElement("li");
+    var a  = document.createElement("a");
+    a.href = "?" + (i + 1);
+    a.textContent = x;
+    ul.appendChild(li).appendChild(a);
+  });
+  document.getElementById("pick").classList.remove("hide");
+}
+</script>
+</body>
+</html>
