@@ -907,17 +907,38 @@ footer strong{color:#fff;font-weight:600;display:block;margin-bottom:6px;font-si
           <span class="pdl"><span class="ms" style="font-size:17px">download</span>내려받기</span>
         </div>
       </a>
-      <a class="poster" href="poster-cafe.jpg" download>
-        <img src="poster-cafe.jpg" alt="11. 3.(화) 15:30 고등학교 교육과정 이야기 카페 포스터 — 1부 교육과정 STORY, 2부 이야기 카페 메뉴판" loading="lazy">
-        <div class="pcap">
-          <div><strong>고등학교 교육과정 이야기 카페</strong><span>11. 3.(화) 15:30~17:30 · 청백마루</span></div>
-          <span class="pdl"><span class="ms" style="font-size:17px">download</span>내려받기</span>
-        </div>
-      </a>
       <a class="poster" href="poster-schedule.png" download>
         <img src="poster-schedule.png" alt="배움:성장 과정별 세부 일정표" loading="lazy">
         <div class="pcap">
           <div><strong>과정별 세부 일정</strong><span>13개 과정 일정표</span></div>
+          <span class="pdl"><span class="ms" style="font-size:17px">download</span>내려받기</span>
+        </div>
+      </a>
+      <a class="poster" href="poster-1017.jpg" download>
+        <img src="poster-1017.jpg" alt="10. 17.(토) 서·논술형 평가 실천 사례 나눔 연수 포스터" loading="lazy">
+        <div class="pcap">
+          <div><strong>서·논술형 평가 실천 사례 나눔</strong><span>10. 17.(토) 09:00~13:00 · 교과별 분반</span></div>
+          <span class="pdl"><span class="ms" style="font-size:17px">download</span>내려받기</span>
+        </div>
+      </a>
+      <a class="poster" href="poster-1024.jpg" download>
+        <img src="poster-1024.jpg" alt="10. 24.(토) 학생평가 역량 강화 연수 포스터" loading="lazy">
+        <div class="pcap">
+          <div><strong>학생평가 역량 강화</strong><span>10. 24.(토) 09:00~13:00 · 특강 + 교과별 분반</span></div>
+          <span class="pdl"><span class="ms" style="font-size:17px">download</span>내려받기</span>
+        </div>
+      </a>
+      <a class="poster" href="poster-ai.jpg" download>
+        <img src="poster-ai.jpg" alt="11. 2.(월)·11. 5.(목) AI 서·논술형 평가 역량 강화 연수 포스터" loading="lazy">
+        <div class="pcap">
+          <div><strong>AI 서·논술형 평가 역량 강화</strong><span>11. 2.(월) 17:00~20:00 · 11. 5.(목) 17:30~19:30</span></div>
+          <span class="pdl"><span class="ms" style="font-size:17px">download</span>내려받기</span>
+        </div>
+      </a>
+      <a class="poster" href="poster-cafe.jpg" download>
+        <img src="poster-cafe.jpg" alt="11. 3.(화) 15:30 고등학교 교육과정 이야기 카페 포스터 — 1부 교육과정 STORY, 2부 이야기 카페 메뉴판" loading="lazy">
+        <div class="pcap">
+          <div><strong>고등학교 교육과정 이야기 카페</strong><span>11. 3.(화) 15:30~17:30 · 청백마루</span></div>
           <span class="pdl"><span class="ms" style="font-size:17px">download</span>내려받기</span>
         </div>
       </a>
@@ -1175,10 +1196,10 @@ const COURSES = [
     {n:"교과군 통합", t:"옥길새길중학교 정세정 수석교사 · 교과 구분 없이 운영"}
    ],
    bannote:"분반별 20명 내외로 모집하며, 분반은 담당 교과에 따라 배정됩니다(중·고 학교급 구분 없음). 11. 2.(월) 참여 방식에 따라 [11. 2. 집합 + 11. 5. 집합]·[11. 2. 원격 + 11. 5. 집합] 중 하나로 신청해 주세요. 11. 5.(목)은 모두 집합입니다"},
-  {stage:3, d:"11. 3.", wd:"화", t:"고등학교 교육과정 이야기 카페",
+  {stage:3, rid:"cafe", d:"11. 3.", wd:"화", t:"고등학교 교육과정 이야기 카페",
    sub:"부천 배움 100이음 · 선택이 배움으로, 배움이 성장으로 · 부천교육지원청 청백마루 (등록 15:00부터)", hl:true,
    area:"고등학교 교육과정", key:"curr", aud:"중·고 교감 · 고교 교육과정부장 · 희망 교원", mode:"offline",
-   time:"15:30~17:30 · 집합 2시간", url:"#",
+   time:"15:30~17:30 · 집합 2시간", url:"#",   /* 신청은 신청 서버의 cafe 과정(10. 26.~10. 29.)이 열리면 버튼이 자동으로 살아납니다 */
    phases:[
     {from:"15:30", to:"15:55", lab:"1부 · 다 함께, 한자리에서", t:"부천 배움 100이음, 교육과정 STORY",
      k:["개회 · 인사 및 운영 안내",
@@ -1254,7 +1275,8 @@ document.querySelectorAll("[data-link]").forEach(function(a){
              essay2c:["var(--s2)","var(--s2-dk)"],
              essayai:["var(--ai)","var(--ai-dk)"],
              share1:["var(--s3)","var(--s3-dk)"],
-             share2:["var(--s3)","var(--s3-dk)"] };
+             share2:["var(--s3)","var(--s3-dk)"],
+             cafe:["var(--s3)","var(--s3-dk)"] };
 
   function 안내상자(icon, head, text, when){
     list.innerHTML = '<div class="applybox"><div class="notice">'
