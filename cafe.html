@@ -512,7 +512,7 @@ document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 dday(); drawFlow(); drawMenu(); gate();
 
 /* ===== 이야기 벽 ===== */
-const WALL = { API_URL: "" };   // Apps Script 웹 앱 주소(…/exec). 비워 두면 미리보기 모드
+const WALL = { API_URL: "https://script.google.com/macros/s/AKfycbyqen0mrwEzsWppMRo0IvxHkBLLmVqDeGLJ1G9aQfvPBwEe2ypBfAk3IHKwIPq5_2r6/exec" };   // Apps Script 웹 앱 주소(…/exec). 비워 두면 미리보기 모드
 const TCOLOR = {1:"#2f6f8f",2:"#2f6f8f",3:"#2f6f8f",4:"#3d8a5a",5:"#5fa3a0",6:"#8a6bb8",7:"#c2571f"};
 function tableInfo(t, r){ const x = MENU[r].find(m => m.t === t); return x ? `${x.w}` : ""; }
 let wall = { cards: [], tab: "all", round: 1, liked: new Set(JSON.parse(store.get("cafe.liked") || "[]")) };
