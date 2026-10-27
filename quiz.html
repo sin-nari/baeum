@@ -114,18 +114,30 @@ body.host .opt .l{width:54px;height:54px;font-size:26px}
 const API = "https://script.google.com/macros/s/AKfycbyqen0mrwEzsWppMRo0IvxHkBLLmVqDeGLJ1G9aQfvPBwEe2ypBfAk3IHKwIPq5_2r6/exec";
 const DUR = 15;   // 문제당 제한 시간(초)
 const Q = [
+  { q:"책자 표지의 ‘100’ 로고, 두 개의 ‘0’은 어떤 기호를 닮았을까요?", o:["하트 ♥","무한대 ∞","안경 👓","자물쇠 🔒"], a:1,
+    n:"“100개의 배움이 이어져, 100개의 성장이 됩니다.” 끝없이 이어지는 ∞ 모양이 책 곳곳에 숨어 있어요." },
   { q:"부천의 고등학교는 모두 몇 곳일까요?", o:["18곳","21곳","24곳","29곳"], a:2,
     n:"24개 학교, 24개의 빛깔. 학교마다 서로 다른 강점으로 교육과정을 특성화하고 있어요." },
+  { ox:1, t:10, q:"교과특성화학교는 지정된 뒤 3년 동안 운영한다.", o:["맞아요","아니에요"], a:0,
+    n:"교과특성화학교는 지정 후 3년 동안 운영합니다. 2024·2025·2026 지정 학교가 함께 있어요." },
   { q:"2026 정규학기 부천형 공동교육과정, 열린 강좌는 모두 몇 개일까요?", o:["37강좌","47강좌","57강좌","67강좌"], a:1,
     n:"1학기 24강좌 + 2학기 23강좌 = 47강좌. 727명의 학생이 학교를 넘어 함께 배웠어요." },
+  { q:"다음 중 2026 공동교육과정에 열리지 ‘않은’ 과목은?", o:["보건","국제 정치","교육의 이해","천문학"], a:3,
+    n:"보건·국제 정치·교육의 이해는 모두 열렸어요. 인공지능 수학, 고급 생명과학, 소설 창작까지 47강좌가 함께했습니다." },
   { q:"부천이 ‘경기도 최초’로 운영한 것은 무엇일까요?", o:["공동교육과정 계절학기","고교학점제 박람회","온라인 학교","AI 디지털교과서"], a:0,
-    n:"학기가 끝나도 배움은 계속됩니다. 겨울 14강좌 221명, 여름 3강좌 35명이 방학에도 배웠어요." },
+    n:"학기가 끝나도 배움은 계속됩니다. 부천은 경기도 최초로 공동교육과정 계절학기를 열었어요." },
+  { ox:1, t:10, q:"여름방학 계절학기에 겨울방학보다 더 많은 학생이 참여했다.", o:["맞아요","아니에요"], a:1,
+    n:"2025 겨울방학 14강좌 221명, 2026 여름방학 3강좌 35명이 방학에도 배웠어요." },
   { q:"나눔캠퍼스로 부천 학생들과 함께하는 대학은 몇 곳일까요?", o:["2곳","3곳","4곳","5곳"], a:3,
-    n:"부천시와 5개 대학이 함께 만드는 열린 배움터. 학교를 넘어 도시가 배움터가 됩니다." },
-  { q:"공동교육과정 계절학기 ‘보건’ 선생님은 몇 번의 수업을 했을까요?", o:["16번","24번","32번","40번"], a:2,
+    n:"부천시·부천교육지원청과 5개 대학이 함께 만드는 열린 배움터. 도시가 배움터가 됩니다." },
+  { q:"다음 중 ‘부천 학교 밖 교육 학점 인정 과목’이 아닌 것은?", o:["영상 제작 기초","스포츠 경기 체력 심화","보이스 디자인과 연기액팅","드론 비행 실습"], a:3,
+    n:"영상 제작 기초·스포츠 경기 체력 심화·보이스 디자인과 연기액팅, 학교 밖에서도 학점을 인정받으며 배웠어요." },
+  { q:"공동교육과정 ‘보건’ 선생님은 몇 번의 수업을 했을까요?", o:["16번","24번","32번","40번"], a:2,
     n:"“서른두 번의 수업 끝에 가장 많이 자란 사람은 저였습니다.” 배움을 만드는 교사도 함께 성장해요." }
 ];
 const L = ["A","B","C","D"];
+const LB = (x,k) => x.ox ? ["O","X"][k] : L[k];
+
 
 /* ===== 도우미 ===== */
 const $ = s => document.querySelector(s);
@@ -186,7 +198,7 @@ function vAsk(){
     view = "ask"+q;
     $("#app").innerHTML = head() + `<div class="qn"><span>문제 ${q+1} / ${Q.length}</span><span id="sec"></span></div>
       <div class="bar" id="bar"><i id="bi"></i></div><div class="qt">${esc(x.q)}</div>
-      <div class="opts">${x.o.map((o,k)=>`<button class="opt o${k}" data-k="${k}"><span class="l">${L[k]}</span>${esc(o)}</button>`).join("")}</div>
+      <div class="opts">${x.o.map((o,k)=>`<button class="opt o${k}" data-k="${k}"><span class="l">${LB(x,k)}</span>${esc(o)}</button>`).join("")}</div>
       <div class="fb" id="fb"></div>`;
     document.querySelectorAll(".opt").forEach(b => b.onclick = () => answer(+b.dataset.k));
     beep(660,.12);
@@ -210,7 +222,7 @@ function vReveal(){
   if (view === "rev"+q){ paintRank(); return; }
   view = "rev"+q;
   $("#app").innerHTML = head() + `<div class="qn"><span>문제 ${q+1} / ${Q.length}</span><span>정답 공개</span></div><div class="qt">${esc(x.q)}</div>
-    <div class="opts">${x.o.map((o,k)=>`<button class="opt o${k} ${k===st.key?"right":mine===k?"wrong":"dim"}" disabled><span class="l">${L[k]}</span>${esc(o)}</button>`).join("")}</div>
+    <div class="opts">${x.o.map((o,k)=>`<button class="opt o${k} ${k===st.key?"right":mine===k?"wrong":"dim"}" disabled><span class="l">${LB(x,k)}</span>${esc(o)}</button>`).join("")}</div>
     <div class="fb">${mine==null ? `<span class="burst">⏰</span>이번 문제는 놓쳤어요` : ok ? `<span class="burst">🎉</span>정답!` : `<span class="burst">🫶</span>아쉬워요!`}<div id="rk"></div></div>`;
   if (ok){ beep(880,.2); confetti(30); } else beep(300,.2);
   paintRank();
@@ -276,11 +288,11 @@ async function hLobby(){
 }
 async function hAsk(q){
   H.q = q; H.phase = "ask";
-  try{ const d = await hostCmd({ op:"ask", q, dur:DUR }); if (d.state) { H.t0 = d.state.t0; } }catch(e){ return; }
+  try{ const d = await hostCmd({ op:"ask", q, dur:(Q[q].t||DUR) }); if (d.state) { H.t0 = d.state.t0; } }catch(e){ return; }
   const x = Q[q]; beep(660,.15);
   $("#app").innerHTML = `<div class="top"><span class="pill">부천 배움 100이음 · 고등학교 STORY</span><span style="font-size:20px">문제 <b>${q+1}</b> / ${Q.length}</span></div>
     <div class="hgrid"><div><div class="qt">${esc(x.q)}</div>
-      <div class="opts">${x.o.map((o,k)=>`<div class="opt o${k}"><span class="l">${L[k]}</span>${esc(o)}</div>`).join("")}</div>
+      <div class="opts">${x.o.map((o,k)=>`<div class="opt o${k}"><span class="l">${LB(x,k)}</span>${esc(o)}</div>`).join("")}</div>
       <div class="ctl"><button class="main" id="rev">정답 공개</button></div></div>
       <div class="side"><div class="ring" id="ring"><svg viewBox="0 0 150 150"><circle cx="75" cy="75" r="65" class="bg"/><circle cx="75" cy="75" r="65" class="fg" id="fg"/></svg><b id="sec">${DUR}</b></div>
         <div class="count" id="ac">0</div><p>명 답했어요 · <span id="pc2">0</span>명 참여</p></div></div>`;
@@ -299,14 +311,14 @@ async function hReveal(q){
   const x = Q[q]; beep(880,.2);
   let all = null; try{ all = await jsonp({ action:"qall", pin:H.pin }); }catch(e){}
   const ans = all && all.answers ? Object.values(all.answers[q] || {}) : [];
-  const cnt = [0,1,2,3].map(k => ans.filter(a => a[0]===k).length), mx = Math.max(1, ...cnt);
+  const cnt = x.o.map((_,k)=>k).map(k => ans.filter(a => a[0]===k).length), mx = Math.max(1, ...cnt);
   const rk = all && all.ranking ? all.ranking.slice(0,5) : [];
   $("#app").innerHTML = `<div class="top"><span class="pill">부천 배움 100이음 · 고등학교 STORY</span><span style="font-size:20px">문제 <b>${q+1}</b> / ${Q.length}</span></div>
     <div class="hgrid"><div><div class="qt">${esc(x.q)}</div>
-      <div class="opts">${x.o.map((o,k)=>`<div class="opt o${k} ${k===x.a?"right":"dim"}"><span class="l">${L[k]}</span>${esc(o)}</div>`).join("")}</div>
-      <div class="note">정답 <b style="color:#ffe28a">${L[x.a]}. ${esc(x.o[x.a])}</b><br>${esc(x.n)}</div>
+      <div class="opts">${x.o.map((o,k)=>`<div class="opt o${k} ${k===x.a?"right":"dim"}"><span class="l">${LB(x,k)}</span>${esc(o)}</div>`).join("")}</div>
+      <div class="note">정답 <b style="color:#ffe28a">${LB(x,x.a)}. ${esc(x.o[x.a])}</b><br>${esc(x.n)}</div>
       <div class="ctl"><button class="main" id="nx">${q===Q.length-1 ? "최종 결과 ▶" : "다음 문제 ▶"}</button></div></div>
-      <div class="side"><p style="margin-top:0"><b>모두의 선택</b></p><div class="dist">${cnt.map((c,k)=>`<div class="${k===x.a?"ok":""}"><span>${L[k]}</span><i style="width:${c/mx*100}%"></i><span>${c}명</span></div>`).join("")}</div>
+      <div class="side"><p style="margin-top:0"><b>모두의 선택</b></p><div class="dist">${cnt.map((c,k)=>`<div class="${k===x.a?"ok":""}"><span>${LB(x,k)}</span><i style="width:${c/mx*100}%"></i><span>${c}명</span></div>`).join("")}</div>
         <p style="margin-top:16px"><b>지금 순위 TOP 5</b></p><ol class="board">${rk.map((r,i)=>`<li><b>${i+1}</b><span>${esc(r.nick)}</span><span>${r.pts}점</span></li>`).join("") || "<li><span></span><span>아직 없어요</span></li>"}</ol></div></div>`;
   $("#nx").onclick = () => q === Q.length-1 ? hResult() : hAsk(q+1);
 }
