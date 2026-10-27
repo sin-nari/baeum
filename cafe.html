@@ -538,16 +538,39 @@ function drawWall(){
   if (wall.tab === "all") { $("#sTitle").textContent = "이야기 벽 · 전체"; $("#sSub").textContent = `모두 ${wall.cards.length}개의 ‘가져갈 한 가지’`; }
   else { $("#sTitle").textContent = `TABLE ${wall.tab}`; $("#sSub").textContent = `1교시 ${tableInfo(wall.tab,1)} · 2교시 ${tableInfo(wall.tab,2)}`; }
 }
+function jsonp(url, ms=12000){
+  return new Promise((ok, no) => {
+    const cb = "__wall" + Date.now() + Math.floor(Math.random()*1e4), sc = document.createElement("script");
+    const done = () => { delete window[cb]; sc.remove(); clearTimeout(tm); };
+    const tm = setTimeout(() => { done(); no(new Error("timeout")); }, ms);
+    window[cb] = d => { done(); ok(d); };
+    sc.onerror = () => { done(); no(new Error("load")); };
+    sc.src = url + (url.includes("?") ? "&" : "?") + "callback=" + cb + "&t=" + Date.now();
+    document.head.appendChild(sc);
+  });
+}
+let wallFail = 0;
 async function loadWall(){
   if (!WALL.API_URL){ if(!wall.cards.length) wall.cards = DEMO.map(d=>({...d,at:Date.now()-Math.random()*6e5})); $("#wStatus").innerHTML = `<span class="demo">미리보기</span>서버를 연결하면 실제 이야기가 올라옵니다.`; drawWall(); return; }
   try{
-    const r = await fetch(WALL.API_URL + "?t=" + Date.now()); const d = await r.json();
-    if (d.ok){ wall.cards = d.cards; drawWall(); $("#wStatus").textContent = `${new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})} 새로 고침 · 15초마다 저절로 올라와요`; }
-  }catch(e){ $("#wStatus").textContent = "잠시 연결이 늦어지고 있어요. 곧 다시 불러옵니다."; }
+    const d = await jsonp(WALL.API_URL);
+    if (!d.ok) throw new Error(d.error || "server");
+    wallFail = 0; wall.cards = d.cards; drawWall();
+    $("#wStatus").textContent = `${new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})} 새로 고침 · 15초마다 저절로 올라와요`;
+  }catch(e){
+    wallFail++; if (!wall.cards.length) drawWall();
+    $("#wStatus").textContent = wallFail > 1 ? "이야기 벽 서버에 연결하지 못하고 있어요. (운영진: 웹 앱 배포의 액세스 권한을 확인해 주세요)" : "잠시 연결이 늦어지고 있어요. 곧 다시 불러옵니다.";
+  }
 }
 async function post(body){
-  const r = await fetch(WALL.API_URL, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(body) });
-  return r.json();
+  const opt = { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(body) };
+  try{
+    const r = await fetch(WALL.API_URL, opt); return await r.json();
+  }catch(e){
+    await fetch(WALL.API_URL, { ...opt, mode:"no-cors" });   // 응답은 못 읽어도 저장은 됩니다
+    await new Promise(r => setTimeout(r, 1200));
+    return { ok:true, blind:true };
+  }
 }
 $("#pTable").innerHTML = [1,2,3,4,5,6,7].map(t => `<option value="${t}">TABLE ${t}</option>`).join("");
 function syncTable(){ const p = pick[wall.round]; if (p!=null) $("#pTable").value = MENU[wall.round][+p].t;
