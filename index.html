@@ -356,6 +356,9 @@ h2{font-size:clamp(23px,3.4vw,30px);font-weight:700;letter-spacing:-.02em}
 .talk .tw{margin-top:9px;padding-left:10px;border-left:2px solid var(--s3);
   font-size:13.5px;color:rgba(255,255,255,.72);word-break:keep-all}
 /* 시간대별 블록 — 분반 안에서 이어지는 두 시간 */
+.cguide{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:8px 14px;border-radius:999px;background:var(--c-lt,#F8E5D5);color:var(--c-dk,#9E5620);font-weight:700;font-size:14px;text-decoration:none}
+.cguide:hover{filter:brightness(.96)}
+.cguide .ms{font-size:18px}
 .phases{margin-top:12px;display:grid;grid-template-columns:1fr 1fr;gap:10px}
 .phase{display:grid;grid-template-columns:auto 1fr;gap:14px;align-items:start;padding:14px 16px;border-radius:10px;
   background:#fff;border:1px solid color-mix(in srgb,var(--c) 35%,transparent)}
@@ -1199,7 +1202,7 @@ const COURSES = [
   {stage:3, rid:"cafe", d:"11. 3.", wd:"화", t:"고등학교 교육과정 이야기 카페",
    sub:"부천 배움 100이음 · 선택이 배움으로, 배움이 성장으로 · 부천교육지원청 청백마루 (등록 15:00부터)", hl:true,
    area:"고등학교 교육과정", key:"curr", aud:"중·고 교감 · 고교 교육과정부장 · 희망 교원", mode:"offline",
-   time:"15:30~17:30 · 집합 2시간", url:"#",   /* 신청은 신청 서버의 cafe 과정(10. 26.~10. 29.)이 열리면 버튼이 자동으로 살아납니다 */
+   time:"15:30~17:30 · 집합 2시간", url:"#", guide:"cafe.html",   /* 신청은 신청 서버의 cafe 과정(10. 26.~10. 29.)이 열리면 버튼이 자동으로 살아납니다 */
    phases:[
     {from:"15:30", to:"15:55", lab:"1부 · 다 함께, 한자리에서", t:"부천 배움 100이음, 교육과정 STORY",
      k:["개회 · 인사 및 운영 안내",
@@ -1583,6 +1586,7 @@ function render(filter){
             }).join('') + '</div>' : '')
       +     (c.bans ? 분반목록(c) : '')
       +     '<div class="time">' + esc(c.time) + '</div>'
+      +     (c.guide ? '<a class="cguide" href="' + esc(c.guide) + '"><span class="ms">local_cafe</span>카페 메뉴판 · 당일 안내 보기<span class="ms">arrow_forward</span></a>' : '')
       +   '</div>'
       +   '<a class="apply' + (live ? '' : (지남 ? ' ended' : ' mute')) + '"'
       +     ' href="' + (live ? esc(c.url) : "#") + '"'
