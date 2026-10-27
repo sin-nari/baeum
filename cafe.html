@@ -308,6 +308,7 @@ body.stage-mode .kb{font-size:15px}
       <a href="#flow">흐름</a>
       <a href="#menu">메뉴판</a>
       <a href="#cup">오늘의 한 잔</a>
+      <a href="quiz.html">1부 퀴즈</a>
       <a href="#wall">이야기 벽</a>
       <a href="#share">전체 나눔</a>
       <a href="#links">바로가기</a>
@@ -666,7 +667,7 @@ async function loadWall(){
   try{
     const d = await jsonp(WALL.API_URL);
     if (!d.ok) throw new Error(d.error || "server");
-    wallFail = 0; wall.cards = d.cards; drawWall();
+    wallFail = 0; wall.cards = d.cards.filter(c => !/^\[quiz\] /.test(c.text)); drawWall();
     $("#wStatus").textContent = `${new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})} 새로 고침 · 15초마다 저절로 올라와요`;
   }catch(e){
     wallFail++; if (!wall.cards.length) drawWall();
