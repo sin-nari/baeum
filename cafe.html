@@ -178,6 +178,64 @@ footer strong{color:#fff;font-family:var(--serif);font-size:17px;display:block}
   .ticket .row{grid-template-columns:56px 1fr auto}
 }
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.reveal{opacity:1;transform:none}}
+
+/* 이야기 벽 */
+.wall-grid{display:grid;grid-template-columns:340px minmax(0,1fr);gap:22px;align-items:start}
+.wall-grid>*{min-width:0}
+.post{background:var(--card);border-radius:22px;border:1px solid var(--line);padding:20px;display:flex;flex-direction:column;gap:12px;position:sticky;top:74px}
+.post label{display:flex;flex-direction:column;gap:5px;font-size:14px;font-weight:700;position:relative}
+.post label small{font-weight:500;color:var(--muted)}
+.post select,.post input,.post textarea{font:inherit;font-size:16px;font-weight:500;border:2px solid var(--line);border-radius:12px;padding:9px 12px;background:var(--cream);color:var(--ink)}
+.post textarea{resize:vertical}
+.post select:focus,.post input:focus,.post textarea:focus{outline:none;border-color:var(--teal)}
+.cnt{position:absolute;right:10px;bottom:8px;font-size:12px;color:var(--muted);font-weight:500}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--paper);border-radius:12px;padding:4px}
+.seg button{font:inherit;font-weight:800;border:0;background:none;border-radius:9px;padding:8px;cursor:pointer;color:var(--muted)}
+.seg button[aria-checked="true"]{background:var(--deep);color:var(--yellow)}
+.send{font:inherit;font-weight:800;font-size:17px;border:0;border-radius:14px;padding:12px;background:var(--orange);color:#fff;cursor:pointer}
+.send:disabled{opacity:.6;cursor:wait}
+.pmsg{margin:0;font-size:14px;min-height:1.3em;color:var(--teal);font-weight:700}
+.pmsg.err{color:var(--orange)}
+.wtabs{display:flex;gap:6px;overflow-x:auto;scrollbar-width:none;padding-bottom:4px}
+.wtabs::-webkit-scrollbar{display:none}
+.wtabs button{font:inherit;font-size:14px;font-weight:700;white-space:nowrap;border:1.5px solid var(--line);background:var(--card);border-radius:999px;padding:6px 12px;cursor:pointer;color:var(--ink)}
+.wtabs button[aria-selected="true"]{background:var(--deep);border-color:var(--deep);color:#fff}
+.wtabs b{font-weight:800;color:var(--orange);margin-left:4px}
+.wtabs button[aria-selected="true"] b{color:var(--yellow)}
+.board{column-width:240px;column-gap:14px;margin-top:12px;min-height:160px}
+.note{break-inside:avoid;margin:0 0 14px;background:#fffdf3;border-radius:6px 16px 16px 16px;padding:14px 14px 10px;box-shadow:0 3px 10px rgba(29,58,64,.1);border-top:6px solid var(--c,#5fa3a0);animation:pop .35s ease both}
+.note:nth-child(3n+1){transform:rotate(-.6deg)}.note:nth-child(3n+2){transform:rotate(.5deg)}
+@keyframes pop{from{opacity:0;transform:translateY(10px) scale(.97)}}
+.note .tx{font-size:17px;font-weight:600;line-height:1.55;white-space:pre-wrap}
+.note .meta{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:10px;font-size:12.5px;color:var(--muted)}
+.note .tg{font-weight:800;color:var(--c,#5fa3a0)}
+.note .lk2{font:inherit;font-size:13px;border:0;background:var(--paper);border-radius:999px;padding:3px 10px;cursor:pointer;color:var(--orange);font-weight:800}
+.note .lk2[disabled]{background:#ffe6d6;cursor:default}
+.empty-wall{column-span:all;text-align:center;color:var(--muted);padding:40px 10px;border:2px dashed var(--line);border-radius:18px}
+.wfoot{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:13px;color:var(--muted);margin-top:4px;flex-wrap:wrap}
+.stage-link{font-weight:800;color:var(--deep);text-decoration:none;background:var(--card);border:1px solid var(--line);border-radius:999px;padding:6px 12px}
+.demo{display:inline-block;background:var(--yellow);color:var(--deep);font-weight:800;border-radius:6px;padding:1px 8px;margin-right:6px}
+/* 무대 화면 */
+body.stage-mode{background:var(--deep)}
+body.stage-mode header,body.stage-mode main>*:not(#wall),body.stage-mode footer,body.stage-mode #wall .sec-head,body.stage-mode .post{display:none}
+body.stage-mode #wall{background:var(--deep);padding:28px 0;min-height:100vh}
+body.stage-mode #wall .wrap{max-width:none;padding-inline:36px}
+body.stage-mode .wall-grid{grid-template-columns:minmax(0,1fr)}
+body.stage-mode .stage-head{display:flex}
+.stage-head{display:none;justify-content:space-between;align-items:flex-end;gap:20px;color:#fff;margin-bottom:16px}
+.stage-head h3{font-family:var(--serif);font-size:44px;color:var(--yellow);line-height:1.2}
+.stage-head p{margin:4px 0 0;font-size:20px;color:#cfe0dc}
+.stage-head .ctl{display:flex;gap:8px}
+.stage-head button{font:inherit;font-weight:800;border:0;border-radius:999px;padding:9px 16px;cursor:pointer;background:var(--deep2);color:#fff}
+.stage-head button[aria-pressed="true"]{background:var(--yellow);color:var(--deep)}
+body.stage-mode .wtabs button{font-size:18px;padding:8px 16px;background:transparent;color:#fff;border-color:rgba(255,255,255,.3)}
+body.stage-mode .wtabs button[aria-selected="true"]{background:#fff;color:var(--deep)}
+body.stage-mode .board{column-width:380px}
+body.stage-mode .note .tx{font-size:25px}
+body.stage-mode .note .meta{font-size:16px}
+body.stage-mode .wfoot{color:#9fb8b4}
+body.stage-mode .stage-link{display:none}
+@media (max-width:860px){.wall-grid{grid-template-columns:minmax(0,1fr)}.post{position:static}}
 </style>
 </head>
 <body>
@@ -188,6 +246,7 @@ footer strong{color:#fff;font-family:var(--serif);font-size:17px;display:block}
       <a href="#flow">흐름</a>
       <a href="#menu">메뉴판</a>
       <a href="#cup">오늘의 한 잔</a>
+      <a href="#wall">이야기 벽</a>
       <a href="#links">바로가기</a>
       <a href="./">배움:성장</a>
     </nav>
@@ -276,7 +335,33 @@ footer strong{color:#fff;font-family:var(--serif);font-size:17px;display:block}
     </div>
   </section>
 
-  <section id="links" class="alt">
+  <section id="wall" class="alt">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="eyebrow">STORY WALL</div>
+        <h2>이야기 벽</h2>
+        <p class="lead">우리 학교로 가져갈 한 가지를 휴대폰으로 남겨 주세요. 모두의 화면과 무대 화면에 바로 올라옵니다.</p>
+      </div>
+      <div class="wall-grid">
+        <form class="post reveal" id="postForm" autocomplete="off">
+          <div class="seg" role="radiogroup" aria-label="교시"><button type="button" role="radio" data-r="1" aria-checked="true">1교시</button><button type="button" role="radio" data-r="2" aria-checked="false">2교시</button></div>
+          <label>테이블<select id="pTable"></select></label>
+          <label>학교 <small>(선택)</small><input id="pSchool" maxlength="20" placeholder="예: 부천○○고"></label>
+          <label>우리 학교로 가져갈 한 가지<textarea id="pText" maxlength="140" rows="3" placeholder="한두 줄이면 충분해요"></textarea><span class="cnt" id="pCnt">0 / 140</span></label>
+          <button class="send" type="submit"><span class="ico">send</span> 벽에 붙이기</button>
+          <p class="pmsg" id="pMsg" aria-live="polite"></p>
+        </form>
+        <div class="board-wrap">
+          <div class="stage-head"><div><h3 id="sTitle">이야기 벽</h3><p id="sSub">우리 학교로 가져갈 한 가지</p></div><div class="ctl"><button id="sAuto" aria-pressed="false">자동 넘김</button><button id="sExit">나가기</button></div></div>
+          <div class="wtabs" id="wTabs" role="tablist" aria-label="테이블"></div>
+          <div class="board" id="board" aria-live="polite"></div>
+          <div class="wfoot"><span id="wStatus"></span><a href="#stage" class="stage-link"><span class="ico">present_to_all</span> 무대 화면으로</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="links">
     <div class="wrap">
       <div class="sec-head reveal">
         <div class="eyebrow">QUICK LINKS</div>
@@ -425,6 +510,87 @@ const io = new IntersectionObserver(es => es.forEach(en => { if (en.isIntersecti
 document.querySelectorAll(".reveal").forEach(el => io.observe(el));
 
 dday(); drawFlow(); drawMenu(); gate();
+
+/* ===== 이야기 벽 ===== */
+const WALL = { API_URL: "" };   // Apps Script 웹 앱 주소(…/exec). 비워 두면 미리보기 모드
+const TCOLOR = {1:"#2f6f8f",2:"#2f6f8f",3:"#2f6f8f",4:"#3d8a5a",5:"#5fa3a0",6:"#8a6bb8",7:"#c2571f"};
+function tableInfo(t, r){ const x = MENU[r].find(m => m.t === t); return x ? `${x.w}` : ""; }
+let wall = { cards: [], tab: "all", round: 1, liked: new Set(JSON.parse(store.get("cafe.liked") || "[]")) };
+const DEMO = [
+  {id:"d1", round:1, table:2, school:"○○고", text:"우리 학교 AI 과목도 진로 설문부터 다시 해 봐야겠어요.", likes:3},
+  {id:"d2", round:1, table:5, school:"", text:"공동교육과정 수요 조사를 이웃 학교와 함께 돌려 보기!", likes:5},
+  {id:"d3", round:1, table:4, school:"○○고", text:"수행평가를 성취기준에서 거꾸로 설계해 보기", likes:2},
+  {id:"d4", round:2, table:6, school:"", text:"공유학교 프로그램을 학생 동아리와 연결해 보면 좋겠다.", likes:1}
+];
+function wallTabs(){
+  const cnt = t => wall.cards.filter(c => t==="all" || c.table===t).length;
+  $("#wTabs").innerHTML = `<button role="tab" data-t="all" aria-selected="${wall.tab==="all"}">전체<b>${cnt("all")}</b></button>` +
+    [1,2,3,4,5,6,7].map(t => `<button role="tab" data-t="${t}" aria-selected="${wall.tab===t}">T${t} ${esc(tableInfo(t,1))}·${esc(tableInfo(t,2))}<b>${cnt(t)}</b></button>`).join("");
+}
+function drawWall(){
+  wallTabs();
+  const list = wall.cards.filter(c => wall.tab==="all" || c.table===wall.tab).slice().sort((a,b)=> (b.at||0)-(a.at||0));
+  $("#board").innerHTML = list.length ? list.map(c => `<article class="note" style="--c:${TCOLOR[c.table]}">
+      <div class="tx">${esc(c.text)}</div>
+      <div class="meta"><span><span class="tg">T${c.table} · ${c.round}교시 ${esc(tableInfo(c.table,c.round))}</span>${c.school?` · ${esc(c.school)}`:""}</span>
+      <button class="lk2" data-id="${esc(c.id)}" ${wall.liked.has(c.id)?"disabled":""} aria-label="공감">♥ ${c.likes||0}</button></div></article>`).join("")
+    : `<div class="empty-wall">아직 붙은 이야기가 없어요. 첫 번째 한 잔을 남겨 주세요!</div>`;
+  if (wall.tab === "all") { $("#sTitle").textContent = "이야기 벽 · 전체"; $("#sSub").textContent = `모두 ${wall.cards.length}개의 ‘가져갈 한 가지’`; }
+  else { $("#sTitle").textContent = `TABLE ${wall.tab}`; $("#sSub").textContent = `1교시 ${tableInfo(wall.tab,1)} · 2교시 ${tableInfo(wall.tab,2)}`; }
+}
+async function loadWall(){
+  if (!WALL.API_URL){ if(!wall.cards.length) wall.cards = DEMO.map(d=>({...d,at:Date.now()-Math.random()*6e5})); $("#wStatus").innerHTML = `<span class="demo">미리보기</span>서버를 연결하면 실제 이야기가 올라옵니다.`; drawWall(); return; }
+  try{
+    const r = await fetch(WALL.API_URL + "?t=" + Date.now()); const d = await r.json();
+    if (d.ok){ wall.cards = d.cards; drawWall(); $("#wStatus").textContent = `${new Date().toLocaleTimeString("ko-KR",{hour:"2-digit",minute:"2-digit"})} 새로 고침 · 15초마다 저절로 올라와요`; }
+  }catch(e){ $("#wStatus").textContent = "잠시 연결이 늦어지고 있어요. 곧 다시 불러옵니다."; }
+}
+async function post(body){
+  const r = await fetch(WALL.API_URL, { method:"POST", headers:{"Content-Type":"text/plain;charset=utf-8"}, body:JSON.stringify(body) });
+  return r.json();
+}
+$("#pTable").innerHTML = [1,2,3,4,5,6,7].map(t => `<option value="${t}">TABLE ${t}</option>`).join("");
+function syncTable(){ const p = pick[wall.round]; if (p!=null) $("#pTable").value = MENU[wall.round][+p].t;
+  [...$("#pTable").options].forEach(o => o.textContent = `TABLE ${o.value} · ${tableInfo(+o.value, wall.round)}`); }
+document.querySelectorAll(".seg button").forEach(b => b.onclick = () => {
+  wall.round = +b.dataset.r; document.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-checked", x===b?"true":"false")); syncTable(); });
+if (Date.now() >= kst("16:33")) document.querySelector('.seg button[data-r="2"]').click(); else syncTable();
+$("#pSchool").value = store.get("cafe.school") || "";
+$("#pText").oninput = () => $("#pCnt").textContent = `${$("#pText").value.length} / 140`;
+$("#postForm").onsubmit = async e => {
+  e.preventDefault();
+  const text = $("#pText").value.trim(), msg = $("#pMsg");
+  if (!text){ msg.className="pmsg err"; msg.textContent="한 줄만 적어 주세요."; return; }
+  const body = { action:"add", round:wall.round, table:+$("#pTable").value, school:$("#pSchool").value.trim(), text };
+  store.set("cafe.school", body.school);
+  const btn = e.submitter || document.querySelector(".send"); btn.disabled = true;
+  try{
+    if (!WALL.API_URL){ wall.cards.push({...body, id:"l"+Date.now(), at:Date.now(), likes:0}); }
+    else { const d = await post(body); if(!d.ok) throw new Error(d.error||"저장하지 못했어요."); await loadWall(); }
+    $("#pText").value=""; $("#pCnt").textContent="0 / 140"; msg.className="pmsg"; msg.textContent="벽에 붙었어요! 고맙습니다 ☕";
+    wall.tab = body.table; drawWall();
+  }catch(err){ msg.className="pmsg err"; msg.textContent = err.message || "잠시 후 다시 시도해 주세요."; }
+  btn.disabled = false;
+};
+$("#wTabs").onclick = e => { const b = e.target.closest("button"); if(!b) return; wall.tab = b.dataset.t==="all" ? "all" : +b.dataset.t; drawWall(); };
+$("#board").onclick = async e => {
+  const b = e.target.closest(".lk2"); if (!b || b.disabled) return;
+  const c = wall.cards.find(x => x.id === b.dataset.id); if (!c) return;
+  c.likes = (c.likes||0)+1; wall.liked.add(c.id); store.set("cafe.liked", JSON.stringify([...wall.liked])); drawWall();
+  if (WALL.API_URL) try{ await post({action:"like", id:c.id}); }catch(err){}
+};
+/* 무대 화면: 주소 끝에 #stage */
+let autoTimer = null;
+function stageMode(){ const on = location.hash === "#stage"; document.body.classList.toggle("stage-mode", on); if (on) window.scrollTo(0,0); }
+window.addEventListener("hashchange", stageMode);
+$("#sExit").onclick = () => { location.hash = "#wall"; };
+$("#sAuto").onclick = () => {
+  const on = $("#sAuto").getAttribute("aria-pressed") !== "true"; $("#sAuto").setAttribute("aria-pressed", on);
+  clearInterval(autoTimer);
+  if (on) autoTimer = setInterval(() => { const order = ["all",1,2,3,4,5,6,7]; wall.tab = order[(order.indexOf(wall.tab)+1)%order.length]; drawWall(); }, 20000);
+};
+stageMode(); loadWall(); setInterval(loadWall, 15000);
+
 setInterval(() => { dday(); drawFlow(); gate(); }, 30000);
 </script>
 </body>
