@@ -236,6 +236,58 @@ body.stage-mode .note .meta{font-size:16px}
 body.stage-mode .wfoot{color:#9fb8b4}
 body.stage-mode .stage-link{display:none}
 @media (max-width:860px){.wall-grid{grid-template-columns:minmax(0,1fr)}.post{position:static}}
+
+/* 전체 나눔 뽑기 */
+.draw{display:grid;grid-template-columns:1.3fr 1fr;gap:22px;align-items:start}
+.draw>*{min-width:0}
+.slot-wrap{background:var(--deep);border-radius:26px;padding:26px;color:#fff;text-align:center}
+.slot{height:220px;border-radius:20px;background:var(--deep2);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;border:3px dashed rgba(255,226,138,.35);overflow:hidden}
+.slot.spin .sn,.slot.spin .sw{animation:blink .08s linear infinite alternate}
+@keyframes blink{from{opacity:.55}to{opacity:1}}
+.slot.hit{border:3px solid var(--yellow);animation:hit .5s ease}
+@keyframes hit{0%{transform:scale(.94)}60%{transform:scale(1.04)}100%{transform:scale(1)}}
+.sn{font-family:var(--serif);font-weight:700;font-size:64px;color:var(--yellow);line-height:1}
+.sw{font-size:19px;color:#cfe0dc;padding:0 10px}
+.dbtns,.tbtns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.draw button{font:inherit;font-weight:800;border:0;border-radius:999px;padding:10px 18px;cursor:pointer;background:var(--yellow);color:var(--deep)}
+.draw button.big{font-size:20px;padding:12px 28px;background:var(--orange);color:#fff}
+.draw button.ghost{background:transparent;border:1.5px solid rgba(255,255,255,.35);color:#cfe0dc}
+.side .ghost{border-color:var(--line)!important;color:var(--muted)!important}
+.draw button:disabled{opacity:.45;cursor:default}
+.side{background:var(--card);border:1px solid var(--line);border-radius:26px;padding:22px}
+.timer{position:relative;width:180px;height:180px;margin:0 auto}
+.timer svg{width:100%;height:100%;transform:rotate(-90deg)}
+.tbg{fill:none;stroke:var(--paper);stroke-width:10}
+.tfg{fill:none;stroke:var(--teal);stroke-width:10;stroke-linecap:round;stroke-dasharray:326.7;stroke-dashoffset:0;transition:stroke-dashoffset 1s linear,stroke .3s}
+.timer.warn .tfg{stroke:var(--orange)}
+.timer.over{animation:shake .4s 3}
+@keyframes shake{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+.tt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.tt b{font-family:var(--serif);font-size:44px;color:var(--deep);line-height:1}
+.timer.warn .tt b{color:var(--orange)}
+.tt span{font-size:13px;color:var(--muted);margin-top:4px;text-align:center;max-width:140px}
+.order{list-style:none;margin:18px 0 0;padding:0;display:grid;gap:6px;counter-reset:o}
+.order li{display:flex;gap:10px;align-items:center;padding:8px 12px;border-radius:12px;background:var(--cream);font-size:15px;cursor:pointer;border:2px solid transparent}
+.order li::before{counter-increment:o;content:counter(o);flex:none;width:26px;height:26px;border-radius:50%;background:var(--deep);color:var(--yellow);font-weight:800;display:grid;place-items:center;font-size:13px}
+.order li b{font-family:var(--serif);font-size:17px;white-space:nowrap}
+.order li span{color:var(--muted);font-size:13px}
+.order li.cur{border-color:var(--orange);background:#fff4e8}
+.order li.done{opacity:.5}
+.order .hint{color:var(--muted);font-size:14px;background:none;cursor:default;justify-content:center}
+.order .hint::before{display:none}
+body.draw-mode{background:var(--deep)}
+body.draw-mode header,body.draw-mode main>*:not(#share),body.draw-mode footer,body.draw-mode #share .lead{display:none}
+body.draw-mode #share{min-height:100vh;padding:30px 0}
+body.draw-mode #share .wrap{max-width:none;padding-inline:40px}
+body.draw-mode #share h2{color:var(--yellow);font-size:48px}
+body.draw-mode #share .eyebrow{color:#ffd1b3}
+body.draw-mode .slot{height:380px}
+body.draw-mode .sn{font-size:120px}body.draw-mode .sw{font-size:30px}
+body.draw-mode .timer{width:240px;height:240px}body.draw-mode .tt b{font-size:60px}
+body.draw-mode .order li{font-size:18px}body.draw-mode .order li b{font-size:22px}
+.exitdraw{display:none}
+body.draw-mode .exitdraw{display:inline-block;position:fixed;top:16px;right:20px;z-index:5;font:inherit;font-weight:800;border:0;border-radius:999px;padding:8px 16px;background:var(--deep2);color:#fff;text-decoration:none}
+@media (max-width:860px){.draw{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -247,6 +299,7 @@ body.stage-mode .stage-link{display:none}
       <a href="#menu">메뉴판</a>
       <a href="#cup">오늘의 한 잔</a>
       <a href="#wall">이야기 벽</a>
+      <a href="#share">전체 나눔</a>
       <a href="#links">바로가기</a>
       <a href="./">배움:성장</a>
     </nav>
@@ -361,6 +414,32 @@ body.stage-mode .stage-link{display:none}
     </div>
   </section>
 
+  <section id="share">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <a class="exitdraw" href="#share">나가기</a>
+        <div class="eyebrow">SHARE TIME · 17:05</div>
+        <h2>전체 나눔 · 발표 순서 뽑기</h2>
+        <p class="lead">테이블마다 카페지기가 3분 안에 나눕니다. 순서는 뽑기로 정해요. 화면에 크게 띄우려면 <a href="#draw">무대용으로 열기</a>를 누르세요.</p>
+      </div>
+      <div class="draw reveal">
+        <div class="slot-wrap">
+          <div class="slot" id="slot" aria-live="polite"><div class="sn">?</div><div class="sw">누가 먼저 나눌까요?</div></div>
+          <div class="dbtns">
+            <button id="drawOne" class="big"><span class="ico">casino</span> 뽑기</button>
+            <button id="drawAll"><span class="ico">shuffle</span> 한 번에 섞기</button>
+            <button id="drawReset" class="ghost">처음부터</button>
+          </div>
+        </div>
+        <div class="side">
+          <div class="timer" id="timer"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="tbg"/><circle cx="60" cy="60" r="52" class="tfg" id="tRing"/></svg><div class="tt"><b id="tTime">3:00</b><span id="tWho">발표 타이머</span></div></div>
+          <div class="tbtns"><button id="tStart"><span class="ico">play_arrow</span> 3분 시작</button><button id="tStop" class="ghost">멈춤</button></div>
+          <ol class="order" id="order"></ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <section id="links">
     <div class="wrap">
       <div class="sec-head reveal">
@@ -369,8 +448,8 @@ body.stage-mode .stage-link{display:none}
         <p class="lead">출석 확인과 만족도 조사는 당일 시간에 맞춰 열립니다.</p>
       </div>
       <div class="links">
-        <a class="lk reveal" id="lkAttend" href="a.html?16"><span class="ico">how_to_reg</span><b>출석 확인</b><span>도착하면 출석을 남겨 주세요.</span><span class="when" id="whenA"></span></a>
-        <a class="lk reveal" id="lkSurvey" href="s.html?16"><span class="ico">rate_review</span><b>만족도 조사</b><span>전체 나눔이 끝나면 3분이면 됩니다.</span><span class="when" id="whenS"></span></a>
+        <a class="lk reveal" id="lkAttend" href="a.html?16"><span class="ico">how_to_reg</span><b>출석 확인</b><span>14:30부터 열려요. 도착하면 출석을 남겨 주세요.</span><span class="when" id="whenA"></span></a>
+        <a class="lk reveal" id="lkSurvey" href="s.html?16"><span class="ico">rate_review</span><b>만족도 조사</b><span>16:30부터 미리 남길 수 있어요. 3분이면 됩니다.</span><span class="when" id="whenS"></span></a>
         <a class="lk reveal" href="https://koreaprint.co.kr/ebook/bucheon2026/" target="_blank" rel="noopener"><span class="ico">import_contacts</span><b>부천 배움 100이음 e북</b><span>1부 STORY의 바탕이 된 성장 이야기 책자를 책장 넘기듯 미리 만나 보세요.</span><span class="when">언제든 · <u onclick="event.preventDefault();open('https://sin-nari.github.io/baeum100/','_blank')">소개 사이트</u></span></a>
       </div>
     </div>
@@ -489,8 +568,8 @@ $("#tables").innerHTML = [1,2,3,4,5,6,7].map(n => `<div aria-label="테이블 ${
 /* 바로가기 시간 열림 */
 function gate(){
   const now = Date.now();
-  const rules = [ ["#lkAttend","#whenA", kst("15:00"), kst("18:00"), "11. 3. 15:00에 열려요"],
-                  ["#lkSurvey","#whenS", kst("17:05"), kst("23:59"), "11. 3. 17:05에 열려요"] ];
+  const rules = [ ["#lkAttend","#whenA", kst("14:30"), kst("18:00"), "11. 3. 14:30에 열려요"],
+                  ["#lkSurvey","#whenS", kst("16:30"), kst("23:59"), "11. 3. 16:30에 열려요"] ];
   rules.forEach(([lk,w,s,e,msg]) => {
     const open = now >= s && now <= e;
     $(lk).classList.toggle("off", !open);
@@ -613,6 +692,69 @@ $("#sAuto").onclick = () => {
   if (on) autoTimer = setInterval(() => { const order = ["all",1,2,3,4,5,6,7]; wall.tab = order[(order.indexOf(wall.tab)+1)%order.length]; drawWall(); }, 20000);
 };
 stageMode(); loadWall(); setInterval(loadWall, 15000);
+
+/* ===== 전체 나눔: 발표 순서 뽑기 + 3분 타이머 ===== */
+const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const TEAMS = [1,2,3,4,5,6,7].map(t => ({ t, w: `${tableInfo(t,1)} · ${tableInfo(t,2)}` }));
+let drawn = JSON.parse(store.get("cafe.order") || "[]"), spinning = false, curIdx = -1;
+function drawOrder(){
+  $("#order").innerHTML = drawn.length ? drawn.map((t,i) => { const x = TEAMS[t-1]; return `<li data-i="${i}" class="${i===curIdx?"cur":i<curIdx?"done":""}"><b>TABLE ${t}</b><span>${esc(x.w)}</span></li>`; }).join("")
+    : `<li class="hint">뽑힌 순서가 여기에 쌓여요</li>`;
+  const left = TEAMS.length - drawn.length;
+  $("#drawOne").disabled = spinning || left === 0; $("#drawAll").disabled = spinning || left === 0;
+  if (!spinning && left === 0 && drawn.length) { $(".sw").textContent = "모든 순서가 정해졌어요! 순서를 누르면 타이머가 맞춰져요"; }
+}
+function showSlot(t, final){
+  const x = TEAMS[t-1]; $(".sn").textContent = `TABLE ${t}`; $(".sw").textContent = x.w;
+  $("#slot").classList.toggle("hit", !!final);
+}
+function remaining(){ return TEAMS.map(x=>x.t).filter(t => !drawn.includes(t)); }
+function spin(){
+  const pool = remaining(); if (!pool.length || spinning) return;
+  spinning = true; drawOrder(); $("#slot").classList.remove("hit"); $("#slot").classList.add("spin");
+  const pick = pool[Math.floor(Math.random()*pool.length)];
+  let n = 0; const total = reduce ? 1 : 22;
+  (function tick(){
+    n++; showSlot(n < total ? pool[n % pool.length] : pick, false); beep(n < total ? 520 : 0, 0.03);
+    if (n < total) setTimeout(tick, 50 + n*n*0.9);
+    else { $("#slot").classList.remove("spin"); showSlot(pick, true); beep(880, .18); drawn.push(pick); store.set("cafe.order", JSON.stringify(drawn)); spinning = false; setCur(drawn.length-1); }
+  })();
+}
+$("#drawOne").onclick = spin;
+$("#drawAll").onclick = () => { const pool = remaining(); for (let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+  drawn = drawn.concat(pool); store.set("cafe.order", JSON.stringify(drawn)); setCur(curIdx < 0 ? 0 : curIdx); showSlot(drawn[curIdx], true); };
+$("#drawReset").onclick = () => { drawn = []; curIdx = -1; store.del("cafe.order"); stopTimer(); $(".sn").textContent="?"; $(".sw").textContent="누가 먼저 나눌까요?"; $("#slot").classList.remove("hit"); $("#tWho").textContent="발표 타이머"; drawOrder(); };
+$("#order").onclick = e => { const li = e.target.closest("li[data-i]"); if (li){ setCur(+li.dataset.i); showSlot(drawn[curIdx], true); } };
+function setCur(i){ curIdx = i; stopTimer(); const t = drawn[i]; if (t) $("#tWho").textContent = `TABLE ${t} 차례`; drawOrder(); }
+
+/* 3분 타이머 */
+const LEN = 180; let tLeft = LEN, tTimer = null;
+function paint(){ const m = Math.floor(Math.max(tLeft,0)/60), s = Math.max(tLeft,0)%60;
+  $("#tTime").textContent = tLeft > 0 ? `${m}:${String(s).padStart(2,"0")}` : "시간!";
+  $("#tRing").style.strokeDashoffset = 326.7 * (1 - Math.max(tLeft,0)/LEN);
+  $("#timer").classList.toggle("warn", tLeft <= 30); $("#timer").classList.toggle("over", tLeft <= 0); }
+function stopTimer(){ clearInterval(tTimer); tTimer = null; tLeft = LEN; paint(); $("#tStart").innerHTML = '<span class="ico">play_arrow</span> 3분 시작'; }
+$("#tStart").onclick = () => {
+  if (tLeft <= 0 && !tTimer){ if (curIdx < drawn.length-1){ setCur(curIdx+1); showSlot(drawn[curIdx], true); } else stopTimer(); return; }
+  if (tTimer){ clearInterval(tTimer); tTimer = null; $("#tStart").innerHTML = '<span class="ico">play_arrow</span> 이어서'; return; }
+  $("#tStart").innerHTML = '<span class="ico">pause</span> 잠깐 멈춤';
+  tTimer = setInterval(() => { tLeft--; paint(); if (tLeft === 30) beep(660,.15);
+    if (tLeft <= 0){ clearInterval(tTimer); tTimer = null; beep(880,.25); setTimeout(()=>beep(660,.35),300);
+      $("#tStart").innerHTML = '<span class="ico">skip_next</span> 다음 차례'; } }, 1000);
+};
+$("#tStop").onclick = stopTimer;
+
+/* 소리 */
+let actx = null;
+function beep(f, d){ if (!f) return; try{ actx = actx || new (window.AudioContext||window.webkitAudioContext)(); const o = actx.createOscillator(), g = actx.createGain();
+  o.frequency.value = f; o.type = "sine"; g.gain.value = .08; o.connect(g); g.connect(actx.destination); o.start(); g.gain.exponentialRampToValueAtTime(.0001, actx.currentTime + d); o.stop(actx.currentTime + d + .02); }catch(e){} }
+
+/* 무대용 크게: #draw */
+function drawMode(){ const on = location.hash === "#draw"; document.body.classList.toggle("draw-mode", on); if (on) window.scrollTo(0,0); }
+window.addEventListener("hashchange", drawMode);
+drawMode(); paint(); drawOrder();
+if (drawn.length){ setCur(0); showSlot(drawn[0], true); }
+
 
 setInterval(() => { dday(); drawFlow(); gate(); }, 30000);
 </script>
