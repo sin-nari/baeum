@@ -288,6 +288,16 @@ body.draw-mode .order li{font-size:18px}body.draw-mode .order li b{font-size:22p
 .exitdraw{display:none}
 body.draw-mode .exitdraw{display:inline-block;position:fixed;top:16px;right:20px;z-index:5;font:inherit;font-weight:800;border:0;border-radius:999px;padding:8px 16px;background:var(--deep2);color:#fff;text-decoration:none}
 @media (max-width:860px){.draw{grid-template-columns:1fr}}
+
+.kinds{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.kinds button{font:inherit;font-size:14px;font-weight:700;text-align:left;border:2px solid var(--line);background:var(--cream);border-radius:12px;padding:8px 10px;cursor:pointer;color:var(--ink);display:flex;gap:6px;align-items:center}
+.kinds button[aria-checked="true"]{border-color:var(--k);background:#fff;box-shadow:inset 0 0 0 1px var(--k)}
+.kfilter{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px}
+.kfilter button{font:inherit;font-size:13px;font-weight:700;border:0;border-radius:999px;padding:5px 11px;cursor:pointer;background:var(--paper);color:var(--ink)}
+.kfilter button[aria-pressed="true"]{background:var(--k,var(--deep));color:#fff}
+.kb{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:800;color:#fff;background:var(--k);border-radius:999px;padding:2px 9px;margin-bottom:6px}
+body.stage-mode .kfilter button{font-size:16px;background:var(--deep2);color:#fff}
+body.stage-mode .kb{font-size:15px}
 </style>
 </head>
 <body>
@@ -393,19 +403,21 @@ body.draw-mode .exitdraw{display:inline-block;position:fixed;top:16px;right:20px
       <div class="sec-head reveal">
         <div class="eyebrow">STORY WALL</div>
         <h2>이야기 벽</h2>
-        <p class="lead">우리 학교로 가져갈 한 가지를 휴대폰으로 남겨 주세요. 모두의 화면과 무대 화면에 바로 올라옵니다.</p>
+        <p class="lead">인상 깊었던 점, 카페지기에게 묻고 싶은 것, 우리 학교로 가져갈 한 가지, 자유로운 생각까지. 무엇이든 휴대폰으로 남겨 주세요. 모두의 화면과 무대 화면에 바로 올라옵니다.</p>
       </div>
       <div class="wall-grid">
         <form class="post reveal" id="postForm" autocomplete="off">
           <div class="seg" role="radiogroup" aria-label="교시"><button type="button" role="radio" data-r="1" aria-checked="true">1교시</button><button type="button" role="radio" data-r="2" aria-checked="false">2교시</button></div>
           <label>테이블<select id="pTable"></select></label>
           <label>학교 <small>(선택)</small><input id="pSchool" maxlength="20" placeholder="예: 부천○○고"></label>
-          <label>우리 학교로 가져갈 한 가지<textarea id="pText" maxlength="140" rows="3" placeholder="한두 줄이면 충분해요"></textarea><span class="cnt" id="pCnt">0 / 140</span></label>
+          <div class="kinds" id="pKinds" role="radiogroup" aria-label="이야기 종류"></div>
+          <label><span id="pLabel">인상 깊었던 점</span><textarea id="pText" maxlength="130" rows="3" placeholder="한두 줄이면 충분해요"></textarea><span class="cnt" id="pCnt">0 / 130</span></label>
           <button class="send" type="submit"><span class="ico">send</span> 벽에 붙이기</button>
           <p class="pmsg" id="pMsg" aria-live="polite"></p>
         </form>
         <div class="board-wrap">
-          <div class="stage-head"><div><h3 id="sTitle">이야기 벽</h3><p id="sSub">우리 학교로 가져갈 한 가지</p></div><div class="ctl"><button id="sAuto" aria-pressed="false">자동 넘김</button><button id="sExit">나가기</button></div></div>
+          <div class="stage-head"><div><h3 id="sTitle">이야기 벽</h3><p id="sSub">모두의 이야기</p></div><div class="ctl"><button id="sAuto" aria-pressed="false">자동 넘김</button><button id="sExit">나가기</button></div></div>
+          <div class="kfilter" id="kFilter" aria-label="종류로 보기"></div>
           <div class="wtabs" id="wTabs" role="tablist" aria-label="테이블"></div>
           <div class="board" id="board" aria-live="polite"></div>
           <div class="wfoot"><span id="wStatus"></span><a href="#stage" class="stage-link"><span class="ico">present_to_all</span> 무대 화면으로</a></div>
@@ -595,12 +607,30 @@ const WALL = { API_URL: "https://script.google.com/macros/s/AKfycbyqen0mrwEzsWpp
 const TCOLOR = {1:"#2f6f8f",2:"#2f6f8f",3:"#2f6f8f",4:"#3d8a5a",5:"#5fa3a0",6:"#8a6bb8",7:"#c2571f"};
 function tableInfo(t, r){ const x = MENU[r].find(m => m.t === t); return x ? `${x.w}` : ""; }
 let wall = { cards: [], tab: "all", round: 1, liked: new Set(JSON.parse(store.get("cafe.liked") || "[]")) };
-const DEMO = [
-  {id:"d1", round:1, table:2, school:"○○고", text:"우리 학교 AI 과목도 진로 설문부터 다시 해 봐야겠어요.", likes:3},
-  {id:"d2", round:1, table:5, school:"", text:"공동교육과정 수요 조사를 이웃 학교와 함께 돌려 보기!", likes:5},
-  {id:"d3", round:1, table:4, school:"○○고", text:"수행평가를 성취기준에서 거꾸로 설계해 보기", likes:2},
-  {id:"d4", round:2, table:6, school:"", text:"공유학교 프로그램을 학생 동아리와 연결해 보면 좋겠다.", likes:1}
+const KINDS = [
+  {k:"wow",  e:"✨", n:"인상 깊었던 점",      ph:"오늘 이야기에서 마음에 남은 장면이나 말", c:"#8a6bb8"},
+  {k:"ask",  e:"❓", n:"카페지기에게 질문",   ph:"더 궁금한 것, 우리 학교 상황에서 묻고 싶은 것", c:"#2f6f8f"},
+  {k:"take", e:"💡", n:"우리 학교로 가져갈 한 가지", ph:"내일 학교에서 바로 해 볼 수 있는 것", c:"#c2571f"},
+  {k:"free", e:"💬", n:"자유 의견·제안",      ph:"바라는 점, 함께 하고 싶은 것, 무엇이든", c:"#3d8a5a"}
 ];
+const KMAP = Object.fromEntries(KINDS.map(x=>[x.k,x]));
+function parseKind(t){ const m = /^\[(wow|ask|take|free)\]\s*/.exec(t||""); return m ? {kind:m[1], text:t.slice(m[0].length)} : {kind:"take", text:t||""}; }
+wall.kind = store.get("cafe.kind") || "wow"; wall.kf = "all";
+const DEMO = [
+  {id:"d1", round:1, table:2, school:"○○고", text:"[take] 우리 학교 AI 과목도 진로 설문부터 다시 해 봐야겠어요.", likes:3},
+  {id:"d2", round:1, table:5, school:"", text:"[ask] 공동교육과정 강사 섭외는 어떻게 하셨나요?", likes:5},
+  {id:"d3", round:1, table:4, school:"○○고", text:"[wow] 성취기준에서 거꾸로 설계하니 수업과 평가가 한 줄로 이어지네요.", likes:2},
+  {id:"d4", round:2, table:6, school:"", text:"[free] 공유학교 프로그램을 학생 동아리와 연결해 보면 좋겠어요.", likes:1}
+];
+function drawKF(){
+  const n = k => wall.cards.filter(c => k==="all" || parseKind(c.text).kind===k).length;
+  $("#kFilter").innerHTML = `<button data-k="all" aria-pressed="${wall.kf==="all"}">전체 ${n("all")}</button>` +
+    KINDS.map(x => `<button data-k="${x.k}" style="--k:${x.c}" aria-pressed="${wall.kf===x.k}">${x.e} ${esc(x.n)} ${n(x.k)}</button>`).join("");
+}
+function drawKinds(){
+  $("#pKinds").innerHTML = KINDS.map(x => `<button type="button" role="radio" data-k="${x.k}" style="--k:${x.c}" aria-checked="${wall.kind===x.k}">${x.e} ${esc(x.n)}</button>`).join("");
+  const x = KMAP[wall.kind]; $("#pLabel").textContent = x.n; $("#pText").placeholder = x.ph;
+}
 function wallTabs(){
   const cnt = t => wall.cards.filter(c => t==="all" || c.table===t).length;
   $("#wTabs").innerHTML = `<button role="tab" data-t="all" aria-selected="${wall.tab==="all"}">전체<b>${cnt("all")}</b></button>` +
@@ -608,13 +638,15 @@ function wallTabs(){
 }
 function drawWall(){
   wallTabs();
-  const list = wall.cards.filter(c => wall.tab==="all" || c.table===wall.tab).slice().sort((a,b)=> (b.at||0)-(a.at||0));
-  $("#board").innerHTML = list.length ? list.map(c => `<article class="note" style="--c:${TCOLOR[c.table]}">
+  drawKF();
+  const list = wall.cards.map(c => ({...c, ...parseKind(c.text)})).filter(c => (wall.tab==="all" || c.table===wall.tab) && (wall.kf==="all" || c.kind===wall.kf)).sort((a,b)=> (b.at||0)-(a.at||0));
+  $("#board").innerHTML = list.length ? list.map(c => `<article class="note" style="--c:${KMAP[c.kind].c};--k:${KMAP[c.kind].c}">
+      <span class="kb">${KMAP[c.kind].e} ${esc(KMAP[c.kind].n)}</span>
       <div class="tx">${esc(c.text)}</div>
       <div class="meta"><span><span class="tg">T${c.table} · ${c.round}교시 ${esc(tableInfo(c.table,c.round))}</span>${c.school?` · ${esc(c.school)}`:""}</span>
       <button class="lk2" data-id="${esc(c.id)}" ${wall.liked.has(c.id)?"disabled":""} aria-label="공감">♥ ${c.likes||0}</button></div></article>`).join("")
     : `<div class="empty-wall">아직 붙은 이야기가 없어요. 첫 번째 한 잔을 남겨 주세요!</div>`;
-  if (wall.tab === "all") { $("#sTitle").textContent = "이야기 벽 · 전체"; $("#sSub").textContent = `모두 ${wall.cards.length}개의 ‘가져갈 한 가지’`; }
+  if (wall.tab === "all") { $("#sTitle").textContent = "이야기 벽 · 전체"; $("#sSub").textContent = wall.kf==="all" ? `모두 ${wall.cards.length}개의 이야기` : `${KMAP[wall.kf].e} ${KMAP[wall.kf].n}만 모아 보기`; }
   else { $("#sTitle").textContent = `TABLE ${wall.tab}`; $("#sSub").textContent = `1교시 ${tableInfo(wall.tab,1)} · 2교시 ${tableInfo(wall.tab,2)}`; }
 }
 function jsonp(url, ms=12000){
@@ -658,18 +690,21 @@ document.querySelectorAll(".seg button").forEach(b => b.onclick = () => {
   wall.round = +b.dataset.r; document.querySelectorAll(".seg button").forEach(x => x.setAttribute("aria-checked", x===b?"true":"false")); syncTable(); });
 if (Date.now() >= kst("16:33")) document.querySelector('.seg button[data-r="2"]').click(); else syncTable();
 $("#pSchool").value = store.get("cafe.school") || "";
-$("#pText").oninput = () => $("#pCnt").textContent = `${$("#pText").value.length} / 140`;
+$("#pText").oninput = () => $("#pCnt").textContent = `${$("#pText").value.length} / 130`;
+drawKinds();
+$("#pKinds").onclick = e => { const b = e.target.closest("button"); if(!b) return; wall.kind = b.dataset.k; store.set("cafe.kind", wall.kind); drawKinds(); };
+$("#kFilter").onclick = e => { const b = e.target.closest("button"); if(!b) return; wall.kf = b.dataset.k; drawWall(); };
 $("#postForm").onsubmit = async e => {
   e.preventDefault();
   const text = $("#pText").value.trim(), msg = $("#pMsg");
   if (!text){ msg.className="pmsg err"; msg.textContent="한 줄만 적어 주세요."; return; }
-  const body = { action:"add", round:wall.round, table:+$("#pTable").value, school:$("#pSchool").value.trim(), text };
+  const body = { action:"add", round:wall.round, table:+$("#pTable").value, school:$("#pSchool").value.trim(), text:`[${wall.kind}] ${text}` };
   store.set("cafe.school", body.school);
   const btn = e.submitter || document.querySelector(".send"); btn.disabled = true;
   try{
     if (!WALL.API_URL){ wall.cards.push({...body, id:"l"+Date.now(), at:Date.now(), likes:0}); }
     else { const d = await post(body); if(!d.ok) throw new Error(d.error||"저장하지 못했어요."); await loadWall(); }
-    $("#pText").value=""; $("#pCnt").textContent="0 / 140"; msg.className="pmsg"; msg.textContent="벽에 붙었어요! 고맙습니다 ☕";
+    $("#pText").value=""; $("#pCnt").textContent="0 / 130"; msg.className="pmsg"; msg.textContent="벽에 붙었어요! 고맙습니다 ☕";
     wall.tab = body.table; drawWall();
   }catch(err){ msg.className="pmsg err"; msg.textContent = err.message || "잠시 후 다시 시도해 주세요."; }
   btn.disabled = false;
