@@ -537,8 +537,8 @@ body.stage-mode .kb{font-size:15px}
           </div>
         </div>
         <div class="lk-side">
-          <h3>당첨 번호</h3>
-          <p>번호표를 보여 주시면 경품을 드려요. 테이블마다 한 분씩, 순서대로 뽑으면 다음 테이블로 자동으로 넘어갑니다.</p>
+          <h3>당첨 번호 <span id="lkCnt" style="font-size:14px;color:#cfe0dc"></span></h3>
+          <p>번호표를 보여 주시면 경품을 드려요. <b>테이블마다 두 분씩, 모두 14분!</b> 두 분을 뽑으면 다음 테이블로 자동으로 넘어갑니다.</p>
           <ol class="lk-win" id="lkWin"></ol>
           <p class="lk-rule">· 번호표가 없거나 자리에 없으면 바로 다시 뽑아요.<br>· 한 번 뽑힌 번호는 다시 나오지 않아요.<br>· 테이블별 번호: 1 (001~018) · 2 (019~036) · 3 (037~054) · 4 (055~072) · 5 (073~090) · 6 (091~108) · 7 (109~126)</p>
         </div>
@@ -904,7 +904,7 @@ function beep(f, d){ if (!f) return; try{ actx = actx || new (window.AudioContex
     $("#lkTabs").innerHTML = [1,2,3,4,5,6,7,0].map(t=>`<button type="button" data-t="${t}" aria-pressed="${L.t===t}">${t?`TABLE ${t}`:"전체"}${t&&winsAt(t)?`<span class="c">🎁${winsAt(t)}</span>`:""}</button>`).join("");
   }
   function list(){
-    const w = L.picks;
+    const w = L.picks; const c=$("#lkCnt"); if(c) c.textContent=`${w.filter(p=>!p.void).length} / 14명`;
     $("#lkWin").innerHTML = w.length ? w.map((p,i)=>`<li class="${p.void?"void":""}"><b>No.${pad(p.n)}</b><span>TABLE ${tableOf(p.n)}${p.void?" · 다시 뽑음":""}</span><button type="button" data-i="${i}">${p.void?"되살리기":"무효"}</button></li>`).join("") : `<li class="empty">아직 뽑지 않았어요</li>`;
   }
   function show(n, msg){ $("#lkT").textContent = n ? `TABLE ${tableOf(n)}` : (L.t?`TABLE ${L.t}`:"전체"); $("#lkN").textContent = n ? pad(n) : "???"; $("#lkM").textContent = msg||""; }
@@ -922,15 +922,19 @@ function beep(f, d){ if (!f) return; try{ actx = actx || new (window.AudioContex
       else { slot.classList.remove("spin"); slot.classList.add("hit"); L.picks.push({n:pick}); save(); show(pick,"번호표를 들어 주세요! 🎁"); tone(880,.25); confetti(); list(); tabs();
         $("#lkGo").disabled=false; $("#lkVoid").disabled=false; } })();
   }
+  const EACH = 2;   // 테이블마다 두 분씩 (7개 테이블 × 2 = 14명)
   $("#lkGo").onclick = () => {
-    const last = L.picks[L.picks.length-1];
-    // 테이블별로 한 분씩: 방금 테이블에서 당첨이 나왔으면 다음 테이블로
-    if (L.t && last && !last.void && tableOf(last.n)===L.t && winsAt(L.t)>=1 && $("#lkGo").dataset.next==="1"){ L.t = L.t%TABLES+1; save(); tabs(); }
-    draw(); $("#lkGo").dataset.next="1";
+    // 지금 테이블이 두 분을 채웠으면, 아직 덜 뽑은 다음 테이블로 넘어갑니다
+    if (L.t && winsAt(L.t) >= EACH){
+      for (let k=1;k<=TABLES;k++){ const t=(L.t-1+k)%TABLES+1; if (winsAt(t) < EACH){ L.t=t; break; } }
+      save(); tabs();
+      if (winsAt(L.t) >= EACH){ show(0,"14분 모두 뽑았어요! 축하합니다 🎉"); return; }
+    }
+    draw();
   };
-  $("#lkVoid").onclick = () => { const last=L.picks[L.picks.length-1]; if(!last) return; last.void=true; save(); list(); tabs(); $("#lkGo").dataset.next="0"; draw(); };
-  $("#lkReset").onclick = () => { if (!confirm("당첨 기록을 모두 지우고 처음부터 할까요?")) return; L={t:1,picks:[]}; save(); tabs(); list(); show(0,"테이블을 고르고 뽑기를 눌러 주세요"); $("#lkGo").dataset.next="0"; };
-  $("#lkTabs").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; L.t=+b.dataset.t; save(); tabs(); show(0, L.t?`TABLE ${L.t} 번호 ${pad(rangeOf(L.t)[0])}~${pad(rangeOf(L.t)[1])}`:"전체 번호 001~126"); $("#lkGo").dataset.next="0"; });
+  $("#lkVoid").onclick = () => { const last=L.picks[L.picks.length-1]; if(!last) return; last.void=true; L.t=tableOf(last.n); save(); list(); tabs(); draw(); };
+  $("#lkReset").onclick = () => { if (!confirm("당첨 기록을 모두 지우고 처음부터 할까요?")) return; L={t:1,picks:[]}; save(); tabs(); list(); show(0,"테이블을 고르고 뽑기를 눌러 주세요"); };
+  $("#lkTabs").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; L.t=+b.dataset.t; save(); tabs(); show(0, L.t?`TABLE ${L.t} 번호 ${pad(rangeOf(L.t)[0])}~${pad(rangeOf(L.t)[1])}`:"전체 번호 001~126"); });
   $("#lkWin").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; const p=L.picks[+b.dataset.i]; p.void=!p.void; save(); list(); tabs(); });
   function luckyMode(){ const on = location.hash === "#luckydraw"; document.body.classList.toggle("lucky-mode", on); if (on) window.scrollTo(0,0); }
   window.addEventListener("hashchange", luckyMode); luckyMode();
