@@ -118,6 +118,14 @@ nav a:hover{background:rgba(255,255,255,.12);opacity:1}
 .ticket button.ghost{background:transparent;color:#cfe0dc;border:1px solid rgba(255,255,255,.3)}
 
 /* 배치도 */
+.mboard{margin-top:28px;background:var(--card);border:1px solid var(--line);border-radius:22px;padding:20px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:22px;align-items:start}
+.mboard h3{margin:0 0 6px;font-size:22px;display:flex;align-items:center;gap:8px}.mboard p{margin:0 0 14px;color:var(--muted);font-size:15px;line-height:1.6}
+.mtabs{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.mtabs button{font:inherit;font-weight:700;font-size:15px;padding:9px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--paper,#fff);color:inherit;cursor:pointer;min-width:84px}
+.mtabs button[aria-pressed="true"]{background:var(--deep);border-color:var(--deep);color:#fff}
+.mdl{display:flex;flex-wrap:wrap;gap:8px}.mdl a{display:inline-flex;align-items:center;gap:6px;padding:10px 16px;border-radius:12px;background:var(--deep);color:#fff;text-decoration:none;font-weight:700;font-size:15px}.mdl a.ghost{background:transparent;color:var(--deep);border:1.5px solid var(--deep)}
+.mprev{display:block;border:0;padding:0;background:none;cursor:zoom-in;width:100%}.mprev img{width:100%;height:auto;border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.15);display:block}
+@media (max-width:760px){.mboard{grid-template-columns:1fr}}
 .room{background:var(--card);border-radius:22px;border:1px solid var(--line);padding:18px}
 .room h4{margin:0 0 10px;font-size:16px;display:flex;justify-content:space-between;align-items:baseline}
 .room h4 small{font-weight:500;color:var(--muted);font-size:13px}
@@ -379,6 +387,19 @@ body.stage-mode .kb{font-size:15px}
           <div class="door"><span>← 출입구 · 등록대</span><span>다과 →</span></div>
         </div>
       </div>
+
+      <div class="mboard reveal" id="menuBoard">
+        <div>
+          <h3><span class="ico">menu_book</span>테이블용 메뉴판</h3>
+          <p>테이블마다 놓이는 인쇄용 메뉴판입니다. 테이블 번호를 누르면 그 테이블 메뉴판이 보이고, 해당 테이블 줄이 강조되어 있어요.</p>
+          <div class="mtabs" role="group" aria-label="테이블 고르기" id="mtabs"></div>
+          <div class="mdl">
+            <a id="mOne" href="menu/menu-table1.jpg" download><span class="ico">image</span>이 메뉴판 이미지</a>
+            <a class="ghost" href="menu/cafe-menu-table1-7-A4.pdf" download><span class="ico">picture_as_pdf</span>전체 7종 PDF (A4)</a>
+          </div>
+        </div>
+        <button class="mprev" id="mPrev" type="button" aria-label="메뉴판 크게 보기"><img id="mImg" src="menu/menu-table1.jpg" alt="TABLE 1 이야기 카페 메뉴판" loading="lazy"></button>
+      </div>
     </div>
   </section>
 
@@ -389,7 +410,7 @@ body.stage-mode .kb{font-size:15px}
         <div class="reveal">
           <div class="eyebrow">TODAY'S CUP</div>
           <h2>‘오늘의 한 잔’을 남겨 주세요</h2>
-          <p class="lead">교시가 끝날 때 우리 학교로 가져갈 한 가지를 카드에 적어 테이블 컵에 꽂아 주세요. 카페지기의 전체 나눔 3분 발표 재료가 됩니다.</p>
+          <p class="lead">교시가 끝날 때 인상 깊었던 점, 궁금한 점, 우리 학교로 가져갈 한 가지를 카드에 적어 테이블 컵에 꽂아 주세요. 카페지기의 전체 나눔 3분 발표 재료가 됩니다.</p>
           <ol class="steps3">
             <li><div><b>교시와 카페를 체크</b>하고</div></li>
             <li><div><b>“우리 학교로 가져갈 한 가지”</b>를 한두 줄로 적은 뒤</div></li>
@@ -593,7 +614,17 @@ function gate(){
 }
 
 /* 포스터 크게 보기 */
-$("#posterBtn").onclick = () => { $("#lb").hidden = false; $("#lbClose").focus(); };
+$("#posterBtn").onclick = () => { const im=$("#lb img"); im.src="poster-cafe.jpg"; im.alt="고등학교 교육과정 이야기 카페 안내 포스터"; $("#lb").hidden = false; $("#lbClose").focus(); };
+/* 테이블용 메뉴판 */
+(function(){
+  const tabs=$("#mtabs"); let cur=1;
+  tabs.innerHTML=[1,2,3,4,5,6,7].map(n=>`<button type="button" data-n="${n}" aria-pressed="${n===1}">TABLE ${n}</button>`).join("");
+  function show(n){ cur=n; $("#mImg").src=`menu/menu-table${n}.jpg`; $("#mImg").alt=`TABLE ${n} 이야기 카페 메뉴판`; $("#mOne").href=`menu/menu-table${n}.jpg`;
+    tabs.querySelectorAll("button").forEach(b=>b.setAttribute("aria-pressed", String(+b.dataset.n===n))); }
+  tabs.addEventListener("click",e=>{ const b=e.target.closest("button"); if(b) show(+b.dataset.n); });
+  $("#mPrev").onclick=()=>{ const im=$("#lb img"); im.src=`menu/menu-table${cur}.jpg`; im.alt=`TABLE ${cur} 이야기 카페 메뉴판`; $("#lb").hidden=false; $("#lbClose").focus(); };
+})();
+
 $("#lbClose").onclick = () => { $("#lb").hidden = true; $("#posterBtn").focus(); };
 $("#lb").onclick = e => { if (e.target.id === "lb") $("#lb").hidden = true; };
 document.addEventListener("keydown", e => { if (e.key === "Escape") $("#lb").hidden = true; });
