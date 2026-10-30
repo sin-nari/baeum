@@ -247,6 +247,10 @@ body.stage-mode .stage-link{display:none}
 @media (max-width:860px){.wall-grid{grid-template-columns:minmax(0,1fr)}.post{position:static}}
 
 
+
+.note.mine{outline:3px solid var(--yellow);outline-offset:-3px}
+.note .mycode{display:inline-block;margin-bottom:6px;background:var(--yellow);color:var(--deep);font-size:13px;font-weight:800;border-radius:999px;padding:2px 10px}
+.note .wc{font-size:11.5px;font-weight:800;color:var(--muted);letter-spacing:.04em;margin-left:auto;margin-right:8px}
 /* 행운 번호 추첨 */
 #lucky{background:var(--deep);color:#fff}
 #lucky .eyebrow{color:#ffd1b3}#lucky h2{color:var(--yellow)}#lucky .lead{color:#cfe0dc}#lucky .lead a{color:var(--yellow)}
@@ -524,7 +528,7 @@ body.stage-mode .kb{font-size:15px}
         <a class="exitlucky" href="#lucky">나가기</a>
         <div class="eyebrow">LUCKY DRAW · 17:05</div>
         <h2>오늘의 한 잔 · 행운 번호 추첨</h2>
-        <p class="lead">카드 아래 번호표를 가지고 계신 분이 주인공! 컵에서 카드를 직접 뽑아도 좋고, 이 화면으로 뽑아도 됩니다. 무대 화면에 크게 띄우려면 <a href="#luckydraw">무대용으로 열기</a>를 누르세요.</p>
+        <p class="lead">카드 아래 번호표를 가지고 계신 분, 그리고 이야기 벽에 글을 남긴 분(내 글의 ‘행운 코드’ W-…)이 주인공! 컵에서 카드를 직접 뽑아도 좋고, 이 화면으로 뽑아도 됩니다. 무대 화면에 크게 띄우려면 <a href="#luckydraw">무대용으로 열기</a>를 누르세요.</p>
       </div>
       <div class="lk-tabs" id="lkTabs" role="group" aria-label="추첨 범위"></div>
       <div class="lkg">
@@ -540,7 +544,7 @@ body.stage-mode .kb{font-size:15px}
           <h3>당첨 번호 <span id="lkCnt" style="font-size:14px;color:#cfe0dc"></span></h3>
           <p>번호표를 보여 주시면 경품을 드려요. <b>테이블마다 두 분씩, 모두 14분!</b> 두 분을 뽑으면 다음 테이블로 자동으로 넘어갑니다.</p>
           <ol class="lk-win" id="lkWin"></ol>
-          <p class="lk-rule">· 번호표가 없거나 자리에 없으면 바로 다시 뽑아요.<br>· 한 번 뽑힌 번호는 다시 나오지 않아요.<br>· 테이블별 번호: 1 (001~018) · 2 (019~036) · 3 (037~054) · 4 (055~072) · 5 (073~090) · 6 (091~108) · 7 (109~126)</p>
+          <p class="lk-rule">· 번호표가 없거나 자리에 없으면 바로 다시 뽑아요.<br>· 한 번 뽑힌 번호는 다시 나오지 않아요.<br>· 이야기 벽 글은 남긴 테이블에서 함께 뽑혀요(W-로 시작).<br>· 테이블별 카드 번호: 1 (001~018) · 2 (019~036) · 3 (037~054) · 4 (055~072) · 5 (073~090) · 6 (091~108) · 7 (109~126)</p>
         </div>
       </div>
     </div>
@@ -744,15 +748,18 @@ function drawWall(){
   wallTabs();
   drawKF();
   const list = wall.cards.map(c => ({...c, ...parseKind(c.text)})).filter(c => (wall.tab==="all" || c.table===wall.tab) && (wall.kf==="all" || c.kind===wall.kf)).sort((a,b)=> (b.at||0)-(a.at||0));
-  $("#board").innerHTML = list.length ? list.map(c => `<article class="note" style="--c:${KMAP[c.kind].c};--k:${KMAP[c.kind].c}">
+  const mine = new Set(myPosts().map(m => m.t+"|"+m.tb));
+  $("#board").innerHTML = list.length ? list.map(c => `<article class="note${mine.has(`[${c.kind}] ${c.text}|${c.table}`)?" mine":""}" style="--c:${KMAP[c.kind].c};--k:${KMAP[c.kind].c}">${mine.has(`[${c.kind}] ${c.text}|${c.table}`)?`<span class="mycode">🎁 내 행운 코드 <b>${wallCode(c)}</b></span>`:""}
       <span class="kb">${KMAP[c.kind].e} ${esc(KMAP[c.kind].n)}</span>
       <div class="tx">${esc(c.text)}</div>
       <div class="meta"><span><span class="tg">T${c.table} · ${c.round}교시 ${esc(tableInfo(c.table,c.round))}</span>${c.school?` · ${esc(c.school)}`:""}</span>
-      <button class="lk2" data-id="${esc(c.id)}" ${wall.liked.has(c.id)?"disabled":""} aria-label="공감">♥ ${c.likes||0}</button></div></article>`).join("")
+      <span class="wc">${wallCode(c)}</span><button class="lk2" data-id="${esc(c.id)}" ${wall.liked.has(c.id)?"disabled":""} aria-label="공감">♥ ${c.likes||0}</button></div></article>`).join("")
     : `<div class="empty-wall">아직 붙은 이야기가 없어요. 첫 번째 한 잔을 남겨 주세요!</div>`;
   if (wall.tab === "all") { $("#sTitle").textContent = "이야기 벽 · 전체"; $("#sSub").textContent = wall.kf==="all" ? `모두 ${wall.cards.length}개의 이야기` : `${KMAP[wall.kf].e} ${KMAP[wall.kf].n}만 모아 보기`; }
   else { $("#sTitle").textContent = `TABLE ${wall.tab}`; $("#sSub").textContent = `1교시 ${tableInfo(wall.tab,1)} · 2교시 ${tableInfo(wall.tab,2)}`; }
 }
+function wallCode(c){ return "W-" + String(c.id||"").replace(/[^0-9a-z]/gi,"").slice(0,4).toUpperCase(); }
+function myPosts(){ try{ return JSON.parse(store.get("cafe.mine")||"[]"); }catch(e){ return []; } }
 function jsonp(url, ms=12000){
   return new Promise((ok, no) => {
     const cb = "__wall" + Date.now() + Math.floor(Math.random()*1e4), sc = document.createElement("script");
@@ -808,7 +815,8 @@ $("#postForm").onsubmit = async e => {
   try{
     if (!WALL.API_URL){ wall.cards.push({...body, id:"l"+Date.now(), at:Date.now(), likes:0}); }
     else { const d = await post(body); if(!d.ok) throw new Error(d.error||"저장하지 못했어요."); await loadWall(); }
-    $("#pText").value=""; $("#pCnt").textContent="0 / 130"; msg.className="pmsg"; msg.textContent="벽에 붙었어요! 고맙습니다 ☕";
+    const mp = myPosts(); mp.push({t:body.text, tb:body.table}); store.set("cafe.mine", JSON.stringify(mp.slice(-20)));
+    $("#pText").value=""; $("#pCnt").textContent="0 / 130"; msg.className="pmsg"; msg.textContent="벽에 붙었어요! 내 글에 표시된 행운 코드(W-…)로 17:05 추첨에도 참여해요 🎁";
     wall.tab = body.table; drawWall();
   }catch(err){ msg.className="pmsg err"; msg.textContent = err.message || "잠시 후 다시 시도해 주세요."; }
   btn.disabled = false;
@@ -891,56 +899,61 @@ function beep(f, d){ if (!f) return; try{ actx = actx || new (window.AudioContex
 /* 무대용 크게: #draw */
 /* ===== 행운 번호 추첨 ===== */
 (function(){
-  const PER = 18, TABLES = 7;
+  const PER = 18, TABLES = 7, EACH = 2;   // 테이블마다 두 분씩 (7개 테이블 × 2 = 14명)
   const rangeOf = t => t ? [ (t-1)*PER+1, t*PER ] : [1, PER*TABLES];
-  const tableOf = n => Math.ceil(n/PER);
+  const tOfNum = n => Math.ceil(n/PER);
   const pad = n => String(n).padStart(3,"0");
-  let L = { t:1, picks:[] };   // picks: {n, void}
+  const lab = p => typeof p.n === "number" ? pad(p.n) : p.n;
+  let L = { t:1, picks:[] };   // picks: {n: 번호 또는 W-코드, t: 테이블, w: 글 앞부분, void}
   try{ const v = JSON.parse(store.get("cafe.lucky")||"null"); if (v && Array.isArray(v.picks)) L = v; }catch(e){}
+  L.picks.forEach(p => { if (!p.t) p.t = typeof p.n==="number" ? tOfNum(p.n) : 0; });
   const save = () => store.set("cafe.lucky", JSON.stringify(L));
-  const used = () => new Set(L.picks.map(p=>p.n));
-  const winsAt = t => L.picks.filter(p=>!p.void && tableOf(p.n)===t).length;
+  const used = () => new Set(L.picks.map(p=>String(p.n)));
+  const winsAt = t => L.picks.filter(p=>!p.void && p.t===t).length;
+  function pool(t){
+    const [a,b] = rangeOf(t), u = used(), out = [];
+    for (let n=a;n<=b;n++) if (!u.has(String(n))) out.push({n, t:tOfNum(n)});
+    (typeof wall!=="undefined" && wall.cards || []).forEach(c => { if ((!t || c.table===t) && !u.has(wallCode(c))) out.push({n:wallCode(c), t:c.table, w:parseKind(c.text).text.slice(0,40)}); });
+    return out;
+  }
   function tabs(){
     $("#lkTabs").innerHTML = [1,2,3,4,5,6,7,0].map(t=>`<button type="button" data-t="${t}" aria-pressed="${L.t===t}">${t?`TABLE ${t}`:"전체"}${t&&winsAt(t)?`<span class="c">🎁${winsAt(t)}</span>`:""}</button>`).join("");
   }
   function list(){
     const w = L.picks; const c=$("#lkCnt"); if(c) c.textContent=`${w.filter(p=>!p.void).length} / 14명`;
-    $("#lkWin").innerHTML = w.length ? w.map((p,i)=>`<li class="${p.void?"void":""}"><b>No.${pad(p.n)}</b><span>TABLE ${tableOf(p.n)}${p.void?" · 다시 뽑음":""}</span><button type="button" data-i="${i}">${p.void?"되살리기":"무효"}</button></li>`).join("") : `<li class="empty">아직 뽑지 않았어요</li>`;
+    $("#lkWin").innerHTML = w.length ? w.map((p,i)=>`<li class="${p.void?"void":""}"><b>${typeof p.n==="number"?"No.":""}${lab(p)}</b><span>TABLE ${p.t}${typeof p.n==="number"?" · 카드":" · 이야기 벽"}${p.void?" · 다시 뽑음":""}</span><button type="button" data-i="${i}">${p.void?"되살리기":"무효"}</button></li>`).join("") : `<li class="empty">아직 뽑지 않았어요</li>`;
   }
-  function show(n, msg){ $("#lkT").textContent = n ? `TABLE ${tableOf(n)}` : (L.t?`TABLE ${L.t}`:"전체"); $("#lkN").textContent = n ? pad(n) : "???"; $("#lkM").textContent = msg||""; }
+  function show(p, msg){ $("#lkT").textContent = p ? `TABLE ${p.t}${typeof p.n==="number"?"":" · 이야기 벽"}` : (L.t?`TABLE ${L.t}`:"전체"); $("#lkN").textContent = p ? lab(p) : "???"; $("#lkM").textContent = msg||""; }
   function confetti(){ const box=$("#lkSlot"), cs=["#ffe28a","#f08a5d","#9fd6d2","#ffffff","#cbbcf0"];
     for(let i=0;i<36;i++){ const c=document.createElement("i"); c.className="lk-cf"; c.style.left=Math.random()*100+"%"; c.style.background=cs[i%cs.length]; c.style.animationDelay=(Math.random()*.4)+"s"; box.appendChild(c); setTimeout(()=>c.remove(),2200); } }
   let ac=null; function tone(f,d){ try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); const o=ac.createOscillator(), g=ac.createGain(); o.frequency.value=f; g.gain.value=.06; o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+d); }catch(e){} }
   function draw(){
-    const [a,b] = rangeOf(L.t), u = used(), pool = [];
-    for (let n=a;n<=b;n++) if (!u.has(n)) pool.push(n);
-    if (!pool.length){ show(0,"이 범위의 번호를 모두 뽑았어요"); return; }
-    const pick = pool[Math.floor(Math.random()*pool.length)];
+    const P = pool(L.t);
+    if (!P.length){ show(null,"이 범위의 번호를 모두 뽑았어요"); return; }
+    const pick = P[Math.floor(Math.random()*P.length)];
     $("#lkGo").disabled = $("#lkVoid").disabled = true; const slot=$("#lkSlot"); slot.classList.remove("hit"); slot.classList.add("spin");
     let k=0; (function roll(){ k++;
-      if (k<26){ const r = a + Math.floor(Math.random()*(b-a+1)); show(r,"두근두근…"); tone(440+k*12,.03); setTimeout(roll, 40+k*6); }
-      else { slot.classList.remove("spin"); slot.classList.add("hit"); L.picks.push({n:pick}); save(); show(pick,"번호표를 들어 주세요! 🎁"); tone(880,.25); confetti(); list(); tabs();
+      if (k<26){ show(P[Math.floor(Math.random()*P.length)],"두근두근…"); tone(440+k*12,.03); setTimeout(roll, 40+k*6); }
+      else { slot.classList.remove("spin"); slot.classList.add("hit"); L.picks.push(pick); save();
+        show(pick, typeof pick.n==="number" ? "번호표를 들어 주세요! 🎁" : `휴대폰의 ‘내 행운 코드’를 보여 주세요! 🎁  “${pick.w}…”`); tone(880,.25); confetti(); list(); tabs();
         $("#lkGo").disabled=false; $("#lkVoid").disabled=false; } })();
   }
-  const EACH = 2;   // 테이블마다 두 분씩 (7개 테이블 × 2 = 14명)
   $("#lkGo").onclick = () => {
-    // 지금 테이블이 두 분을 채웠으면, 아직 덜 뽑은 다음 테이블로 넘어갑니다
     if (L.t && winsAt(L.t) >= EACH){
       for (let k=1;k<=TABLES;k++){ const t=(L.t-1+k)%TABLES+1; if (winsAt(t) < EACH){ L.t=t; break; } }
       save(); tabs();
-      if (winsAt(L.t) >= EACH){ show(0,"14분 모두 뽑았어요! 축하합니다 🎉"); return; }
+      if (winsAt(L.t) >= EACH){ show(null,"14분 모두 뽑았어요! 축하합니다 🎉"); return; }
     }
     draw();
   };
-  $("#lkVoid").onclick = () => { const last=L.picks[L.picks.length-1]; if(!last) return; last.void=true; L.t=tableOf(last.n); save(); list(); tabs(); draw(); };
-  $("#lkReset").onclick = () => { if (!confirm("당첨 기록을 모두 지우고 처음부터 할까요?")) return; L={t:1,picks:[]}; save(); tabs(); list(); show(0,"테이블을 고르고 뽑기를 눌러 주세요"); };
-  $("#lkTabs").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; L.t=+b.dataset.t; save(); tabs(); show(0, L.t?`TABLE ${L.t} 번호 ${pad(rangeOf(L.t)[0])}~${pad(rangeOf(L.t)[1])}`:"전체 번호 001~126"); });
+  $("#lkVoid").onclick = () => { const last=L.picks[L.picks.length-1]; if(!last) return; last.void=true; if (last.t) L.t=last.t; save(); list(); tabs(); draw(); };
+  $("#lkReset").onclick = () => { if (!confirm("당첨 기록을 모두 지우고 처음부터 할까요?")) return; L={t:1,picks:[]}; save(); tabs(); list(); show(null,"테이블을 고르고 뽑기를 눌러 주세요"); };
+  $("#lkTabs").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; L.t=+b.dataset.t; save(); tabs(); const P=pool(L.t), w=P.filter(p=>typeof p.n!=="number").length; show(null, `${L.t?`TABLE ${L.t} 카드 ${pad(rangeOf(L.t)[0])}~${pad(rangeOf(L.t)[1])}`:"전체 카드 001~126"}${w?` + 이야기 벽 ${w}개`:""}`); });
   $("#lkWin").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; const p=L.picks[+b.dataset.i]; p.void=!p.void; save(); list(); tabs(); });
   function luckyMode(){ const on = location.hash === "#luckydraw"; document.body.classList.toggle("lucky-mode", on); if (on) window.scrollTo(0,0); }
   window.addEventListener("hashchange", luckyMode); luckyMode();
-  tabs(); list(); show(0,"테이블을 고르고 뽑기를 눌러 주세요");
+  tabs(); list(); show(null,"테이블을 고르고 뽑기를 눌러 주세요");
 })();
-
 function drawMode(){ const on = location.hash === "#draw"; document.body.classList.toggle("draw-mode", on); if (on) window.scrollTo(0,0); }
 window.addEventListener("hashchange", drawMode);
 drawMode(); paint(); drawOrder();
