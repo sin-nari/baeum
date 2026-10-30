@@ -246,6 +246,47 @@ body.stage-mode .wfoot{color:#9fb8b4}
 body.stage-mode .stage-link{display:none}
 @media (max-width:860px){.wall-grid{grid-template-columns:minmax(0,1fr)}.post{position:static}}
 
+
+/* 행운 번호 추첨 */
+#lucky{background:var(--deep);color:#fff}
+#lucky .eyebrow{color:#ffd1b3}#lucky h2{color:var(--yellow)}#lucky .lead{color:#cfe0dc}#lucky .lead a{color:var(--yellow)}
+.lk-tabs{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 16px}
+.lk-tabs button{font:inherit;font-weight:800;font-size:15px;border:1.5px solid rgba(255,255,255,.3);background:transparent;color:#fff;border-radius:999px;padding:8px 14px;cursor:pointer}
+.lk-tabs button[aria-pressed="true"]{background:var(--yellow);border-color:var(--yellow);color:var(--deep)}
+.lk-tabs button .c{font-size:12px;opacity:.75;margin-left:4px}
+.lkg{display:grid;grid-template-columns:1.4fr 1fr;gap:22px;align-items:start}.lkg>*{min-width:0}
+.lk-slot{border-radius:26px;background:var(--deep2);border:3px dashed rgba(255,226,138,.4);min-height:300px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center;padding:20px;position:relative;overflow:hidden}
+.lk-slot .lt{font-size:22px;font-weight:800;color:#ffd1b3;letter-spacing:.08em}
+.lk-slot .ln{font-family:var(--serif);font-weight:700;font-size:110px;line-height:1;color:var(--yellow)}
+.lk-slot .lm{font-size:18px;color:#cfe0dc;min-height:1.4em}
+.lk-slot.spin .ln{animation:blink .07s linear infinite alternate}
+.lk-slot.hit{border:3px solid var(--yellow);animation:hit .5s ease}
+.lk-btns{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:16px}
+.lk-btns button{font:inherit;font-weight:800;border:0;border-radius:999px;padding:11px 20px;cursor:pointer;background:var(--yellow);color:var(--deep)}
+.lk-btns button.big{font-size:21px;padding:13px 30px;background:var(--orange);color:#fff}
+.lk-btns button.ghost{background:transparent;border:1.5px solid rgba(255,255,255,.35);color:#cfe0dc}
+.lk-btns button:disabled{opacity:.45;cursor:default}
+.lk-side{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.15);border-radius:22px;padding:18px 20px}
+.lk-side h3{margin:0 0 4px;font-size:19px;color:var(--yellow)}.lk-side p{margin:0 0 12px;font-size:14px;color:#cfe0dc;line-height:1.6}
+.lk-win{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.lk-win li{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.08);border-radius:12px;padding:8px 12px;font-size:16px}
+.lk-win li b{font-family:var(--serif);font-size:22px;color:var(--yellow);min-width:76px}
+.lk-win li span{flex:1;color:#cfe0dc}
+.lk-win li button{font:inherit;font-size:12.5px;font-weight:700;border:1px solid rgba(255,255,255,.3);background:transparent;color:#cfe0dc;border-radius:999px;padding:3px 10px;cursor:pointer}
+.lk-win li.void{opacity:.45;text-decoration:line-through}
+.lk-win .empty{justify-content:center;color:#9fb8b4;background:none}
+.lk-rule{margin-top:14px;font-size:13.5px;color:#9fb8b4;line-height:1.6}
+.lk-cf{position:absolute;width:10px;height:14px;top:-20px;border-radius:2px;animation:fall 1.6s ease-in forwards}
+@keyframes fall{to{transform:translateY(420px) rotate(540deg);opacity:0}}
+.exitlucky{display:none}
+body.lucky-mode{background:var(--deep)}
+body.lucky-mode header,body.lucky-mode main>*:not(#lucky),body.lucky-mode footer,body.lucky-mode #lucky .lead{display:none}
+body.lucky-mode #lucky{min-height:100vh;padding:30px 0}body.lucky-mode #lucky .wrap{max-width:none;padding-inline:40px}
+body.lucky-mode #lucky h2{font-size:52px}body.lucky-mode .lk-slot{min-height:460px}body.lucky-mode .lk-slot .ln{font-size:200px}body.lucky-mode .lk-slot .lt{font-size:34px}body.lucky-mode .lk-slot .lm{font-size:26px}
+body.lucky-mode .lk-tabs button{font-size:20px;padding:10px 18px}body.lucky-mode .lk-win li{font-size:20px}body.lucky-mode .lk-win li b{font-size:28px}
+body.lucky-mode .exitlucky{display:inline-block;position:fixed;top:16px;right:20px;z-index:5;font-weight:800;border-radius:999px;padding:8px 16px;background:var(--deep2);color:#fff;text-decoration:none}
+@media (max-width:860px){.lkg{grid-template-columns:1fr}.lk-slot .ln{font-size:80px}}
+
 /* 전체 나눔 뽑기 */
 .draw{display:grid;grid-template-columns:1.3fr 1fr;gap:22px;align-items:start}
 .draw>*{min-width:0}
@@ -320,6 +361,7 @@ body.stage-mode .kb{font-size:15px}
       <a href="quiz.html">1부 퀴즈</a>
       <a href="#wall">이야기 벽</a>
       <a href="#share">전체 나눔</a>
+      <a href="#lucky">행운 추첨</a>
       <a href="#links">바로가기</a>
       <a href="./">배움:성장</a>
     </nav>
@@ -470,6 +512,35 @@ body.stage-mode .kb{font-size:15px}
           <div class="timer" id="timer"><svg viewBox="0 0 120 120" aria-hidden="true"><circle cx="60" cy="60" r="52" class="tbg"/><circle cx="60" cy="60" r="52" class="tfg" id="tRing"/></svg><div class="tt"><b id="tTime">3:00</b><span id="tWho">발표 타이머</span></div></div>
           <div class="tbtns"><button id="tStart"><span class="ico">play_arrow</span> 3분 시작</button><button id="tStop" class="ghost">멈춤</button></div>
           <ol class="order" id="order"></ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+
+  <section id="lucky">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <a class="exitlucky" href="#lucky">나가기</a>
+        <div class="eyebrow">LUCKY DRAW · 17:05</div>
+        <h2>오늘의 한 잔 · 행운 번호 추첨</h2>
+        <p class="lead">카드 아래 번호표를 가지고 계신 분이 주인공! 컵에서 카드를 직접 뽑아도 좋고, 이 화면으로 뽑아도 됩니다. 무대 화면에 크게 띄우려면 <a href="#luckydraw">무대용으로 열기</a>를 누르세요.</p>
+      </div>
+      <div class="lk-tabs" id="lkTabs" role="group" aria-label="추첨 범위"></div>
+      <div class="lkg">
+        <div>
+          <div class="lk-slot" id="lkSlot" aria-live="polite"><div class="lt" id="lkT">TABLE ?</div><div class="ln" id="lkN">???</div><div class="lm" id="lkM">테이블을 고르고 뽑기를 눌러 주세요</div></div>
+          <div class="lk-btns">
+            <button class="big" id="lkGo"><span class="ico">redeem</span> 뽑기</button>
+            <button id="lkVoid" disabled>번호표가 없어요 · 다시</button>
+            <button class="ghost" id="lkReset">처음부터</button>
+          </div>
+        </div>
+        <div class="lk-side">
+          <h3>당첨 번호</h3>
+          <p>번호표를 보여 주시면 경품을 드려요. 테이블마다 한 분씩, 순서대로 뽑으면 다음 테이블로 자동으로 넘어갑니다.</p>
+          <ol class="lk-win" id="lkWin"></ol>
+          <p class="lk-rule">· 번호표가 없거나 자리에 없으면 바로 다시 뽑아요.<br>· 한 번 뽑힌 번호는 다시 나오지 않아요.<br>· 테이블별 번호: 1 (001~018) · 2 (019~036) · 3 (037~054) · 4 (055~072) · 5 (073~090) · 6 (091~108) · 7 (109~126)</p>
         </div>
       </div>
     </div>
@@ -818,6 +889,54 @@ function beep(f, d){ if (!f) return; try{ actx = actx || new (window.AudioContex
   o.frequency.value = f; o.type = "sine"; g.gain.value = .08; o.connect(g); g.connect(actx.destination); o.start(); g.gain.exponentialRampToValueAtTime(.0001, actx.currentTime + d); o.stop(actx.currentTime + d + .02); }catch(e){} }
 
 /* 무대용 크게: #draw */
+/* ===== 행운 번호 추첨 ===== */
+(function(){
+  const PER = 18, TABLES = 7;
+  const rangeOf = t => t ? [ (t-1)*PER+1, t*PER ] : [1, PER*TABLES];
+  const tableOf = n => Math.ceil(n/PER);
+  const pad = n => String(n).padStart(3,"0");
+  let L = { t:1, picks:[] };   // picks: {n, void}
+  try{ const v = JSON.parse(store.get("cafe.lucky")||"null"); if (v && Array.isArray(v.picks)) L = v; }catch(e){}
+  const save = () => store.set("cafe.lucky", JSON.stringify(L));
+  const used = () => new Set(L.picks.map(p=>p.n));
+  const winsAt = t => L.picks.filter(p=>!p.void && tableOf(p.n)===t).length;
+  function tabs(){
+    $("#lkTabs").innerHTML = [1,2,3,4,5,6,7,0].map(t=>`<button type="button" data-t="${t}" aria-pressed="${L.t===t}">${t?`TABLE ${t}`:"전체"}${t&&winsAt(t)?`<span class="c">🎁${winsAt(t)}</span>`:""}</button>`).join("");
+  }
+  function list(){
+    const w = L.picks;
+    $("#lkWin").innerHTML = w.length ? w.map((p,i)=>`<li class="${p.void?"void":""}"><b>No.${pad(p.n)}</b><span>TABLE ${tableOf(p.n)}${p.void?" · 다시 뽑음":""}</span><button type="button" data-i="${i}">${p.void?"되살리기":"무효"}</button></li>`).join("") : `<li class="empty">아직 뽑지 않았어요</li>`;
+  }
+  function show(n, msg){ $("#lkT").textContent = n ? `TABLE ${tableOf(n)}` : (L.t?`TABLE ${L.t}`:"전체"); $("#lkN").textContent = n ? pad(n) : "???"; $("#lkM").textContent = msg||""; }
+  function confetti(){ const box=$("#lkSlot"), cs=["#ffe28a","#f08a5d","#9fd6d2","#ffffff","#cbbcf0"];
+    for(let i=0;i<36;i++){ const c=document.createElement("i"); c.className="lk-cf"; c.style.left=Math.random()*100+"%"; c.style.background=cs[i%cs.length]; c.style.animationDelay=(Math.random()*.4)+"s"; box.appendChild(c); setTimeout(()=>c.remove(),2200); } }
+  let ac=null; function tone(f,d){ try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); const o=ac.createOscillator(), g=ac.createGain(); o.frequency.value=f; g.gain.value=.06; o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+d); }catch(e){} }
+  function draw(){
+    const [a,b] = rangeOf(L.t), u = used(), pool = [];
+    for (let n=a;n<=b;n++) if (!u.has(n)) pool.push(n);
+    if (!pool.length){ show(0,"이 범위의 번호를 모두 뽑았어요"); return; }
+    const pick = pool[Math.floor(Math.random()*pool.length)];
+    $("#lkGo").disabled = $("#lkVoid").disabled = true; const slot=$("#lkSlot"); slot.classList.remove("hit"); slot.classList.add("spin");
+    let k=0; (function roll(){ k++;
+      if (k<26){ const r = a + Math.floor(Math.random()*(b-a+1)); show(r,"두근두근…"); tone(440+k*12,.03); setTimeout(roll, 40+k*6); }
+      else { slot.classList.remove("spin"); slot.classList.add("hit"); L.picks.push({n:pick}); save(); show(pick,"번호표를 들어 주세요! 🎁"); tone(880,.25); confetti(); list(); tabs();
+        $("#lkGo").disabled=false; $("#lkVoid").disabled=false; } })();
+  }
+  $("#lkGo").onclick = () => {
+    const last = L.picks[L.picks.length-1];
+    // 테이블별로 한 분씩: 방금 테이블에서 당첨이 나왔으면 다음 테이블로
+    if (L.t && last && !last.void && tableOf(last.n)===L.t && winsAt(L.t)>=1 && $("#lkGo").dataset.next==="1"){ L.t = L.t%TABLES+1; save(); tabs(); }
+    draw(); $("#lkGo").dataset.next="1";
+  };
+  $("#lkVoid").onclick = () => { const last=L.picks[L.picks.length-1]; if(!last) return; last.void=true; save(); list(); tabs(); $("#lkGo").dataset.next="0"; draw(); };
+  $("#lkReset").onclick = () => { if (!confirm("당첨 기록을 모두 지우고 처음부터 할까요?")) return; L={t:1,picks:[]}; save(); tabs(); list(); show(0,"테이블을 고르고 뽑기를 눌러 주세요"); $("#lkGo").dataset.next="0"; };
+  $("#lkTabs").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; L.t=+b.dataset.t; save(); tabs(); show(0, L.t?`TABLE ${L.t} 번호 ${pad(rangeOf(L.t)[0])}~${pad(rangeOf(L.t)[1])}`:"전체 번호 001~126"); $("#lkGo").dataset.next="0"; });
+  $("#lkWin").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; const p=L.picks[+b.dataset.i]; p.void=!p.void; save(); list(); tabs(); });
+  function luckyMode(){ const on = location.hash === "#luckydraw"; document.body.classList.toggle("lucky-mode", on); if (on) window.scrollTo(0,0); }
+  window.addEventListener("hashchange", luckyMode); luckyMode();
+  tabs(); list(); show(0,"테이블을 고르고 뽑기를 눌러 주세요");
+})();
+
 function drawMode(){ const on = location.hash === "#draw"; document.body.classList.toggle("draw-mode", on); if (on) window.scrollTo(0,0); }
 window.addEventListener("hashchange", drawMode);
 drawMode(); paint(); drawOrder();
