@@ -251,6 +251,18 @@ body.stage-mode .stage-link{display:none}
 .note.mine{outline:3px solid var(--yellow);outline-offset:-3px}
 .note .mycode{display:inline-block;margin-bottom:6px;background:var(--yellow);color:var(--deep);font-size:13px;font-weight:800;border-radius:999px;padding:2px 10px}
 .note .wc{font-size:11.5px;font-weight:800;color:var(--muted);letter-spacing:.04em;margin-left:auto;margin-right:8px}
+
+.lk-src{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:0 0 10px;font-size:14px;color:#cfe0dc}
+.lk-src button{font:inherit;font-weight:700;font-size:14px;border:1.5px solid rgba(255,255,255,.25);background:transparent;color:#cfe0dc;border-radius:12px;padding:6px 12px;cursor:pointer}
+.lk-src button[aria-pressed="true"]{background:#fff;color:var(--deep);border-color:#fff}
+.lk-slot.wp .ln{font-size:44px;color:#ffd1b3;font-family:inherit;font-weight:800;letter-spacing:.06em}
+.lq{margin:10px 0 6px;font-family:var(--serif);font-weight:700;font-size:30px;line-height:1.45;color:#fff;max-width:92%;word-break:keep-all}
+.lq .qq::before{content:"“";color:var(--yellow)}.lq .qq::after{content:"”";color:var(--yellow)}
+.lk-slot.wp .lt{font-size:18px}body.lucky-mode .lk-slot.wp .lt{font-size:26px}
+.lk-win li b{white-space:nowrap}.lk-win li span{min-width:0}
+.lq small{display:block;margin-top:8px;font-family:inherit;font-size:15px;font-weight:700;color:#ffd1b3}
+body.lucky-mode .lk-slot.wp .ln{font-size:64px}body.lucky-mode .lq{font-size:46px}body.lucky-mode .lq small{font-size:22px}
+.lk-win li em{font-style:normal;display:block;font-size:13px;color:#9fb8b4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 /* 행운 번호 추첨 */
 #lucky{background:var(--deep);color:#fff}
 #lucky .eyebrow{color:#ffd1b3}#lucky h2{color:var(--yellow)}#lucky .lead{color:#cfe0dc}#lucky .lead a{color:var(--yellow)}
@@ -528,12 +540,13 @@ body.stage-mode .kb{font-size:15px}
         <a class="exitlucky" href="#lucky">나가기</a>
         <div class="eyebrow">LUCKY DRAW · 17:05</div>
         <h2>오늘의 한 잔 · 행운 번호 추첨</h2>
-        <p class="lead">카드 아래 번호표를 가지고 계신 분, 그리고 이야기 벽에 글을 남긴 분(내 글의 ‘행운 코드’ W-…)이 주인공! 컵에서 카드를 직접 뽑아도 좋고, 이 화면으로 뽑아도 됩니다. 무대 화면에 크게 띄우려면 <a href="#luckydraw">무대용으로 열기</a>를 누르세요.</p>
+        <p class="lead">이야기 벽에 남긴 글 가운데서 뽑아요. 뽑힌 글이 화면에 크게 나오면, 글을 남긴 선생님이 손을 들고 한 말씀 나눠 주세요. 종이 카드 번호표까지 함께 뽑으려면 ‘이야기 벽 + 종이 카드’를 고르세요. 무대 화면에 크게 띄우려면 <a href="#luckydraw">무대용으로 열기</a>를 누르세요.</p>
       </div>
+      <div class="lk-src" id="lkSrc" role="group" aria-label="추첨 대상"><span>추첨 대상</span><button type="button" data-s="wall">💬 이야기 벽 글</button><button type="button" data-s="all">💬 이야기 벽 + 🎫 종이 카드</button></div>
       <div class="lk-tabs" id="lkTabs" role="group" aria-label="추첨 범위"></div>
       <div class="lkg">
         <div>
-          <div class="lk-slot" id="lkSlot" aria-live="polite"><div class="lt" id="lkT">TABLE ?</div><div class="ln" id="lkN">???</div><div class="lm" id="lkM">테이블을 고르고 뽑기를 눌러 주세요</div></div>
+          <div class="lk-slot" id="lkSlot" aria-live="polite"><div class="lt" id="lkT">TABLE ?</div><div class="ln" id="lkN">???</div><blockquote class="lq" id="lkQ" hidden></blockquote><div class="lm" id="lkM">테이블을 고르고 뽑기를 눌러 주세요</div></div>
           <div class="lk-btns">
             <button class="big" id="lkGo"><span class="ico">redeem</span> 뽑기</button>
             <button id="lkVoid" disabled>번호표가 없어요 · 다시</button>
@@ -904,16 +917,17 @@ function beep(f, d){ if (!f) return; try{ actx = actx || new (window.AudioContex
   const tOfNum = n => Math.ceil(n/PER);
   const pad = n => String(n).padStart(3,"0");
   const lab = p => typeof p.n === "number" ? pad(p.n) : p.n;
-  let L = { t:1, picks:[] };   // picks: {n: 번호 또는 W-코드, t: 테이블, w: 글 앞부분, void}
+  let L = { t:1, src:"wall", picks:[] };   // picks: {n: 번호 또는 W-코드, t: 테이블, w: 글 앞부분, void}
   try{ const v = JSON.parse(store.get("cafe.lucky")||"null"); if (v && Array.isArray(v.picks)) L = v; }catch(e){}
+  if (!L.src) L.src = "wall";
   L.picks.forEach(p => { if (!p.t) p.t = typeof p.n==="number" ? tOfNum(p.n) : 0; });
   const save = () => store.set("cafe.lucky", JSON.stringify(L));
   const used = () => new Set(L.picks.map(p=>String(p.n)));
   const winsAt = t => L.picks.filter(p=>!p.void && p.t===t).length;
   function pool(t){
     const [a,b] = rangeOf(t), u = used(), out = [];
-    for (let n=a;n<=b;n++) if (!u.has(String(n))) out.push({n, t:tOfNum(n)});
-    (typeof wall!=="undefined" && wall.cards || []).forEach(c => { if ((!t || c.table===t) && !u.has(wallCode(c))) out.push({n:wallCode(c), t:c.table, w:parseKind(c.text).text.slice(0,40)}); });
+    if (L.src === "all") for (let n=a;n<=b;n++) if (!u.has(String(n))) out.push({n, t:tOfNum(n)});
+    (typeof wall!=="undefined" && wall.cards || []).forEach(c => { if ((!t || c.table===t) && !u.has(wallCode(c))) { const k=parseKind(c.text); out.push({n:wallCode(c), t:c.table, r:c.round, k:k.kind, w:k.text, s:c.school||""}); } });
     return out;
   }
   function tabs(){
@@ -921,9 +935,17 @@ function beep(f, d){ if (!f) return; try{ actx = actx || new (window.AudioContex
   }
   function list(){
     const w = L.picks; const c=$("#lkCnt"); if(c) c.textContent=`${w.filter(p=>!p.void).length} / 14명`;
-    $("#lkWin").innerHTML = w.length ? w.map((p,i)=>`<li class="${p.void?"void":""}"><b>${typeof p.n==="number"?"No.":""}${lab(p)}</b><span>TABLE ${p.t}${typeof p.n==="number"?" · 카드":" · 이야기 벽"}${p.void?" · 다시 뽑음":""}</span><button type="button" data-i="${i}">${p.void?"되살리기":"무효"}</button></li>`).join("") : `<li class="empty">아직 뽑지 않았어요</li>`;
+    $("#lkWin").innerHTML = w.length ? w.map((p,i)=>`<li class="${p.void?"void":""}"><b>${typeof p.n==="number"?"No.":""}${lab(p)}</b><span>TABLE ${p.t}${typeof p.n==="number"?" · 카드":" · 이야기 벽"}${p.void?" · 다시 뽑음":""}${p.w?`<em>${esc(p.w)}</em>`:""}</span><button type="button" data-i="${i}">${p.void?"되살리기":"무효"}</button></li>`).join("") : `<li class="empty">아직 뽑지 않았어요</li>`;
   }
-  function show(p, msg){ $("#lkT").textContent = p ? `TABLE ${p.t}${typeof p.n==="number"?"":" · 이야기 벽"}` : (L.t?`TABLE ${L.t}`:"전체"); $("#lkN").textContent = p ? lab(p) : "???"; $("#lkM").textContent = msg||""; }
+  function show(p, msg, full){
+    const wp = p && typeof p.n !== "number";
+    $("#lkSlot").classList.toggle("wp", !!wp);
+    $("#lkT").textContent = p ? (wp ? `TABLE ${p.t} · ${p.r||"?"}교시 · ${(KMAP[p.k]||{}).e||"💬"} ${(KMAP[p.k]||{}).n||"이야기"}` : `TABLE ${p.t} · 종이 카드`) : (L.t?`TABLE ${L.t}`:"전체");
+    $("#lkN").textContent = p ? lab(p) : "???";
+    const q = $("#lkQ");
+    if (wp && full){ q.hidden=false; q.innerHTML = `<span class="qq">${esc(p.w)}</span>${p.s?`<small>${esc(p.s)}</small>`:""}`; } else { q.hidden=true; q.innerHTML=""; }
+    $("#lkM").textContent = msg||"";
+  }
   function confetti(){ const box=$("#lkSlot"), cs=["#ffe28a","#f08a5d","#9fd6d2","#ffffff","#cbbcf0"];
     for(let i=0;i<36;i++){ const c=document.createElement("i"); c.className="lk-cf"; c.style.left=Math.random()*100+"%"; c.style.background=cs[i%cs.length]; c.style.animationDelay=(Math.random()*.4)+"s"; box.appendChild(c); setTimeout(()=>c.remove(),2200); } }
   let ac=null; function tone(f,d){ try{ ac=ac||new (window.AudioContext||window.webkitAudioContext)(); const o=ac.createOscillator(), g=ac.createGain(); o.frequency.value=f; g.gain.value=.06; o.connect(g); g.connect(ac.destination); o.start(); o.stop(ac.currentTime+d); }catch(e){} }
@@ -933,9 +955,9 @@ function beep(f, d){ if (!f) return; try{ actx = actx || new (window.AudioContex
     const pick = P[Math.floor(Math.random()*P.length)];
     $("#lkGo").disabled = $("#lkVoid").disabled = true; const slot=$("#lkSlot"); slot.classList.remove("hit"); slot.classList.add("spin");
     let k=0; (function roll(){ k++;
-      if (k<26){ show(P[Math.floor(Math.random()*P.length)],"두근두근…"); tone(440+k*12,.03); setTimeout(roll, 40+k*6); }
+      if (k<26){ show(P[Math.floor(Math.random()*P.length)],"두근두근…", false); tone(440+k*12,.03); setTimeout(roll, 40+k*6); }
       else { slot.classList.remove("spin"); slot.classList.add("hit"); L.picks.push(pick); save();
-        show(pick, typeof pick.n==="number" ? "번호표를 들어 주세요! 🎁" : `휴대폰의 ‘내 행운 코드’를 보여 주세요! 🎁  “${pick.w}…”`); tone(880,.25); confetti(); list(); tabs();
+        show(pick, typeof pick.n==="number" ? "번호표를 들어 주세요! 🎁" : "이 글을 남긴 선생님! 손을 들고 한 말씀 부탁드려요 🎤🎁", true); tone(880,.25); confetti(); list(); tabs();
         $("#lkGo").disabled=false; $("#lkVoid").disabled=false; } })();
   }
   $("#lkGo").onclick = () => {
@@ -948,7 +970,10 @@ function beep(f, d){ if (!f) return; try{ actx = actx || new (window.AudioContex
   };
   $("#lkVoid").onclick = () => { const last=L.picks[L.picks.length-1]; if(!last) return; last.void=true; if (last.t) L.t=last.t; save(); list(); tabs(); draw(); };
   $("#lkReset").onclick = () => { if (!confirm("당첨 기록을 모두 지우고 처음부터 할까요?")) return; L={t:1,picks:[]}; save(); tabs(); list(); show(null,"테이블을 고르고 뽑기를 눌러 주세요"); };
-  $("#lkTabs").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; L.t=+b.dataset.t; save(); tabs(); const P=pool(L.t), w=P.filter(p=>typeof p.n!=="number").length; show(null, `${L.t?`TABLE ${L.t} 카드 ${pad(rangeOf(L.t)[0])}~${pad(rangeOf(L.t)[1])}`:"전체 카드 001~126"}${w?` + 이야기 벽 ${w}개`:""}`); });
+  $("#lkTabs").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; L.t=+b.dataset.t; save(); tabs(); const P=pool(L.t), w=P.filter(p=>typeof p.n!=="number").length; show(null, `${L.t?`TABLE ${L.t}`:"전체"} · 이야기 벽 ${w}개${L.src==="all"?` + 종이 카드 ${L.t?`${pad(rangeOf(L.t)[0])}~${pad(rangeOf(L.t)[1])}`:"001~126"}`:""}`); });
+  function src(){ document.querySelectorAll("#lkSrc button").forEach(b=>b.setAttribute("aria-pressed", String(b.dataset.s===L.src))); }
+  $("#lkSrc").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; L.src=b.dataset.s; save(); src(); const P=pool(L.t); show(null, `뽑을 수 있는 이야기 ${P.length}개`); });
+  src();
   $("#lkWin").addEventListener("click", e=>{ const b=e.target.closest("button"); if(!b) return; const p=L.picks[+b.dataset.i]; p.void=!p.void; save(); list(); tabs(); });
   function luckyMode(){ const on = location.hash === "#luckydraw"; document.body.classList.toggle("lucky-mode", on); if (on) window.scrollTo(0,0); }
   window.addEventListener("hashchange", luckyMode); luckyMode();
