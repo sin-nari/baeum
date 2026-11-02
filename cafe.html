@@ -187,6 +187,36 @@ footer strong{color:#fff;font-family:var(--serif);font-size:17px;display:block}
   .flow li:last-child{grid-column:1/-1}
   .ticket .row{grid-template-columns:56px 1fr auto}
 }
+
+/* ── 교시 30분 타이머 ── */
+.clockbtns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.clockbtns button{font:inherit;cursor:pointer;border:0;border-radius:var(--r);padding:22px;background:var(--deep);color:#fff;text-align:left;display:flex;flex-direction:column;gap:4px}
+.clockbtns button b{font-size:24px}.clockbtns button span{color:#cfe0dc;font-size:15px}
+#ck{position:fixed;inset:0;z-index:60;background:var(--deep);color:#f4ecd8;display:none;flex-direction:column;align-items:center;justify-content:center;gap:1.6vh;padding:2vh 4vw;text-align:center}
+#ck.on{display:flex}
+#ck>*{flex-shrink:0}
+#ck{overflow:auto}
+#ck .ck-t{font-family:var(--serif);font-size:clamp(28px,4vw,56px);font-weight:700;color:var(--yellow)}
+#ck .ck-big{font-size:clamp(110px,22vw,320px);font-weight:900;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+#ck .ck-now{font-size:clamp(22px,2.6vw,38px);font-weight:800}
+#ck .ck-bar{width:min(1200px,92vw);display:flex;height:22px;border-radius:999px;overflow:hidden;position:relative;background:#2b5559}
+#ck .ck-bar i{display:block;height:100%}
+#ck .ck-bar .p1{flex:15;background:#e0784a}#ck .ck-bar .p2{flex:8;background:#5fa3a0}#ck .ck-bar .p3{flex:7;background:var(--yellow)}
+#ck .ck-bar .nd{position:absolute;top:-6px;bottom:-6px;width:6px;border-radius:3px;background:#fff;box-shadow:0 0 0 3px rgba(0,0,0,.25);left:0;transition:left 1s linear}
+#ck .ck-lab{width:min(1200px,92vw);display:flex;font-size:clamp(14px,1.5vw,20px);color:#bfd8d5}
+#ck .ck-lab span{text-align:left}
+#ck .ck-wall{display:none;align-items:center;gap:3vw;background:var(--yellow);color:var(--deep);border-radius:28px;padding:1.6vh 3vw;max-width:94vw}
+#ck .ck-wall b{display:block;font-size:clamp(32px,4.8vw,80px);line-height:1.15;font-weight:900}
+#ck .ck-wall span{font-size:clamp(18px,2vw,30px);font-weight:700}
+#ck .ck-wall img{width:clamp(130px,14vw,230px);height:auto;border-radius:14px;background:#fff;padding:6px}
+#ck.last .ck-wall{display:flex;animation:ckpulse 1.6s ease-in-out infinite}
+#ck.last .ck-big{font-size:clamp(72px,11vw,190px);color:var(--yellow)}
+#ck.end .ck-big{color:#ff9d7a}
+@keyframes ckpulse{0%,100%{transform:scale(1)}50%{transform:scale(1.03)}}
+#ck .ck-ctl{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}
+#ck .ck-ctl button{font:inherit;font-weight:800;cursor:pointer;border-radius:999px;padding:10px 20px;border:2px solid rgba(255,255,255,.5);background:transparent;color:#fff}
+#ck .ck-ctl button.main{background:var(--yellow);color:var(--deep);border-color:var(--yellow)}
+@media (max-width:640px){.clockbtns{grid-template-columns:1fr}}
 @media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}.reveal{opacity:1;transform:none}}
 
 /* 이야기 벽 */
@@ -374,6 +404,7 @@ body.stage-mode .kb{font-size:15px}
     <nav aria-label="바로가기">
       <a href="#flow">흐름</a>
       <a href="#menu">메뉴판</a>
+      <a href="#clock">타이머</a>
       <a href="#cup">오늘의 한 잔</a>
       <a href="quiz.html">1부 퀴즈</a>
       <a href="#wall">이야기 벽</a>
@@ -458,6 +489,20 @@ body.stage-mode .kb{font-size:15px}
           </div>
         </div>
         <button class="mprev" id="mPrev" type="button" aria-label="메뉴판 크게 보기"><img id="mImg" src="menu/menu-all.jpg" alt="이야기 카페 기본 메뉴판" loading="lazy"></button>
+      </div>
+    </div>
+  </section>
+
+  <section id="clock">
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div class="eyebrow">CAFE TIMER</div>
+        <h2>교시 30분 타이머</h2>
+        <p class="lead">교시를 시작할 때 눌러 주세요. 화면 가득 30분이 흐르고, <b>끝나기 7분 전</b>부터는 “이야기 벽에 한 줄 남겨 주세요!”가 크게 나옵니다.</p>
+      </div>
+      <div class="clockbtns reveal">
+        <button type="button" data-ck="1"><b>1교시 타임 ▶</b><span>16:00~16:30 · 16:23부터 이야기 벽</span></button>
+        <button type="button" data-ck="2"><b>2교시 타임 ▶</b><span>16:35~17:05 · 16:58부터 이야기 벽</span></button>
       </div>
     </div>
   </section>
@@ -984,6 +1029,63 @@ if (drawn.length){ setCur(0); showSlot(drawn[0], true); }
 
 
 setInterval(() => { dday(); drawFlow(); gate(); }, 30000);
+</script>
+<div id="ck" role="dialog" aria-label="교시 타이머">
+  <div class="ck-t" id="ckT">이야기 카페 1교시</div>
+  <div class="ck-big" id="ckBig">30:00</div>
+  <div class="ck-now" id="ckNow">사례 이야기</div>
+  <div class="ck-bar"><i class="p1"></i><i class="p2"></i><i class="p3"></i><span class="nd" id="ckNd"></span></div>
+  <div class="ck-lab"><span style="flex:15">0~15분 사례 이야기</span><span style="flex:8">15~23분 질문·토의</span><span style="flex:7">마지막 7분 이야기 벽</span></div>
+  <div class="ck-wall"><div><b>이야기 벽에<br>한 줄 남겨 주세요!!!</b><span id="ckWallSub">교시가 끝나기 전에 꼭 · 남긴 글로 행운 추첨</span></div><img src="menu/qr-wall.png" alt="이야기 벽 QR"></div>
+  <div class="ck-ctl"><button type="button" class="main" id="ckGo">시작</button><button type="button" id="ckSync">시간표대로 맞추기</button><button type="button" id="ckReset">30:00으로</button><button type="button" id="ckClose">닫기</button></div>
+</div>
+<script>
+/* ── 교시 30분 타이머 ── */
+(function(){
+  const LEN = 30*60, WALL = 7*60;
+  const SCHED = { 1:{s:"16:00", e:"16:30", next:"다른 테이블로 옮겨 주세요"}, 2:{s:"16:35", e:"17:05", next:"전체 나눔으로 모여 주세요"} };
+  const q = s => document.querySelector(s);
+  const ck = q("#ck"); let round = 1, end = null, left = LEN, tick = null, beeped = {};
+  function kstAt(hm){ const [h,m] = hm.split(":").map(Number); const d = new Date(); const utc = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), h-9, m); return utc; }
+  function save(){ try{ localStorage.setItem("cafe.ck", JSON.stringify({round, end, left})); }catch(e){} }
+  function snd(f,d){ try{ const a = window.__ckA || (window.__ckA = new (window.AudioContext||window.webkitAudioContext)()); const o=a.createOscillator(), g=a.createGain(); o.frequency.value=f; o.connect(g); g.connect(a.destination); g.gain.setValueAtTime(.2,a.currentTime); g.gain.exponentialRampToValueAtTime(.001,a.currentTime+d); o.start(); o.stop(a.currentTime+d); }catch(e){} }
+  function paint(){
+    const l = Math.max(0, end ? Math.round((end - Date.now())/1000) : left);
+    const el = LEN - l;
+    q("#ckBig").textContent = l > 0 ? `${Math.floor(l/60)}:${String(l%60).padStart(2,"0")}` : "0:00";
+    q("#ckNd").style.left = `calc(${Math.min(100, el/LEN*100)}% - 3px)`;
+    const last = l > 0 && l <= WALL, done = end && l <= 0;
+    ck.classList.toggle("last", last || done); ck.classList.toggle("end", !!done);
+    q("#ckNow").textContent = done ? `${round}교시 끝! ${SCHED[round].next}` : last ? `남은 ${Math.ceil(l/60)}분 · 이야기 벽에 한 줄` : el < 15*60 ? "지금은 사례 이야기" : "지금은 질문·토의";
+    q("#ckWallSub").textContent = done ? "아직 못 남기셨다면 지금 바로! · 남긴 글로 행운 추첨" : "교시가 끝나기 전에 꼭 · 남긴 글로 행운 추첨";
+    if (end){
+      if (el >= 15*60 && !beeped.q){ beeped.q = 1; snd(660,.3); }
+      if (last && !beeped.w){ beeped.w = 1; snd(880,.3); setTimeout(()=>snd(880,.3),400); }
+      if (done && !beeped.e){ beeped.e = 1; snd(880,.4); setTimeout(()=>snd(660,.5),450); clearInterval(tick); tick = null; q("#ckGo").textContent = "다시 시작"; }
+    }
+  }
+  function run(){ clearInterval(tick); tick = setInterval(paint, 500); q("#ckGo").textContent = "일시정지"; paint(); save(); }
+  function open(r){
+    round = r; q("#ckT").textContent = `이야기 카페 ${r}교시 · ${SCHED[r].s}~${SCHED[r].e}`;
+    ck.classList.add("on"); document.body.style.overflow = "hidden";
+    const now = Date.now(), s = kstAt(SCHED[r].s), e = kstAt(SCHED[r].e);
+    if (now >= s && now < e){ end = e; beeped = {}; run(); }   // 교시 중이면 시간표에 맞춰 바로
+    else { end = null; left = LEN; beeped = {}; q("#ckGo").textContent = "시작"; paint(); }
+  }
+  function close(){ ck.classList.remove("on"); document.body.style.overflow = ""; clearInterval(tick); tick = null; }
+  document.querySelectorAll("[data-ck]").forEach(b => b.addEventListener("click", () => open(+b.dataset.ck)));
+  q("#ckGo").onclick = () => {
+    if (tick){ left = Math.max(0, Math.round((end - Date.now())/1000)); end = null; clearInterval(tick); tick = null; q("#ckGo").textContent = "이어서"; save(); return; }
+    if (left <= 0 || (end && end <= Date.now())){ left = LEN; beeped = {}; }
+    end = Date.now() + left*1000; run();
+  };
+  q("#ckSync").onclick = () => { end = kstAt(SCHED[round].e); beeped = {}; if (end - Date.now() > LEN*1000) end = Date.now() + LEN*1000; run(); };
+  q("#ckReset").onclick = () => { clearInterval(tick); tick = null; end = null; left = LEN; beeped = {}; q("#ckGo").textContent = "시작"; paint(); save(); };
+  q("#ckClose").onclick = close;
+  document.addEventListener("keydown", e => { if (!ck.classList.contains("on")) return; if (e.key === "Escape") close(); if (e.key === " "){ e.preventDefault(); q("#ckGo").click(); } });
+  const h = () => { const m = location.hash.match(/^#clock([12])$/); if (m) open(+m[1]); };
+  window.addEventListener("hashchange", h); h();
+})();
 </script>
 </body>
 </html>
