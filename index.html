@@ -1193,7 +1193,7 @@ const COURSES = [
   {stage:3, rid:"cafe", d:"11. 3.", wd:"화", t:"고등학교 교육과정 이야기 카페",
    sub:"부천 배움 100이음 · 선택이 배움으로, 배움이 성장으로 · 부천교육지원청 청백마루 (등록 15:00부터)", hl:true,
    area:"고등학교 교육과정", key:"curr", aud:"중·고 교감 · 고교 교육과정부장 · 희망 교원", mode:"offline",
-   time:"15:30~17:30 · 집합 2시간", url:"#", guide:"cafe.html",   /* 신청은 신청 서버의 cafe 과정(10. 26.~10. 29.)이 열리면 버튼이 자동으로 살아납니다 */
+   time:"15:30~17:30 · 집합 2시간", url:LINKS.keynote + "#cafe", until:"2026-11-03T11:00:00+09:00", guide:"cafe.html",   /* 11. 3.(화) 11:00까지 신청 버튼을 열어 둡니다 (until 이 지나면 '신청 마감') */
    phases:[
     {from:"15:30", to:"15:55", lab:"1부 · 다 함께, 한자리에서", t:"부천 배움 100이음, 교육과정 STORY",
      k:["개회 · 인사 및 운영 안내",
@@ -1536,7 +1536,8 @@ function render(filter){
             + '<span class="scount">' + esc(s.note) + ' · ' + n + '과정</span></div>';
       lastStage = c.stage;
     }
-    var live = c.url && c.url !== "#";
+    var 마감됨 = !!(c.until && new Date() > new Date(c.until));
+    var live = c.url && c.url !== "#" && !마감됨;
     var 지남 = 지난과정(c);
     if (c.ai) s = {c:"var(--ai)", lt:"var(--ai-lt)", dk:"var(--ai-dk)", name:s.name};
     var cls = "slot" + (c.tbd ? " tbd" : "") + (c.wd === "토" ? " sat" : "") + (c.ai ? " ai" : "")
@@ -1584,6 +1585,7 @@ function render(filter){
       +     (live ? ' target="_blank" rel="noopener"' : ' aria-disabled="true"') + '>'
       +     (live ? '신청하기<span class="ms" style="font-size:17px">arrow_forward</span>'
                   : 지남 ? '종료'
+                  : 마감됨 ? '신청 마감'
                   : c.tbd ? '일정 확정 후 안내' : '신청 준비 중') + '</a>'
       + '</div></div>';
   });
