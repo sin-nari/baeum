@@ -189,6 +189,9 @@ footer strong{color:#fff;font-family:var(--serif);font-size:17px;display:block}
 }
 
 /* ── 교시 30분 타이머 ── */
+.cklen{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin:0 0 12px;font-weight:800}
+.cklen label{display:inline-flex;gap:6px;align-items:center;border:2px solid var(--line);border-radius:999px;padding:6px 16px;cursor:pointer;background:#fff}
+.cklen label:has(input:checked){border-color:var(--deep);background:var(--yellow)}
 .clockbtns{display:grid;grid-template-columns:1fr 1fr;gap:14px}
 .clockbtns button{font:inherit;cursor:pointer;border:0;border-radius:var(--r);padding:22px;background:var(--deep);color:#fff;text-align:left;display:flex;flex-direction:column;gap:4px}
 .clockbtns button b{font-size:24px}.clockbtns button span{color:#cfe0dc;font-size:15px}
@@ -497,12 +500,13 @@ body.stage-mode .kb{font-size:15px}
     <div class="wrap">
       <div class="sec-head reveal">
         <div class="eyebrow">CAFE TIMER</div>
-        <h2>교시 30분 타이머</h2>
-        <p class="lead">교시를 시작할 때 눌러 주세요. 화면 가득 30분이 흐르고, <b>끝나기 7분 전</b>부터는 “이야기 벽에 한 줄 남겨 주세요!”가 크게 나옵니다.</p>
+        <h2>교시 타이머 · 30분 / 25분</h2>
+        <p class="lead">교시를 시작할 때 눌러 주세요. 화면 가득 30분(또는 25분)이 흐르고, <b>끝나기 7분 전</b>부터는 “이야기 벽에 한 줄 남겨 주세요!”가 크게 나옵니다.</p>
       </div>
+      <div class="cklen reveal" role="radiogroup" aria-label="교시 운영 시간"><span>운영 시간</span><label><input type="radio" name="cklen" value="30" checked> 30분</label><label><input type="radio" name="cklen" value="25"> 25분</label></div>
       <div class="clockbtns reveal">
-        <button type="button" data-ck="1"><b>1교시 타임 ▶</b><span>16:00~16:30 · 16:23부터 이야기 벽</span></button>
-        <button type="button" data-ck="2"><b>2교시 타임 ▶</b><span>16:35~17:05 · 16:58부터 이야기 벽</span></button>
+        <button type="button" data-ck="1"><b>1교시 타임 ▶</b><span id="ckInfo1">16:00~16:30 · 16:23부터 이야기 벽</span></button>
+        <button type="button" data-ck="2"><b>2교시 타임 ▶</b><span id="ckInfo2">16:35~17:05 · 16:58부터 이야기 벽</span></button>
       </div>
     </div>
   </section>
@@ -558,15 +562,15 @@ body.stage-mode .kb{font-size:15px}
       <div class="sec-head reveal">
         <a class="exitdraw" href="#share">나가기</a>
         <div class="eyebrow">SHARE TIME · 17:05</div>
-        <h2>전체 나눔 · 발표 순서 뽑기</h2>
-        <p class="lead">테이블마다 카페지기가 3분 안에 나눕니다. 순서는 뽑기로 정해요. 화면에 크게 띄우려면 <a href="#draw">무대용으로 열기</a>를 누르세요.</p>
+        <h2>전체 나눔 · 발표 테이블 3곳 뽑기</h2>
+        <p class="lead">일곱 테이블 가운데 <b>세 곳</b>을 뽑아, 그 테이블 카페지기가 3분씩 나눕니다. 화면에 크게 띄우려면 <a href="#draw">무대용으로 열기</a>를 누르세요.</p>
       </div>
       <div class="draw reveal">
         <div class="slot-wrap">
-          <div class="slot" id="slot" aria-live="polite"><div class="sn">?</div><div class="sw">누가 먼저 나눌까요?</div></div>
+          <div class="slot" id="slot" aria-live="polite"><div class="sn">?</div><div class="sw">어느 테이블이 나눌까요?</div></div>
           <div class="dbtns">
             <button id="drawOne" class="big"><span class="ico">casino</span> 뽑기</button>
-            <button id="drawAll"><span class="ico">shuffle</span> 한 번에 섞기</button>
+            <button id="drawAll"><span class="ico">shuffle</span> 세 곳 한 번에</button>
             <button id="drawReset" class="ghost">처음부터</button>
           </div>
         </div>
@@ -902,13 +906,14 @@ stageMode(); loadWall(); setInterval(loadWall, 15000);
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 function tableWho(t, r){ const x = MENU[r].find(m => m.t === t); return x ? `${x.w} ${x.n||""}`.trim() : ""; }
 const TEAMS = [1,2,3,4,5,6,7].map(t => ({ t, w: `${tableWho(t,1)} · ${tableWho(t,2)}` }));
-let drawn = JSON.parse(store.get("cafe.order") || "[]"), spinning = false, curIdx = -1;
+const SHARE_N = 3;   // 전체 나눔 테이블 수
+let drawn = JSON.parse(store.get("cafe.order") || "[]").slice(0, SHARE_N), spinning = false, curIdx = -1;
 function drawOrder(){
   $("#order").innerHTML = drawn.length ? drawn.map((t,i) => { const x = TEAMS[t-1]; return `<li data-i="${i}" class="${i===curIdx?"cur":i<curIdx?"done":""}"><b>TABLE ${t}</b><span>${esc(x.w)}</span></li>`; }).join("")
     : `<li class="hint">뽑힌 순서가 여기에 쌓여요</li>`;
-  const left = TEAMS.length - drawn.length;
+  const left = Math.min(SHARE_N, TEAMS.length) - drawn.length;
   $("#drawOne").disabled = spinning || left === 0; $("#drawAll").disabled = spinning || left === 0;
-  if (!spinning && left === 0 && drawn.length) { $(".sw").textContent = "모든 순서가 정해졌어요! 순서를 누르면 타이머가 맞춰져요"; }
+  if (!spinning && left === 0 && drawn.length) { $(".sw").textContent = `나눔 테이블 ${SHARE_N}곳이 정해졌어요! 순서를 누르면 타이머가 맞춰져요`; }
 }
 function showSlot(t, final){
   const x = TEAMS[t-1]; $(".sn").textContent = `TABLE ${t}`; $(".sw").textContent = x.w;
@@ -916,7 +921,7 @@ function showSlot(t, final){
 }
 function remaining(){ return TEAMS.map(x=>x.t).filter(t => !drawn.includes(t)); }
 function spin(){
-  const pool = remaining(); if (!pool.length || spinning) return;
+  const pool = remaining(); if (!pool.length || spinning || drawn.length >= SHARE_N) return;
   spinning = true; drawOrder(); $("#slot").classList.remove("hit"); $("#slot").classList.add("spin");
   const pick = pool[Math.floor(Math.random()*pool.length)];
   let n = 0; const total = reduce ? 1 : 22;
@@ -927,9 +932,9 @@ function spin(){
   })();
 }
 $("#drawOne").onclick = spin;
-$("#drawAll").onclick = () => { const pool = remaining(); for (let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
-  drawn = drawn.concat(pool); store.set("cafe.order", JSON.stringify(drawn)); setCur(curIdx < 0 ? 0 : curIdx); showSlot(drawn[curIdx], true); };
-$("#drawReset").onclick = () => { drawn = []; curIdx = -1; store.del("cafe.order"); stopTimer(); $(".sn").textContent="?"; $(".sw").textContent="누가 먼저 나눌까요?"; $("#slot").classList.remove("hit"); $("#tWho").textContent="발표 타이머"; drawOrder(); };
+$("#drawAll").onclick = () => { if (spinning || drawn.length >= SHARE_N) return; const pool = remaining(); for (let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+  drawn = drawn.concat(pool.slice(0, SHARE_N - drawn.length)); store.set("cafe.order", JSON.stringify(drawn)); setCur(curIdx < 0 ? 0 : curIdx); showSlot(drawn[curIdx], true); };
+$("#drawReset").onclick = () => { drawn = []; curIdx = -1; store.del("cafe.order"); stopTimer(); $(".sn").textContent="?"; $(".sw").textContent="어느 테이블이 나눌까요?"; $("#slot").classList.remove("hit"); $("#tWho").textContent="발표 타이머"; drawOrder(); };
 $("#order").onclick = e => { const li = e.target.closest("li[data-i]"); if (li){ setCur(+li.dataset.i); showSlot(drawn[curIdx], true); } };
 function setCur(i){ curIdx = i; stopTimer(); const t = drawn[i]; if (t) $("#tWho").textContent = `TABLE ${t} 차례`; drawOrder(); }
 
@@ -1035,15 +1040,29 @@ setInterval(() => { dday(); drawFlow(); gate(); }, 30000);
   <div class="ck-big" id="ckBig">30:00</div>
   <div class="ck-now" id="ckNow">사례 이야기</div>
   <div class="ck-bar"><i class="p1"></i><i class="p2"></i><i class="p3"></i><span class="nd" id="ckNd"></span></div>
-  <div class="ck-lab"><span style="flex:15">0~15분 사례 이야기</span><span style="flex:8">15~23분 질문·토의</span><span style="flex:7">마지막 7분 이야기 벽</span></div>
+  <div class="ck-lab"><span id="ckL1" style="flex:15">0~15분 사례 이야기</span><span id="ckL2" style="flex:8">15~23분 질문·토의</span><span id="ckL3" style="flex:7">마지막 7분 이야기 벽</span></div>
   <div class="ck-wall"><div><b>이야기 벽에<br>한 줄 남겨 주세요!!!</b><span id="ckWallSub">교시가 끝나기 전에 꼭 · 남긴 글로 행운 추첨</span></div><img src="menu/qr-wall.png" alt="이야기 벽 QR"></div>
-  <div class="ck-ctl"><button type="button" class="main" id="ckGo">시작</button><button type="button" id="ckSync">시간표대로 맞추기</button><button type="button" id="ckReset">30:00으로</button><button type="button" id="ckClose">닫기</button></div>
+  <div class="ck-ctl"><button type="button" class="main" id="ckGo">시작</button><button type="button" id="ckSync">시간표대로 맞추기</button><button type="button" id="ckReset">처음으로</button><button type="button" id="ckClose">닫기</button></div>
 </div>
 <script>
 /* ── 교시 30분 타이머 ── */
 (function(){
-  const LEN = 30*60, WALL = 7*60;
-  const SCHED = { 1:{s:"16:00", e:"16:30", next:"다른 테이블로 옮겨 주세요"}, 2:{s:"16:35", e:"17:05", next:"전체 나눔으로 모여 주세요"} };
+  let LEN = 30*60, TALK = 15*60; const WALL = 7*60;
+  const SCHED = { 1:{s:"16:00", next:"다른 테이블로 옮겨 주세요"}, 2:{s:"16:35", next:"전체 나눔으로 모여 주세요"} };
+  const hm = (t, add) => { const [h,m] = t.split(":").map(Number); const x = h*60 + m + add; return `${Math.floor(x/60)}:${String(x%60).padStart(2,"0")}`; };
+  function setLen(min){
+    LEN = min*60; TALK = (min === 25 ? 12 : 15)*60;
+    const disc = LEN - WALL - TALK;
+    [1,2].forEach(r => { SCHED[r].e = hm(SCHED[r].s, min); const el = document.getElementById("ckInfo"+r); if (el) el.textContent = `${SCHED[r].s}~${SCHED[r].e} · ${hm(SCHED[r].s, min-7)}부터 이야기 벽`; });
+    const bar = document.querySelector("#ck .ck-bar");
+    bar.querySelector(".p1").style.flex = TALK/60; bar.querySelector(".p2").style.flex = disc/60; bar.querySelector(".p3").style.flex = 7;
+    document.getElementById("ckL1").style.flex = TALK/60; document.getElementById("ckL2").style.flex = disc/60;
+    document.getElementById("ckL1").textContent = `0~${TALK/60}분 사례 이야기`;
+    document.getElementById("ckL2").textContent = `${TALK/60}~${(TALK+disc)/60}분 질문·토의`;
+    try{ localStorage.setItem("cafe.cklen", String(min)); }catch(e){}
+  }
+  document.querySelectorAll('input[name=cklen]').forEach(i => i.addEventListener("change", () => setLen(+i.value)));
+  { let v = 30; try{ v = +(localStorage.getItem("cafe.cklen") || 30); }catch(e){} if (v !== 25) v = 30; const r = document.querySelector(`input[name=cklen][value="${v}"]`); if (r) r.checked = true; setLen(v); }
   const q = s => document.querySelector(s);
   const ck = q("#ck"); let round = 1, end = null, left = LEN, tick = null, beeped = {};
   function kstAt(hm){ const [h,m] = hm.split(":").map(Number); const d = new Date(); const utc = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), h-9, m); return utc; }
@@ -1056,17 +1075,17 @@ setInterval(() => { dday(); drawFlow(); gate(); }, 30000);
     q("#ckNd").style.left = `calc(${Math.min(100, el/LEN*100)}% - 3px)`;
     const last = l > 0 && l <= WALL, done = end && l <= 0;
     ck.classList.toggle("last", last || done); ck.classList.toggle("end", !!done);
-    q("#ckNow").textContent = done ? `${round}교시 끝! ${SCHED[round].next}` : last ? `남은 ${Math.ceil(l/60)}분 · 이야기 벽에 한 줄` : el < 15*60 ? "지금은 사례 이야기" : "지금은 질문·토의";
+    q("#ckNow").textContent = done ? `${round}교시 끝! ${SCHED[round].next}` : last ? `남은 ${Math.ceil(l/60)}분 · 이야기 벽에 한 줄` : el < TALK ? "지금은 사례 이야기" : "지금은 질문·토의";
     q("#ckWallSub").textContent = done ? "아직 못 남기셨다면 지금 바로! · 남긴 글로 행운 추첨" : "교시가 끝나기 전에 꼭 · 남긴 글로 행운 추첨";
     if (end){
-      if (el >= 15*60 && !beeped.q){ beeped.q = 1; snd(660,.3); }
+      if (el >= TALK && !beeped.q){ beeped.q = 1; snd(660,.3); }
       if (last && !beeped.w){ beeped.w = 1; snd(880,.3); setTimeout(()=>snd(880,.3),400); }
       if (done && !beeped.e){ beeped.e = 1; snd(880,.4); setTimeout(()=>snd(660,.5),450); clearInterval(tick); tick = null; q("#ckGo").textContent = "다시 시작"; }
     }
   }
   function run(){ clearInterval(tick); tick = setInterval(paint, 500); q("#ckGo").textContent = "일시정지"; paint(); save(); }
   function open(r){
-    round = r; q("#ckT").textContent = `이야기 카페 ${r}교시 · ${SCHED[r].s}~${SCHED[r].e}`;
+    round = r; q("#ckT").textContent = `이야기 카페 ${r}교시 · ${SCHED[r].s}~${SCHED[r].e} (${LEN/60}분)`;
     ck.classList.add("on"); document.body.style.overflow = "hidden";
     const now = Date.now(), s = kstAt(SCHED[r].s), e = kstAt(SCHED[r].e);
     if (now >= s && now < e){ end = e; beeped = {}; run(); }   // 교시 중이면 시간표에 맞춰 바로
@@ -1076,7 +1095,7 @@ setInterval(() => { dday(); drawFlow(); gate(); }, 30000);
   document.querySelectorAll("[data-ck]").forEach(b => b.addEventListener("click", () => open(+b.dataset.ck)));
   q("#ckGo").onclick = () => {
     if (tick){ left = Math.max(0, Math.round((end - Date.now())/1000)); end = null; clearInterval(tick); tick = null; q("#ckGo").textContent = "이어서"; save(); return; }
-    if (left <= 0 || (end && end <= Date.now())){ left = LEN; beeped = {}; }
+    if (left <= 0 || left > LEN || (end && end <= Date.now())){ left = LEN; beeped = {}; }
     end = Date.now() + left*1000; run();
   };
   q("#ckSync").onclick = () => { end = kstAt(SCHED[round].e); beeped = {}; if (end - Date.now() > LEN*1000) end = Date.now() + LEN*1000; run(); };
