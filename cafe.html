@@ -562,15 +562,15 @@ body.stage-mode .kb{font-size:15px}
       <div class="sec-head reveal">
         <a class="exitdraw" href="#share">나가기</a>
         <div class="eyebrow">SHARE TIME · 17:05</div>
-        <h2>전체 나눔 · 발표 테이블 3곳 뽑기</h2>
-        <p class="lead">일곱 테이블 가운데 <b>세 곳</b>을 뽑아, 그 테이블 카페지기가 3분씩 나눕니다. 화면에 크게 띄우려면 <a href="#draw">무대용으로 열기</a>를 누르세요.</p>
+        <h2>전체 나눔 · 카페지기 3분 뽑기</h2>
+        <p class="lead">카페지기 14분 가운데 <b>세 분</b>을 뽑습니다(테이블이 겹치지 않게, 테이블당 한 분). 뽑힌 카페지기가 3분씩 나눕니다. 화면에 크게 띄우려면 <a href="#draw">무대용으로 열기</a>를 누르세요.</p>
       </div>
       <div class="draw reveal">
         <div class="slot-wrap">
-          <div class="slot" id="slot" aria-live="polite"><div class="sn">?</div><div class="sw">어느 테이블이 나눌까요?</div></div>
+          <div class="slot" id="slot" aria-live="polite"><div class="sn">?</div><div class="sw">어느 카페지기가 나눌까요?</div></div>
           <div class="dbtns">
             <button id="drawOne" class="big"><span class="ico">casino</span> 뽑기</button>
-            <button id="drawAll"><span class="ico">shuffle</span> 세 곳 한 번에</button>
+            <button id="drawAll"><span class="ico">shuffle</span> 세 분 한 번에</button>
             <button id="drawReset" class="ghost">처음부터</button>
           </div>
         </div>
@@ -906,21 +906,22 @@ stageMode(); loadWall(); setInterval(loadWall, 15000);
 /* ===== 전체 나눔: 발표 순서 뽑기 + 3분 타이머 ===== */
 const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
 function tableWho(t, r){ const x = MENU[r].find(m => m.t === t); return x ? `${x.w} ${x.n||""}`.trim() : ""; }
-const TEAMS = [1,2,3,4,5,6,7].map(t => ({ t, w: `${tableWho(t,1)} · ${tableWho(t,2)}` }));
-const SHARE_N = 3;   // 전체 나눔 테이블 수
-let drawn = JSON.parse(store.get("cafe.order") || "[]").slice(0, SHARE_N), spinning = false, curIdx = -1;
+/* 추첨 단위: 카페지기 한 분(테이블당 1명). 키 "테이블-교시" */
+const HOSTS = [1,2].flatMap(r => [1,2,3,4,5,6,7].map(t => ({ k:`${t}-${r}`, t, w: tableWho(t,r) })).filter(x => x.w));
+const H = k => HOSTS.find(x => x.k === k);
+const SHARE_N = 3;   // 전체 나눔: 테이블 3곳 · 카페지기 3분
+let drawn = JSON.parse(store.get("cafe.order") || "[]").filter(k => typeof k === "string" && H(k)).slice(0, SHARE_N), spinning = false, curIdx = -1;
 function drawOrder(){
-  $("#order").innerHTML = drawn.length ? drawn.map((t,i) => { const x = TEAMS[t-1]; return `<li data-i="${i}" class="${i===curIdx?"cur":i<curIdx?"done":""}"><b>TABLE ${t}</b><span>${esc(x.w)}</span></li>`; }).join("")
+  $("#order").innerHTML = drawn.length ? drawn.map((k,i) => { const x = H(k); return `<li data-i="${i}" class="${i===curIdx?"cur":i<curIdx?"done":""}"><b>TABLE ${x.t}</b><span>${esc(x.w)}</span></li>`; }).join("")
     : `<li class="hint">뽑힌 순서가 여기에 쌓여요</li>`;
-  const left = Math.min(SHARE_N, TEAMS.length) - drawn.length;
+  const left = SHARE_N - drawn.length;
   $("#drawOne").disabled = spinning || left === 0; $("#drawAll").disabled = spinning || left === 0;
-  if (!spinning && left === 0 && drawn.length) { $(".sw").textContent = `나눔 테이블 ${SHARE_N}곳이 정해졌어요! 순서를 누르면 타이머가 맞춰져요`; }
 }
-function showSlot(t, final){
-  const x = TEAMS[t-1]; $(".sn").textContent = `TABLE ${t}`; $(".sw").textContent = x.w;
+function showSlot(k, final){
+  const x = H(k); if (!x) return; $(".sn").textContent = `TABLE ${x.t}`; $(".sw").textContent = x.w;
   $("#slot").classList.toggle("hit", !!final);
 }
-function remaining(){ return TEAMS.map(x=>x.t).filter(t => !drawn.includes(t)); }
+function remaining(){ const used = drawn.map(k => H(k).t); return HOSTS.filter(x => !used.includes(x.t)).map(x => x.k); }
 function spin(){
   const pool = remaining(); if (!pool.length || spinning || drawn.length >= SHARE_N) return;
   spinning = true; drawOrder(); $("#slot").classList.remove("hit"); $("#slot").classList.add("spin");
@@ -933,11 +934,10 @@ function spin(){
   })();
 }
 $("#drawOne").onclick = spin;
-$("#drawAll").onclick = () => { if (spinning || drawn.length >= SHARE_N) return; const pool = remaining(); for (let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
-  drawn = drawn.concat(pool.slice(0, SHARE_N - drawn.length)); store.set("cafe.order", JSON.stringify(drawn)); setCur(curIdx < 0 ? 0 : curIdx); showSlot(drawn[curIdx], true); };
-$("#drawReset").onclick = () => { drawn = []; curIdx = -1; store.del("cafe.order"); stopTimer(); $(".sn").textContent="?"; $(".sw").textContent="어느 테이블이 나눌까요?"; $("#slot").classList.remove("hit"); $("#tWho").textContent="발표 타이머"; drawOrder(); };
+$("#drawAll").onclick = () => { if (spinning || drawn.length >= SHARE_N) return; while (drawn.length < SHARE_N){ const pool = remaining(); if (!pool.length) break; drawn.push(pool[Math.floor(Math.random()*pool.length)]); } store.set("cafe.order", JSON.stringify(drawn)); setCur(curIdx < 0 ? 0 : curIdx); showSlot(drawn[curIdx], true); };
+$("#drawReset").onclick = () => { drawn = []; curIdx = -1; store.del("cafe.order"); stopTimer(); $(".sn").textContent="?"; $(".sw").textContent="어느 카페지기가 나눌까요?"; $("#slot").classList.remove("hit"); $("#tWho").textContent="발표 타이머"; drawOrder(); };
 $("#order").onclick = e => { const li = e.target.closest("li[data-i]"); if (li){ setCur(+li.dataset.i); showSlot(drawn[curIdx], true); } };
-function setCur(i){ curIdx = i; stopTimer(); const t = drawn[i]; if (t) $("#tWho").textContent = `TABLE ${t} 차례`; drawOrder(); }
+function setCur(i){ curIdx = i; stopTimer(); const x = H(drawn[i]||""); if (x) $("#tWho").textContent = `TABLE ${x.t} · ${x.w} 차례`; drawOrder(); }
 
 /* 3분 타이머 */
 const LEN = 180; let tLeft = LEN, tTimer = null;
