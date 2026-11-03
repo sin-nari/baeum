@@ -204,6 +204,7 @@ footer strong{color:#fff;font-family:var(--serif);font-size:17px;display:block}
 #ck .ck-now{font-size:clamp(22px,2.6vw,38px);font-weight:800}
 #ck .ck-bar{width:min(1200px,92vw);display:flex;height:22px;border-radius:999px;overflow:hidden;position:relative;background:#2b5559}
 #ck .ck-bar i{display:block;height:100%}
+#ck .ck-lab span{white-space:nowrap}
 #ck .ck-bar .p1{flex:15;background:#e0784a}#ck .ck-bar .p2{flex:8;background:#5fa3a0}#ck .ck-bar .p3{flex:7;background:var(--yellow)}
 #ck .ck-bar .nd{position:absolute;top:-6px;bottom:-6px;width:6px;border-radius:3px;background:#fff;box-shadow:0 0 0 3px rgba(0,0,0,.25);left:0;transition:left 1s linear}
 #ck .ck-lab{width:min(1200px,92vw);display:flex;font-size:clamp(14px,1.5vw,20px);color:#bfd8d5}
@@ -500,10 +501,10 @@ body.stage-mode .kb{font-size:15px}
     <div class="wrap">
       <div class="sec-head reveal">
         <div class="eyebrow">CAFE TIMER</div>
-        <h2>교시 타이머 · 30분 / 25분 / 20분</h2>
-        <p class="lead">교시를 시작할 때 눌러 주세요. 화면 가득 30분(또는 25분·20분)이 흐르고, <b>끝나기 7분 전(20분 운영은 5분 전)</b>부터는 “이야기 벽에 한 줄 남겨 주세요!”가 크게 나옵니다.</p>
+        <h2>교시 타이머 · 30분 / 25분</h2>
+        <p class="lead">교시를 시작할 때 눌러 주세요. 화면 가득 30분(또는 25분)이 흐르고, <b>끝나기 7분 전</b>부터는 “이야기 벽에 한 줄 남겨 주세요!”가 크게 나옵니다.</p>
       </div>
-      <div class="cklen reveal" role="radiogroup" aria-label="교시 운영 시간"><span>운영 시간</span><label><input type="radio" name="cklen" value="30" checked> 30분</label><label><input type="radio" name="cklen" value="25"> 25분</label><label><input type="radio" name="cklen" value="20"> 20분 (버전 2)</label></div>
+      <div class="cklen reveal" role="radiogroup" aria-label="교시 운영 시간"><span>운영 시간</span><label><input type="radio" name="cklen" value="30" checked> 30분</label><label><input type="radio" name="cklen" value="25"> 25분</label></div>
       <div class="clockbtns reveal">
         <button type="button" data-ck="1"><b>1교시 타임 ▶</b><span id="ckInfo1">16:00~16:30 · 16:23부터 이야기 벽</span></button>
         <button type="button" data-ck="2"><b>2교시 타임 ▶</b><span id="ckInfo2">16:35~17:05 · 16:58부터 이야기 벽</span></button>
@@ -1052,20 +1053,20 @@ setInterval(() => { dday(); drawFlow(); gate(); }, 30000);
   const SCHED = { 1:{s:"16:00", next:"다른 테이블로 옮겨 주세요"}, 2:{s:"16:35", next:"전체 나눔으로 모여 주세요"} };
   const hm = (t, add) => { const [h,m] = t.split(":").map(Number); const x = h*60 + m + add; return `${Math.floor(x/60)}:${String(x%60).padStart(2,"0")}`; };
   function setLen(min){
-    LEN = min*60; TALK = (min === 20 ? 10 : min === 25 ? 12 : 15)*60; WALL = (min === 20 ? 5 : 7)*60;
+    LEN = min*60; TALK = (min === 25 ? 12 : 15)*60; WALL = (min === 20 ? 2 : 7)*60;   // 20분 운영(cafe2.html): 사례 15 · 질문·토의 3 · 한 줄 2
     SCHED[2].s = min === 20 ? "16:25" : "16:35";   // 버전 2: 20분 교시 + 이동 5분
     const disc = LEN - WALL - TALK, w = WALL/60;
     [1,2].forEach(r => { SCHED[r].e = hm(SCHED[r].s, min); const el = document.getElementById("ckInfo"+r); if (el) el.textContent = `${SCHED[r].s}~${SCHED[r].e} · ${hm(SCHED[r].s, min-w)}부터 이야기 벽`;
       const mt = document.getElementById("mT"+r); if (mt) mt.textContent = `${SCHED[r].s}~${SCHED[r].e}`; });
     const bar = document.querySelector("#ck .ck-bar");
-    bar.querySelector(".p1").style.flex = TALK/60; bar.querySelector(".p2").style.flex = disc/60; bar.querySelector(".p3").style.flex = w; document.getElementById("ckL3").style.flex = w; document.getElementById("ckL3").textContent = `마지막 ${w}분 이야기 벽`;
+    bar.querySelector(".p1").style.flex = TALK/60; bar.querySelector(".p2").style.flex = disc/60; bar.querySelector(".p3").style.flex = w; document.getElementById("ckL3").style.flex = w; document.getElementById("ckL3").textContent = w < 5 ? `${w}분 한 줄` : `마지막 ${w}분 이야기 벽`;
     document.getElementById("ckL1").style.flex = TALK/60; document.getElementById("ckL2").style.flex = disc/60;
     document.getElementById("ckL1").textContent = `0~${TALK/60}분 사례 이야기`;
-    document.getElementById("ckL2").textContent = `${TALK/60}~${(TALK+disc)/60}분 질문·토의`;
+    document.getElementById("ckL2").textContent = `${TALK/60}~${(TALK+disc)/60}분 질문·토의`; document.getElementById("ckL2").style.display = disc ? "" : "none";
     try{ localStorage.setItem("cafe.cklen", String(min)); }catch(e){}
   }
   document.querySelectorAll('input[name=cklen]').forEach(i => i.addEventListener("change", () => setLen(+i.value)));
-  { let v = 30; try{ v = +(localStorage.getItem("cafe.cklen") || 30); }catch(e){} if (v !== 25 && v !== 20) v = 30; const r = document.querySelector(`input[name=cklen][value="${v}"]`); if (r) r.checked = true; setLen(v); }
+  { let v = 30; try{ v = +(localStorage.getItem("cafe.cklen") || 30); }catch(e){} if (v !== 25) v = 30; const r = document.querySelector(`input[name=cklen][value="${v}"]`); if (r) r.checked = true; setLen(v); }
   const q = s => document.querySelector(s);
   const ck = q("#ck"); let round = 1, end = null, left = LEN, tick = null, beeped = {};
   function kstAt(hm){ const [h,m] = hm.split(":").map(Number); const d = new Date(); const utc = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), h-9, m); return utc; }
