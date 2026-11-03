@@ -461,8 +461,8 @@ body.stage-mode .kb{font-size:15px}
       </div>
       <div class="order-tip reveal"><span class="ico">local_cafe</span><div>1교시와 2교시는 <b>서로 다른 주제</b>를 고르면 더 많은 이야기를 맛볼 수 있어요. 고른 내용은 이 기기에만 저장됩니다.</div></div>
       <div class="periods">
-        <div class="period reveal"><h3>1교시 <small>16:00~16:30</small></h3><ul class="menu" id="m1" role="radiogroup" aria-label="1교시 카페"></ul></div>
-        <div class="period reveal"><h3>2교시 <small>16:35~17:05</small></h3><ul class="menu" id="m2" role="radiogroup" aria-label="2교시 카페"></ul></div>
+        <div class="period reveal"><h3>1교시 <small id="mT1">16:00~16:30</small></h3><ul class="menu" id="m1" role="radiogroup" aria-label="1교시 카페"></ul></div>
+        <div class="period reveal"><h3>2교시 <small id="mT2">16:35~17:05</small></h3><ul class="menu" id="m2" role="radiogroup" aria-label="2교시 카페"></ul></div>
       </div>
 
       <div class="slip">
@@ -500,10 +500,10 @@ body.stage-mode .kb{font-size:15px}
     <div class="wrap">
       <div class="sec-head reveal">
         <div class="eyebrow">CAFE TIMER</div>
-        <h2>교시 타이머 · 30분 / 25분</h2>
-        <p class="lead">교시를 시작할 때 눌러 주세요. 화면 가득 30분(또는 25분)이 흐르고, <b>끝나기 7분 전</b>부터는 “이야기 벽에 한 줄 남겨 주세요!”가 크게 나옵니다.</p>
+        <h2>교시 타이머 · 30분 / 25분 / 20분</h2>
+        <p class="lead">교시를 시작할 때 눌러 주세요. 화면 가득 30분(또는 25분·20분)이 흐르고, <b>끝나기 7분 전(20분 운영은 5분 전)</b>부터는 “이야기 벽에 한 줄 남겨 주세요!”가 크게 나옵니다.</p>
       </div>
-      <div class="cklen reveal" role="radiogroup" aria-label="교시 운영 시간"><span>운영 시간</span><label><input type="radio" name="cklen" value="30" checked> 30분</label><label><input type="radio" name="cklen" value="25"> 25분</label></div>
+      <div class="cklen reveal" role="radiogroup" aria-label="교시 운영 시간"><span>운영 시간</span><label><input type="radio" name="cklen" value="30" checked> 30분</label><label><input type="radio" name="cklen" value="25"> 25분</label><label><input type="radio" name="cklen" value="20"> 20분 (버전 2)</label></div>
       <div class="clockbtns reveal">
         <button type="button" data-ck="1"><b>1교시 타임 ▶</b><span id="ckInfo1">16:00~16:30 · 16:23부터 이야기 벽</span></button>
         <button type="button" data-ck="2"><b>2교시 타임 ▶</b><span id="ckInfo2">16:35~17:05 · 16:58부터 이야기 벽</span></button>
@@ -1048,22 +1048,24 @@ setInterval(() => { dday(); drawFlow(); gate(); }, 30000);
 <script>
 /* ── 교시 30분 타이머 ── */
 (function(){
-  let LEN = 30*60, TALK = 15*60; const WALL = 7*60;
+  let LEN = 30*60, TALK = 15*60, WALL = 7*60;
   const SCHED = { 1:{s:"16:00", next:"다른 테이블로 옮겨 주세요"}, 2:{s:"16:35", next:"전체 나눔으로 모여 주세요"} };
   const hm = (t, add) => { const [h,m] = t.split(":").map(Number); const x = h*60 + m + add; return `${Math.floor(x/60)}:${String(x%60).padStart(2,"0")}`; };
   function setLen(min){
-    LEN = min*60; TALK = (min === 25 ? 12 : 15)*60;
-    const disc = LEN - WALL - TALK;
-    [1,2].forEach(r => { SCHED[r].e = hm(SCHED[r].s, min); const el = document.getElementById("ckInfo"+r); if (el) el.textContent = `${SCHED[r].s}~${SCHED[r].e} · ${hm(SCHED[r].s, min-7)}부터 이야기 벽`; });
+    LEN = min*60; TALK = (min === 20 ? 10 : min === 25 ? 12 : 15)*60; WALL = (min === 20 ? 5 : 7)*60;
+    SCHED[2].s = min === 20 ? "16:25" : "16:35";   // 버전 2: 20분 교시 + 이동 5분
+    const disc = LEN - WALL - TALK, w = WALL/60;
+    [1,2].forEach(r => { SCHED[r].e = hm(SCHED[r].s, min); const el = document.getElementById("ckInfo"+r); if (el) el.textContent = `${SCHED[r].s}~${SCHED[r].e} · ${hm(SCHED[r].s, min-w)}부터 이야기 벽`;
+      const mt = document.getElementById("mT"+r); if (mt) mt.textContent = `${SCHED[r].s}~${SCHED[r].e}`; });
     const bar = document.querySelector("#ck .ck-bar");
-    bar.querySelector(".p1").style.flex = TALK/60; bar.querySelector(".p2").style.flex = disc/60; bar.querySelector(".p3").style.flex = 7;
+    bar.querySelector(".p1").style.flex = TALK/60; bar.querySelector(".p2").style.flex = disc/60; bar.querySelector(".p3").style.flex = w; document.getElementById("ckL3").style.flex = w; document.getElementById("ckL3").textContent = `마지막 ${w}분 이야기 벽`;
     document.getElementById("ckL1").style.flex = TALK/60; document.getElementById("ckL2").style.flex = disc/60;
     document.getElementById("ckL1").textContent = `0~${TALK/60}분 사례 이야기`;
     document.getElementById("ckL2").textContent = `${TALK/60}~${(TALK+disc)/60}분 질문·토의`;
     try{ localStorage.setItem("cafe.cklen", String(min)); }catch(e){}
   }
   document.querySelectorAll('input[name=cklen]').forEach(i => i.addEventListener("change", () => setLen(+i.value)));
-  { let v = 30; try{ v = +(localStorage.getItem("cafe.cklen") || 30); }catch(e){} if (v !== 25) v = 30; const r = document.querySelector(`input[name=cklen][value="${v}"]`); if (r) r.checked = true; setLen(v); }
+  { let v = 30; try{ v = +(localStorage.getItem("cafe.cklen") || 30); }catch(e){} if (v !== 25 && v !== 20) v = 30; const r = document.querySelector(`input[name=cklen][value="${v}"]`); if (r) r.checked = true; setLen(v); }
   const q = s => document.querySelector(s);
   const ck = q("#ck"); let round = 1, end = null, left = LEN, tick = null, beeped = {};
   function kstAt(hm){ const [h,m] = hm.split(":").map(Number); const d = new Date(); const utc = Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate(), h-9, m); return utc; }
