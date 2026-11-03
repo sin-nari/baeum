@@ -520,7 +520,7 @@ body.stage-mode .kb{font-size:15px}
           <h2>‘오늘의 한 잔’은 이야기 벽에</h2>
           <p class="lead">교시가 끝나면 휴대폰으로 QR을 찍어 <b>이야기 벽</b>에 한 줄 남겨 주세요. 모인 이야기는 카페지기의 전체 나눔 3분 발표 재료가 되고, <b>17:05 행운 추첨</b>도 이 글들 가운데서 해요.</p>
           <ol class="steps3">
-            <li><div><b>교시·테이블</b>을 고르고 <b>인상 깊었던 점 · 질문 · 가져갈 한 가지 · 자유 의견</b> 중 하나를 골라</div></li>
+            <li><div><b>교시·테이블</b>을 고르고 <b>카페지기에게 질문 · 응원 · 인상 깊었던 점 · 가져갈 한 가지 · 자유 의견</b> 중 하나를 골라</div></li>
             <li><div>한두 줄로 적어 <b>벽에 붙이기</b>를 누르면, 내 글에 <b>행운 코드</b>(W-…)가 붙어요.</div></li>
             <li><div><b>17:05 전체 나눔</b>에서 이야기 벽 글로 추첨해요. 뽑히면 한 말씀 나눠 주세요 🎤🎁 <a href="#wall">이야기 벽으로 가기 →</a></div></li>
           </ol>
@@ -534,7 +534,7 @@ body.stage-mode .kb{font-size:15px}
       <div class="sec-head reveal">
         <div class="eyebrow">STORY WALL</div>
         <h2>이야기 벽</h2>
-        <p class="lead">인상 깊었던 점, 카페지기에게 묻고 싶은 것, 우리 학교로 가져갈 한 가지, 자유로운 생각까지. 무엇이든 휴대폰으로 남겨 주세요. 모두의 화면과 무대 화면에 바로 올라옵니다.</p>
+        <p class="lead">카페지기에게 묻고 싶은 것, 카페지기에게 보내는 응원, 인상 깊었던 점, 우리 학교로 가져갈 한 가지까지. 무엇이든 휴대폰으로 남겨 주세요. 모두의 화면과 무대 화면에 바로 올라옵니다.</p>
       </div>
       <div class="wall-grid">
         <form class="post reveal" id="postForm" autocomplete="off">
@@ -542,7 +542,7 @@ body.stage-mode .kb{font-size:15px}
           <label>테이블<select id="pTable"></select></label>
           <label>학교 <small>(선택)</small><input id="pSchool" maxlength="20" placeholder="예: 부천○○고"></label>
           <div class="kinds" id="pKinds" role="radiogroup" aria-label="이야기 종류"></div>
-          <label><span id="pLabel">인상 깊었던 점</span><textarea id="pText" maxlength="130" rows="3" placeholder="한두 줄이면 충분해요"></textarea><span class="cnt" id="pCnt">0 / 130</span></label>
+          <label><span id="pLabel">카페지기에게 질문</span><textarea id="pText" maxlength="130" rows="3" placeholder="한두 줄이면 충분해요"></textarea><span class="cnt" id="pCnt">0 / 130</span></label>
           <button class="send" type="submit"><span class="ico">send</span> 벽에 붙이기</button>
           <p class="pmsg" id="pMsg" aria-live="polite"></p>
         </form>
@@ -778,14 +778,15 @@ const TCOLOR = {1:"#2f6f8f",2:"#2f6f8f",3:"#2f6f8f",4:"#3d8a5a",5:"#5fa3a0",6:"#
 function tableInfo(t, r){ const x = MENU[r].find(m => m.t === t); return x ? `${x.w}` : ""; }
 let wall = { cards: [], tab: "all", round: 1, liked: new Set(JSON.parse(store.get("cafe.liked") || "[]")) };
 const KINDS = [
-  {k:"wow",  e:"✨", n:"인상 깊었던 점",      ph:"오늘 이야기에서 마음에 남은 장면이나 말", c:"#8a6bb8"},
-  {k:"ask",  e:"❓", n:"카페지기에게 질문",   ph:"더 궁금한 것, 우리 학교 상황에서 묻고 싶은 것", c:"#2f6f8f"},
-  {k:"take", e:"💡", n:"우리 학교로 가져갈 한 가지", ph:"내일 학교에서 바로 해 볼 수 있는 것", c:"#c2571f"},
-  {k:"free", e:"💬", n:"자유 의견·제안",      ph:"바라는 점, 함께 하고 싶은 것, 무엇이든", c:"#3d8a5a"}
+  {k:"ask",   e:"❓", n:"카페지기에게 질문",   ph:"더 궁금한 것, 우리 학교 상황에서 묻고 싶은 것", c:"#2f6f8f"},
+  {k:"cheer", e:"👏", n:"카페지기에게 응원",   ph:"오늘 이야기를 들려준 카페지기 선생님께 한마디", c:"#d4527a"},
+  {k:"wow",   e:"✨", n:"인상 깊었던 점",      ph:"오늘 이야기에서 마음에 남은 장면이나 말", c:"#8a6bb8"},
+  {k:"take",  e:"💡", n:"우리 학교로 가져갈 한 가지", ph:"내일 학교에서 바로 해 볼 수 있는 것", c:"#c2571f"},
+  {k:"free",  e:"💬", n:"자유 의견·제안",      ph:"바라는 점, 함께 하고 싶은 것, 무엇이든", c:"#3d8a5a"}
 ];
 const KMAP = Object.fromEntries(KINDS.map(x=>[x.k,x]));
-function parseKind(t){ const m = /^\[(wow|ask|take|free)\]\s*/.exec(t||""); return m ? {kind:m[1], text:t.slice(m[0].length)} : {kind:"take", text:t||""}; }
-wall.kind = store.get("cafe.kind") || "wow"; wall.kf = "all";
+function parseKind(t){ const m = /^\[(wow|ask|cheer|take|free)\]\s*/.exec(t||""); return m ? {kind:m[1], text:t.slice(m[0].length)} : {kind:"take", text:t||""}; }
+wall.kind = store.get("cafe.kind") || "ask"; wall.kf = "all";
 const DEMO = [
   {id:"d1", round:1, table:2, school:"○○고", text:"[take] 우리 학교 AI 과목도 진로 설문부터 다시 해 봐야겠어요.", likes:3},
   {id:"d2", round:1, table:5, school:"", text:"[ask] 공동교육과정 강사 섭외는 어떻게 하셨나요?", likes:5},
@@ -1041,7 +1042,7 @@ setInterval(() => { dday(); drawFlow(); gate(); }, 30000);
   <div class="ck-now" id="ckNow">사례 이야기</div>
   <div class="ck-bar"><i class="p1"></i><i class="p2"></i><i class="p3"></i><span class="nd" id="ckNd"></span></div>
   <div class="ck-lab"><span id="ckL1" style="flex:15">0~15분 사례 이야기</span><span id="ckL2" style="flex:8">15~23분 질문·토의</span><span id="ckL3" style="flex:7">마지막 7분 이야기 벽</span></div>
-  <div class="ck-wall"><div><b>이야기 벽에<br>한 줄 남겨 주세요!!!</b><span id="ckWallSub">교시가 끝나기 전에 꼭 · 남긴 글로 행운 추첨</span></div><img src="menu/qr-wall.png" alt="이야기 벽 QR"></div>
+  <div class="ck-wall"><div><b>이야기 벽에<br>한 줄 남겨 주세요!!!</b><span id="ckWallSub">카페지기에게 질문도, 응원도 좋아요 · 남긴 글로 행운 추첨</span></div><img src="menu/qr-wall.png" alt="이야기 벽 QR"></div>
   <div class="ck-ctl"><button type="button" class="main" id="ckGo">시작</button><button type="button" id="ckSync">시간표대로 맞추기</button><button type="button" id="ckReset">처음으로</button><button type="button" id="ckClose">닫기</button></div>
 </div>
 <script>
@@ -1076,7 +1077,7 @@ setInterval(() => { dday(); drawFlow(); gate(); }, 30000);
     const last = l > 0 && l <= WALL, done = end && l <= 0;
     ck.classList.toggle("last", last || done); ck.classList.toggle("end", !!done);
     q("#ckNow").textContent = done ? `${round}교시 끝! ${SCHED[round].next}` : last ? `남은 ${Math.ceil(l/60)}분 · 이야기 벽에 한 줄` : el < TALK ? "지금은 사례 이야기" : "지금은 질문·토의";
-    q("#ckWallSub").textContent = done ? "아직 못 남기셨다면 지금 바로! · 남긴 글로 행운 추첨" : "교시가 끝나기 전에 꼭 · 남긴 글로 행운 추첨";
+    q("#ckWallSub").textContent = done ? "아직 못 남기셨다면 지금 바로! · 카페지기에게 질문도, 응원도 좋아요" : "카페지기에게 질문도, 응원도 좋아요 · 남긴 글로 행운 추첨";
     if (end){
       if (el >= TALK && !beeped.q){ beeped.q = 1; snd(660,.3); }
       if (last && !beeped.w){ beeped.w = 1; snd(880,.3); setTimeout(()=>snd(880,.3),400); }
