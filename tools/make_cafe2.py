@@ -1,8 +1,8 @@
-# cafe.html(30분 운영) → cafe2.html(20분 운영 · 버전 2)
-# cafe.html을 고친 뒤:  python3 tools/make_cafe2.py
+# cafe30.html(30분 운영 원본) → cafe.html · cafe2.html(20분 운영, 11. 3. 실제 운영)
+# cafe30.html을 고친 뒤:  python3 tools/make_cafe2.py
 import pathlib, sys
 root = pathlib.Path(__file__).resolve().parent.parent
-s = (root/"cafe.html").read_text(encoding="utf-8")
+s = (root/"cafe30.html").read_text(encoding="utf-8")
 R = [
  ('<title>고등학교 교육과정 이야기 카페 · 배움:성장</title>', '<title>이야기 카페 (20분 운영) · 배움:성장</title>'),
  ('<div class="kick">부천 배움 100이음 · 「배움:성장」 사례 공유형 직무연수</div>',
@@ -42,5 +42,6 @@ for a, b in R:
     n = s.count(a)
     if n < 1: sys.exit(f"못 찾음: {a[:60]}")
     s = s.replace(a, b)
-(root/"cafe2.html").write_text(s, encoding="utf-8")
-print("cafe2.html 만듦,", len(R), "곳 바꿈")
+for out in ("cafe.html", "cafe2.html"):
+    (root/out).write_text(s, encoding="utf-8")
+print("cafe.html · cafe2.html(20분) 만듦,", len(R), "곳 바꿈")
